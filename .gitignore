@@ -9,3 +9,8 @@ data/all_surveys_01.rds
 data/all_surveys_recoded_01.rds
 interim_outputs/resample_survey_designs_863_bcn
 interim_outputs/resamples_863_bcn
+interim_outputs/calibration/raked_sampling_designs_resamples_03.rds
+interim_outputs/calibration/raked_calibration_weights_resamples_03.rds
+interim_outputs/calibration/weights_resamples_trimmed_1_03.rds
+interim_outputs/calibration/weights_resamples_trimmed_2_03.rds
+interim_outputs/calibration/weights_resamples_untrimmed_03.rds
