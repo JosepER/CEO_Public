@@ -14,16 +14,28 @@ library(tidyverse)
 
 # create folder structure
 
-c("data", c("data", "from_CEO"), c("data", "from_IDESCAT"), c("data", "subsets"),
+folder_directories <- list("data", c("data", "from_CEO"), c("data", "from_IDESCAT"), c("data", "subsets"),
   "interim_outputs", c("interim_outputs", "calibration"), c("interim_outputs", "proportions_survey_863"),
   c("interim_outputs", "resample_survey_desings_863_bcn"), c("interim_outputs", "resamples_863_bcn"),
-  "other", "scripts")
+  "other")
 
-if(!dir.exists(here("data"))){
-  
-  dir.create("data")
-  
-}
+folder_directories %>%
+  map(function(.x){
+    
+   if(length(.x) > 1){
+          
+         temp_dir  <- str_c(.x, collapse = "/")
+        }else{
+          temp_dir <- .x
+        }
+        
+        if(!dir.exists(here(temp_dir))){
+    
+    dir.create(temp_dir)
+    
+  } 
+  })
+
 
 # Import data for all surveys----
 
@@ -148,6 +160,18 @@ data_all_surveys %<>%
 ## It's not so easy to say, but it looks like the only proper stratum was Province (province),
 ## Then they had quotas of size (size_municipality) and sex + gender + place of birth (crossed)
 
+## email from CEO: 
+#La selecció de la persona a entrevistar es fa en tres etapes:
+# -	Etapa 1: Municipi mitjançant una selecció aleatòria dins de cada estat de la mostra. Aquesta selecció la fa l'empresa contractista.
+# -	Etapa 2: seció censal. En funció del nombre d'enquestes a realitzar, es decideixen quantes rutes es realitzaran per municipi. Es fa una única ruta per secció censal. El punt de sortida de cada ruta és aleatrori a partir del directori de carrers.
+# -	Etapa 3: individu. Un cop decidit el punt de sortida els enquestadors realitzen rutes aleatòries fins a completar la mostra seguint les quotes detallades a la fitxa tècnica. No s'utilitza cap llistat de domicilis. Els enquestadors es mouen per la secció censal amb bastanta llibertat fins a completar la mostra.
+
+# A cada estrat de la mostra s'assignen sempre dos enquestadors diferents. 
+
+# Pràcticament totes les variables de mostreig s'eliminen del fitxer final garantir la dissociació de les dades (LOPD). 
+
+ 
+
   ## Proportions by province and habitat
   ### Quotas don't seem to be allocated within crossed Province and size of municipality!
 
@@ -158,7 +182,7 @@ data_all_surveys %>%
   group_by(BOP_NUM, province, size_municipality) %>%
   mutate(prop_quota = n/sum(n)) %>%
   arrange(province, size_municipality, quota) %>%
-  filter(province == 8, size_municipality == 5) 
+  filter(province == 8) 
 
 data_all_surveys %>%
   select(ANY, BOP_NUM, province, size_municipality, SEXE, GR_EDAT) %>%
@@ -167,7 +191,7 @@ data_all_surveys %>%
   summarise(n_female = sum(SEXE -1),
                            prop_female = mean(SEXE-1)) %>%
   arrange(province, size_municipality) %>%
-  filter(province == 8, size_municipality == 5)  
+  filter(province == 8)  
 
 data_all_surveys %>%
   select(ANY, BOP_NUM, province, size_municipality, SEXE, GR_EDAT) %>%
@@ -176,7 +200,7 @@ data_all_surveys %>%
   group_by(BOP_NUM, province, size_municipality) %>%
   mutate(prop_age = n/sum(n)) %>%
   arrange(GR_EDAT) %>%
-  filter(province == 8, size_municipality == 5)
+  filter(province == 8)
 
   ### Quotas were not allocated within size of municipality?
 data_all_surveys %>%
@@ -266,100 +290,6 @@ data_all_surveys %>%
   unique()
 
 
-# Get proportions in population ----
-
-## I will use the proportions in BOP_NUM 40 and 41 (2 previous surveys from 2017).
-## These are the quotas in those surveys.
-## This could be also done with official statistics, but it would take a couple days of work to
-##  search and clean the data. Quotas from the two previous surveys should be a good estimate.
-
-data_all_surveys %>%
-  filter(ANY == 2017) %>%
-  count(BOP_NUM)
-
-data_earlier <- data_all_surveys %>%
-  filter( BOP_NUM %in% c(40, 41))
-  
-data_earlier %>%
-  count(BOP_NUM, size_municipality) %>%
-  arrange( size_municipality) 
-
-
-# province by municipality size 
-
-data_earlier %>%
-  count(BOP_NUM, province, size_municipality) %>%
-  arrange(province, size_municipality) 
-
-prop_province_munsize_population <- data_earlier %>%
-  count(province, size_municipality) %>%
-  mutate(prop_population = n/sum(n))
-
-  
-  
-# gender, age group and place of birth
-
-data_earlier %>%
-  count(BOP_NUM, quota) %>%
-  arrange(quota)
-
-data_earlier %>%
-  count(BOP_NUM, province, SEXE, GR_EDAT, place_of_birth) %>%
-  arrange(SEXE, GR_EDAT, place_of_birth) 
-
-data_earlier %>%
-  count(BOP_NUM, province, quota) %>%
-  arrange(province, quota) 
-
-prop_age_sex_pob_population <- data_earlier %>%
-  count(province, quota) %>%
-  group_by(province) %>%
-  mutate(prop_population = n/sum(n))
-
-
-## different provinces have different numbers of quotas of age x sex x pob
-## I need to make sure that all of them appear in survey 863
-prop_age_sex_pob_population %>% 
-  group_by(province) %>% 
-  summarise(unique_quotas = n_distinct(quota))
-
-prop_age_sex_pob_population %>% 
-  group_by(province) %>% 
-  summarise(unique_quotas = str_c(quota, collapse = " ")) %>% 
-  separate(col = "unique_quotas", into = c(letters, LETTERS), sep = " ")
-
-unique_quotas_age_sex_pob_population <- list()
-
-for(i in unique(prop_age_sex_pob_population$province)){
-  
-  unique_quotas_age_sex_pob_population[[i]] <- prop_age_sex_pob_population[prop_age_sex_pob_population$province == i, ][["quota"]]
-  
-}
-
-rm(i)  
-
-
-  # test that sum of proportions equal 1
-
-test_prop_1 <- prop_province_munsize_population %$%
-  prop_population %>%
-  sum() %>%
-  as.logical()
-
-test_prop_2 <- prop_age_sex_pob_population %$%
-  prop_population %>%
-  sum() %>%
-  as.logical()
-
-if(!all(test_prop_1, test_prop_2)){
-  
-  stop("Failed test: sum of all proportions in population categories must be equal to 1.")
-  
-}
-
-rm(test_prop_1, test_prop_2)
-
-
 # Obtain labeled version of survey 863 ----
 
 ## Subset survey 42 (bar 863)
@@ -374,11 +304,6 @@ vars_not_in_863 <- names(data_863_labelled)[!names(data_863_labelled) %in% names
     
 
   ### Save large variables in a separate datafile
-if(!dir.exists(here("data", "subsets"))){
-  
-  dir.create(here("data", "subsets"))
-  
-}
 
 data_863_labelled %>%
   names() %>%
@@ -463,81 +388,13 @@ prop_age_sex_pob_863_wt <- data_863_labelled %>%
 
 # Compare population proportions with those in survey 863 ----
 
-  ## Compare which quota categories existed in previous surveys and in 863
-unique_quotas_age_sex_pob_population
-
-unique_quotas_age_sex_pob_survey_863 <- list()
-
-for(i in unique(prop_age_sex_pob_population$province)){
-  
-  unique_quotas_age_sex_pob_survey_863[[i]] <- prop_age_sex_pob_863_wt[prop_age_sex_pob_863_wt$province == i, ][["quota"]]
-
-}
-
-rm(i)
-
-unique_quotas_age_sex_pob_population %>% map_dbl(length)
-
-unique_quotas_age_sex_pob_survey_863 %>% map_dbl(length)
-  
-
-map2(.x = unique_quotas_age_sex_pob_population,
-     .y = unique_quotas_age_sex_pob_survey_863, 
-     .f = ~ .x[!.x %in% .y] )
-
-map2(.x = unique_quotas_age_sex_pob_population,
-     .y = unique_quotas_age_sex_pob_survey_863, 
-     .f = ~ .y[!.y %in% .x] )
-
+  ## Compare which quota categories existed in previous surveys and in 863. Not done any more.
+  ### from previous scripts:
     ### that's bad. Two quotas less in Girona, one less in Tarragona and one switching in Lleida
-    ### I'll probably have to use BCN only
-
-  ## Compare proportions in quotas 
-
-(nrow(prop_age_sex_pob_population) == nrow(prop_age_sex_pob_863)) & (nrow(prop_age_sex_pob_population) == nrow(prop_age_sex_pob_863_wt))
-
-comparison_prop_age_sex_pob <- prop_age_sex_pob_population %>%
-  select(-n) %>%
-  left_join(prop_age_sex_pob_863, by = c("province", "quota")) %>%
-  left_join(prop_age_sex_pob_863_wt %>% select(-n), by = c("province", "quota"))
-
-## There are small differences when compared with quotas
-comparison_prop_age_sex_pob
-
-## proportion after weighting of age x place of birth x language 
-
-  ### I will have to be a bit careful during calibration with this 'no answer'.
-data_863_labelled %>%
-  count(first_language)
+    ### I'll probably have to use BCN only.
 
   ### Make sure there are unique values of weights in each age x pob x language category
   ### i.e. each category in the weighting table has a unique weight
-
-data_863_labelled %>%
-  filter(first_language != "No answer") %>%
-  count(age, place_of_birth, first_language, PONDERA) %>%
-  count(age, place_of_birth, first_language) %>%
-  filter(nn > 1) %>%
-  nrow() == 0
-
-  ### compute proportion
-
-prop_age_place_of_birth_language_calibration <- data_863_labelled %>%
-  filter(first_language != "No answer") %>%
-  count(age, place_of_birth, first_language, wt = PONDERA) %>%
-  mutate(prop_calibration = n/sum(n)) %>%
-  arrange(age, place_of_birth, first_language) 
-
-prop_age_place_of_birth_language_calibration$prop_calibration %>% 
-  sum() == 1
-
-  ### compute proportions for BCN only
-
-prop_age_place_of_birth_language_calibration_BCN <- data_863_labelled %>%
-  filter(first_language != "No answer", province == "Barcelona") %>%
-  count(age, place_of_birth, first_language, wt = PONDERA) %>%
-  mutate(prop_calibration = n/sum(n)) %>%
-  arrange(age, place_of_birth, first_language) 
 
 # Export----
 
@@ -551,18 +408,6 @@ data_863_labelled %>%
 
 ## proportions in survey 863 
 
-if(!dir.exists(here("interim_outputs"))){
-  
-  dir.create(here("interim_outputs"))
-  
-}
-
-if(!dir.exists(here("interim_outputs", "proportions_survey_863"))){
-  
-  dir.create(here("interim_outputs", "proportions_survey_863"))
-  
-}
-
 ## RDS
 
 prop_province_munsize_863 %>%
@@ -571,13 +416,6 @@ prop_province_munsize_863 %>%
 prop_age_sex_pob_863 %>%
   write_rds(here("interim_outputs", "proportions_survey_863", "proportion_age_sex_863_01.rds"))
 
-prop_age_place_of_birth_language_calibration %>%
-  write_rds(here("interim_outputs", "proportions_survey_863", "proportion_age_place_of_birth_language_weighted_863_01.rds"))
-
-prop_age_place_of_birth_language_calibration_BCN %>%
-  write_rds(here("interim_outputs", "proportions_survey_863", "proportion_age_place_of_birth_language_weighted_BCN_863_01.rds"))
-
-
 ## csv 
 
 prop_province_munsize_863 %>%
@@ -585,11 +423,3 @@ prop_province_munsize_863 %>%
 
 prop_age_sex_pob_863 %>%
   write_csv(here("interim_outputs", "proportions_survey_863", "proportion_age_sex_863_01.csv"))
-
-prop_age_place_of_birth_language_calibration %>%
-  write_csv(here("interim_outputs", "proportions_survey_863", "proportion_age_place_of_birth_language_weighted_863_01.csv"))
-
-prop_age_place_of_birth_language_calibration_BCN %>%
-  write_csv(here("interim_outputs", "proportions_survey_863", "proportion_age_place_of_birth_language_weighted_BCN_863_01.csv"))
-
-

@@ -13,13 +13,13 @@ library(tidyverse)
 
 # Register parallel backend ----
 
-cl <- makeCluster(4)
+cl <- makeCluster(5)
 registerDoParallel(cl)
 
 getDoParWorkers()
 getDoParName()
 
-#set.seed(4)
+set.seed(4)
 
 # Import objects ----
 
@@ -29,8 +29,6 @@ data_863_labelled <- read_rds(here("data", "survey_data_863_recoded_01.rds")) %>
   filter(province == "Barcelona")
 
   ## quotas and calibrated proportions for BCN only
-
-prop_age_place_of_birth_language_calibration <- read_rds(here("interim_outputs", "proportions_survey_863", "proportion_age_place_of_birth_language_weighted_863_01.rds"))
 
 prop_province_munsize_863 <- read_rds(here("interim_outputs", "proportions_survey_863", "proportion_province_munsize_863_01.rds")) %>%
   filter(province == "Barcelona")
@@ -196,7 +194,7 @@ rm(data_quota_1, data_quota_2)
 # Start by trying it only on BCN sample
 
 
-n_bootstrap_resamples <- 2000
+n_bootstrap_resamples <- 10000
 
 if(!file.exists(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, ".rds") ))){
   
@@ -214,9 +212,7 @@ resamples <- foreach(icount(n_bootstrap_resamples))%dopar%{
   n.sample <- nrow(data)
   quota.totals.sofar <- rep(0,length=ncol(data[,quota.cols]))
 
-  
-  #move saving objects HERE!!!
-  
+ 
   while(continue){
     new.sample <- sample.from[sample(seq(n.sample),n.sample,replace=T),,drop=F]
     quota.vars.sample <- new.sample[,quota.cols,drop=F]
@@ -382,12 +378,4 @@ data_frame(resamples_ = resamples %>%
              as.numeric()) %>%
   ggplot(aes(x = resamples_)) +
   geom_density()  
-
-
-resamples %>%
-  map("ORDRE_CINE") %>%
-  unlist() %>%
-  table() %>%
-  sort(decreasing = T) %>%
-  head(20)
 

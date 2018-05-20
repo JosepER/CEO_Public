@@ -15,7 +15,7 @@ library(tidyverse)
 
   ## Resamples
 
-resamples <-  read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", 2000, ".rds")))
+resamples <-  read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", 10000, ".rds")))
 
   ## survey dataset
 
@@ -330,6 +330,10 @@ summary_main_survey_weights %>%
   
 }
 
+data_frame(ORDRE_CINE = raked_data_863$variables$ORDRE_CINE, 
+           weights = weights(raked_data_863)) %>%
+  write_rds(here("interim_outputs", "calibration", "main_survey_weights_03.csv"))
+
 rm(comparison_proportions_place_of_birth, comparison_proportions_first_language,
    data_863_place_of_birth_prop, data_863_first_language, first_language_calibration_survey_863,
    place_of_birth_survey_863, summary_main_survey_weights, survey_design_data_863,
@@ -343,12 +347,6 @@ resamples_for_calibration <- resamples %>%
   map(~ data_863_for_calibration[match(.x[["ORDRE_CINE"]], data_863_for_calibration[["ORDRE_CINE"]]), ])
 
 ## **create 'survey' survey designs for each resample----
-
-if(!dir.exists(here("interim_outputs", "resample_survey_desings_863_bcn"))){
-  
-  dir.create(here("interim_outputs", "resample_survey_desings_863_bcn"))
-  
-}
 
 if(!file.exists(here("interim_outputs", "resample_survey_desings_863_bcn", "survey_designs_03.rds"))){
 
@@ -622,6 +620,7 @@ sum(weigths_summary$weights_ratio > 5)
 sum(weigths_summary$weights_ratio > 6)
 
 # trim weights ----
+## trim to 99.5 percentile
   
 resamples_calibration_weights_trimmed <- map2(.x = resamples_calibration_weights, .y = as.list(weigths_summary$q0.995), function(x = .x, y = .y){ 
   x[which(x > y)] <- y 
@@ -713,8 +712,6 @@ resamples_sum_trimmed_weights <- pmap(.l = list(x = resamples_calibration_weight
 
 # Note: some sum of trimmed weights look rather large.
 # Inflation in sum of trimmed weights appears in second trimming
-
-# to do: explore what happened in those resamples with so many trimmed weights!
 
 resamples_sum_trimmed_weights %>%
   arrange(desc(sum_diff_trimmed_2)) %>%
@@ -838,8 +835,6 @@ rm(population_margins_first_language_checks, resamples_to_check_index,
    weigths_summary, resamples_length, first_language_population_to_check, 
    check_language, check_language_summary)
 
-## to do: export weights for resamples
-## to do: double-check warnings about removing objects
 
 # Export weights for resamples ----
 
