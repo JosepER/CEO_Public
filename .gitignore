@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+data/from_CEO
+CEO ideas
+data/from_IDESCAT
+data/all_surveys_01.rds
+data/all_surveys_recoded_01.rds
+interim_outputs/resample_survey_designs_863_bcn
+interim_outputs/resamples_863_bcn
