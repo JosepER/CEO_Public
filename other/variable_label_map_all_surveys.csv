@@ -1,0 +1,804 @@
+variable,label
+ORDRE_CINE,Número d'ordre de registre
+ORDRE,Número d'ordre de registre
+BOP_NUM,Número d'ordre del baròmetre
+ANY,Any de realització del baròmetre
+MES,Mes de realització del baròmetre
+DIA,Dia (variable anonimitzada)
+HOR_INI,HOR INI (variable anonimitzada)
+HOR_FIN,HOR FIN (variable anonimitzada)
+DURADA,Durada entrevista en segons
+CODI_ENQ,Codi entrevistador/a
+sexe_enq,Sexe entrevistador/a
+estudis_enq,Estudis entrevistador/a
+nacionalitat_enq,Nacionalitat entrevistador/a
+num_quest,Número de registre original
+EXPERIMENT,Experiment
+CIRCUIT1,Circuit P20A-P23 / P20B-P55 Onada42
+CIRCUIT2,Circuit P21 Onada42
+CIRCUIT3,Circuit P27 Onada42
+PROVI,Província
+HABITAT,Grandària de municipi
+MUN,MUNICIPI (variable anonimitzada)
+COMARCA,Comarca
+SEXE,Q1. Sexe
+EDAT,Q2. Edat
+GR_EDAT,Q2. Grups d'edat
+Edat_CEO,Edat CEO (recodificació grups de 5 anys)
+F01,F.01. Estic trucant a un domicili particular?
+F00,Prefereix que li faci les preguntes en català o en castellà
+F02,F.03. Està vostè empadronat/ada en aquest municipi?
+F03,F.04. Tè vostè la ciutadania espanyola?
+PRE_P1,P1. Principals problemes actuals de Catalunya (ORIGINAL)
+P1_LITERALS,P1 LITERAL
+P1_100_R,Immigració
+P1_200_R,Atur i precarietat laboral
+P1_300_R,Accès a l'habitatge
+P1_400_R,Inseguretat ciutadana
+P1_500_R,Sanitat
+P1_600_R,Relacions Catalunya-Espanya
+P1_700_R,Sistema de finançament de Catalunya
+P1_800_R,Insatisfacció amb la política
+P1_900_R,Educació-cultura-investigació
+P1_1000_R,Manca d'infraestructures i problemes amb el transport
+P1_1100_R,Incivisme i violència
+P1_1200_R,Funcionament de l'economia
+P1_1300_R,Crisi identitat catalana
+P1_1400_R,1400
+P1_1500_R,Excessiva pressió fiscal
+P1_1600_R,Baix nivell salarial
+P1_1700_R,Serveis deficients i males instal·lacions públiques
+P1_1800_R,Millorar polítiques socials
+P1_8000_R,Altres
+P1_9600_R,9600
+P1_9500_R,Cap problema
+P1_9800_R,No ho sap
+P1_9900_R,No contesta
+P1_100_E,Immigració 100
+P1_101_E,Racisme [101]
+P1_102_E,Immigració vinculada a inseguretat ciutadana [102]
+P1_103_E,Massa immigrants sense papers [103]
+P1_104_E,Entrada massiva [104]
+P1_105_E,No integrada als costums del país d'acollida [105]
+P1_106_E,Hi ha massa immigrants [106]
+P1_107_E,Fan que baixin els salaris [107]
+P1_108_E,Cobren salaris baixos [108]
+P1_109_E,No hi ha suficient treball per a ells [109]
+P1_110_E,Excès d'ajudes i drets [110]
+P1_111_E,Manca d'ajudes als immigrants [111]
+P1_112_E,Ens treuen la feina [112]
+P1_200_E,Atur i precarietat laboral 200
+P1_201_E,Manca de treball: atur [201]
+P1_202_E,Precarietat laboral / contracte [202]
+P1_203_E,Contractes precaris per als joves [203]
+P1_204_E,"Atur en determinats colÂ·lectius (dones, joves, majors de 40) [204]"
+P1_300_E,Accès a l'habitatge 300
+P1_301_E,Habitatge car [301]
+P1_302_E,Accès difícil pels joves [302]
+P1_304_E,Especulació [304]
+P1_305_E,Corrupció urbanística [305]
+P1_306_E,Preu de les hipoteques [306]
+P1_307_E,No hi ha suficients habitatges públics / manca d'ajuts públics [307]
+P1_308_E,Problemes pels llogaters [308]
+P1_400_E,Inseguretat ciutadana 400
+P1_401_E,Robatoris / estafes [401]
+P1_402_E,Massa delinqüència [402]
+P1_403_E,Assassinats [403]
+P1_404_E,Insuficients policies/cossos de seguretat [404]
+P1_405_E,Ineficàcia policial [405]
+P1_500_E,Sanitat 500
+P1_501_E,"Manca d'hospitals, ambulatoris / massificació [501]"
+P1_502_E,Llargues llistes d'espera [502]
+P1_503_E,"Malalties (sida, càncer...) [503]"
+P1_600_E,Relacions Catalunya-Espanya 600
+P1_601_E,Nou Estatut i autogovern. Falta d'autonomia o independència [601]
+P1_602_E,Imatge de Catalunya a Espanya [602]
+P1_603_E,Excessiu nacionalisme català. Imposició llengua catalana / Independentisme [603]
+P1_604_E,Debat polític massa centrat en la independència [604]
+P1_605_E,Efectes del referèndum de l'1 d'octubre [605]
+P1_700_E,Sistema de finançament de Catalunya 700
+P1_701_E,Impostos centralitzats [701]
+P1_800_E,Insatisfacció amb la política 800
+P1_801_E,Cal millorar la democràcia / sistema polític [801]
+P1_802_E,Govern de la Generalitat [802]
+P1_803_E,Política exterior [803]
+P1_804_E,Oposició PP [804]
+P1_805_E,Carod-Rovira/ERC [805]
+P1_806_E,Corrupció política [806]
+P1_807_E,Els polítics no escolten la gent [807]
+P1_808_E,Enfrontament entre partits polítics [808]
+P1_809_E,Mal govern a nivell municipal [809]
+P1_810_E,Insatisfacció amb el govern central / Madrid [810]
+P1_811_E,El president del govern central [811]
+P1_812_E,Manca de lideratge polític [812]
+P1_813_E,El president de la Generalitat [813]
+P1_814_E,Manipulació de l'opinió pública [814]
+P1_815_E,Actituds franquistes [815]
+P1_817_E,Desconfiança vers els polítics [817]
+P1_818_E,Insatisfacció vers els polítics [818]
+P1_819_E,Crítiques a l'anterior govern [819]
+P1_820_E,Mala gestió [820]
+P1_821_E,Els privilegis dels polítics [821]
+P1_822_E,Moviment 15 M. Els indignats [822]
+P1_900_E,Educació-cultura-investigació 900
+P1_901_E,Manca formació política de la ciutadania [901]
+P1_902_E,Baix nivell educatiu/cultural [902]
+P1_903_E,Escoles insuficients [903]
+P1_904_E,Beques insuficients [904]
+P1_905_E,Poca innovació i investigació [905]
+P1_906_E,Pèrdua de respecte cap al professorat/pèrdua autoritat [906]
+P1_907_E,Desorientació Reforma Educativa [907]
+P1_908_E,Llibres escolars cars [908]
+P1_909_E,Pla Bolonya [909]
+P1_1000_E,Manca d'infraestructures i problemes amb el transport 1000
+P1_1001_E,Peatges [1001]
+P1_1002_E,"Excès de trànsit, aparcament [1002]"
+P1_1003_E,Transport públic: mal funcionament o insuficient [1003]
+P1_1004_E,Infraestructures viàries insuficients [1004]
+P1_1005_E,Seguretat vial / estat de les carreteres [1005]
+P1_1006_E,Accidents de trànsit [1006]
+P1_1007_E,Aeroport [1007]
+P1_1008_E,Manca d'inversions (problemes xarxa elèctrica a Barcelona) [1008]
+P1_1100_E,Incivisme i violència 1100
+P1_1101_E,Crisi valors morals [1101]
+P1_1102_E,Violència (en general) [1102]
+P1_1103_E,Violència de gènere [1103]
+P1_1104_E,La gent no es respecta entre ella [1104]
+P1_1105_E,Maltractament als animals [1105]
+P1_1106_E,Mal ús de l'espai públic [1106]
+P1_1200_E,Funcionament de l'economia 1200
+P1_1201_E,Situació sector agrari [1201]
+P1_1202_E,Crisi sector tèxtil [1202]
+P1_1203_E,Deslocalització [1203]
+P1_1204_E,Descontentament amb l'euro [1204]
+P1_1205_E,Inflació / pèrdua de poder adquisitiu / vida cara / preu dels carburants [1205]
+P1_1207_E,Mal funcionament de l'economia espanyola en general [1207]
+P1_1208_E,Les empreses / bancs tenen massa poder [1208]
+P1_1210_E,Crisi del sector industrial [1210]
+P1_1211_E,"Dèficit, deute, malbaratament [1211]"
+P1_1212_E,Retallades. Restriccions pressupostàries [1212]
+P1_1213_E,Tancament empreses [1213]
+P1_1214_E,Manca de foment a les empreses [1214]
+P1_1215_E,Crisis sistema financer i manca de crèdit [1215]
+P1_1216_E,Corrupció econòmica [1216]
+P1_1300_E,Crisi identitat catalana 1300
+P1_1301_E,Situació llengua catalana [1301]
+P1_1302_E,Excessiu nacionalisme espanyol [1302]
+P1_1500_E,Excessiva pressió fiscal 1500
+P1_1501_E,No ajuda als empresaris autònoms [1501]
+P1_1502_E,Mal ús de la recaptació dels impostos [1502]
+P1_1600_E,Baix nivell salarial 1600
+P1_1700_E,Serveis deficients i males instalÂ·lacions públiques 1700
+P1_1701_E,Descontentament amb l'Administració/burocràcia [1701]
+P1_1702_E,Mal funcionament de la justícia [1702]
+P1_1703_E,Mala actuació dels jutges [1703]
+P1_1704_E,Manca d'equipaments i serveis [1704]
+P1_1705_E,Neteja als municipis [1705]
+P1_1800_E,Millorar polítiques socials 1800
+P1_1801_E,Manca d'atenció a la gent gran i discapacitats [1801]
+P1_1802_E,Desigualtat social i pobresa [1802]
+P1_1803_E,Drogues i alcoholisme/tabaquisme [1803]
+P1_1804_E,"Conciliació amb la vida laboral, personal i familiar [1804]"
+P1_1805_E,Pensions baixes [1805]
+P1_1806_E,Manca d'ajudes als joves [1806]
+P1_1808_E,Discriminació de la dona [1808]
+P1_8000_E,Altres 8000
+P1_8001_E,Terrorisme [8001]
+P1_8002_E,Deteriorament del medi ambient [8002]
+P1_8003_E,Manca de llibertat [8003]
+P1_8004_E,Localització de les presons [8004]
+P1_8005_E,Centralisme de Barcelona [8005]
+P1_8006_E,Incertesa cap al futur [8006]
+P1_8007_E,Contrari als drets dels homosexuals [8007]
+P1_8008_E,Guerra [8008]
+P1_8010_E,Moviment ocupa [8010]
+P1_8011_E,Manca d'aigua [8011]
+P1_8012_E,Programes del cor/telebasura [8012]
+P1_8013_E,Baixa natalitat [8013]
+P1_8014_E,No hi ha temps per a l'oci [8014]
+P1_8015_E,Descontentament amb els mitjans de comunicació [8015]
+P1_8016_E,Influència de les religions en la vida pública [8016]
+P1_8017_E,La prostitució [8017]
+P1_8020_E,Usos del sòl [8020]
+P1_8021_E,Fanatisme religiós [8021]
+P1_8023_E,Desnonaments [8023]
+P1_8024_E,Turisme [8024]
+P1_9400_E,Tots 9400
+P1_9500_E,Cap problema 9500
+P1_9800_E,No ho sap 9800
+P1_9900_E,No contesta 9900
+PRE_P2,P2. Problema més important de Catalunya (ORIGINAL)
+P2,P2. Problema més important de Catalunya (EXTENSA)
+P2_R,P2. Problema més important de Catalunya (REDUIDA)
+P2_LITERALS,P2 LITERAL
+P3,P3. Partit que dóna millor resposta al problema
+P3_LITERALS,P3 LITERAL
+P3R,P3. Partit que dóna millor resposta al problema agrupada
+P4,P4. Valoració de la situació econòmica actual de Catalunya
+P5,P5. Comparació de la situació econòmica actual a Catalunya respecte a l'any passat
+P6,P6. Perspectives de la situació econòmica a Catalunya d'aquí a un any
+P7,P7. Situació econòmica actual d'Espanya
+P8,P8. Comparació de la situació econòmica personal actual respecte a l'any passat
+P9,P9. Valoració de la situació política actual de Catalunya
+P10,P10. Comparació de la situació política actual a Catalunya respecte a l'any passat
+P11,P11. Perspectives de la situació política a Catalunya d'aquí a un any
+P12,P12. Valoració de la situació política actual d'Espanya
+P52,P52. Amb quina frase se sent més identificat/ada?
+P53,"P53. Com es posicionaria vostè en una escala de 0 a 10, tenint en compte que 0 és “gens disposat/ada a assumir riscos” i 10 “totalment disposat/ada a assumir riscos”?"
+P54,P54. Com li agradaria que es prenguessin les decisions polítiques a Catalunya en una escala de 0 a 10 on 0 significa que els ciutadans haurien de prendre directament totes les decisions i 10 significa que els polítics haurien de prendre directament totes
+P13A,P13a. Objectius del país en els propers 10 anys
+P13B,P13b. Quin li seguiria en importància
+P13C,"P13c. Vostè està totalment a favor, mès aviat a favor, mès aviat en contra o totalment en contra de que les Administracions catalanes passin a recaptar i decidir la distribució de tots els impostos que paguen els ciutadans i les empreses de Catalunya"
+P14,P14. Interès per la política
+P15,P15. Nivell subjectiu d'informació sobre política
+P20A,P20a. Confiança en els polítics catalans (0-10)
+P23,P23. Com valora la gestió de l’actual govern de la Generalitat de Catalunya en els darrers mesos (0-10)
+P16_TELE_U,S'informa a través de la televisió
+P16_RADIO_U,S'informa a través de ràdio
+P16_PREMSA_U,S'informa a través de premsa
+P16_INTERNET_U,S'informa a través de internet
+P16_AMICS_U,"S'informa a través d'amics, coneguts o familiars"
+P16_NOINFO_U,No s'informa perquè no li interessa la política
+P16_NS,No ho sap
+P16_NC,No contesta
+P16A_REC,P16a. A quin canal de televisió acostuma vostè a veure habitualment els informatius?
+P16A_LITERALS,P16A LITERAL
+P16B_REC,P16b. A quina emissora de ràdio acostuma vostè a escoltar els informatius habitualment?
+P16B_LITERALS,P16B LITERAL
+P16C_REC,P16c. i quin diari acostuma a llegir amb més freqüència?
+P16C_LITERALS,P16C LITERAL
+P65A,P65a. Pàgines de mitjans de comunicació
+P65B,P65b. Pàgines de partits o candidats
+P65C,P65c. Pàgines d’organitzacions ciutadanes o moviments cívics
+P65D,P65d. Blogs o fòrums de debat
+P65E,P65e. Xarxes socials virtuals
+P65F,P65f. Facebook
+P65G,P65g. Twitter
+P65H,P65h. Linkedin
+P65I,P65i. Snapchat
+P65J,P65j. Instagram
+PRE_P16D,P16d. I com s'informa del temes polítics per Internet?
+P16D_1_LITERALS,P16D LITERAL
+P16D_2_LITERALS,P16D LITERAL
+P16D_3_LITERALS,P16D LITERAL
+P16D_1,"P16d. I ara, em podria indicar quines són les tres pàgines web que consulta més freqüentment per informar-se dels temes polítics?"
+P16D_2,"P16d. I ara, em podria indicar quines són les tres pàgines web que consulta més freqüentment per informar-se dels temes polítics?"
+P16D_3,"P16d. I ara, em podria indicar quines són les tres pàgines web que consulta més freqüentment per informar-se dels temes polítics?"
+P16D_4,P16d. I com s'informa dels temes polítics per Internet?
+P16D_5,P16d. I com s'informa dels temes polítics per Internet?
+P16D_6,P16d. I com s'informa dels temes polítics per Internet?
+P16D_7,P16d. I com s'informa dels temes polítics per Internet?
+P16D_8,P16d. I com s'informa dels temes polítics per Internet?
+P17A,"P17a. Fins a quin punt diria que, en línies generals, està vostè satisfet/a amb la seva vida actual"
+P17B,P17b. Confiança social
+P20B,P20b. Confiança en els polítics espanyols (0-10)
+P55,P55. Com valora la gestió de l’actual govern espanyol en els darrers mesos (0-10)
+P18,P18. Satisfacció amb el funcionament de la nostra democràcia
+P44A,P44a. Grau de Confiança en grups professionals: En el personal sanitari
+P44B,P44b. Grau de Confiança en grups professionals: En el cos docent
+P44C,P44c. Grau de Confiança en grups professionals: En els científics
+P44D,P44d. Grau de Confiança en grups professionals: En els periodistes
+P44E,P44e. Grau de Confiança en grups professionals: En el cos de Policies Nacionals i Guàrdia Civil
+P44F,P44f. Grau de Confiança en grups professionals: En el cos dels Mossos d'Esquadra
+P44G,P44g. Grau de Confiança en grups professionals: En els jutges
+P44H,P44h. Grau de Confiança en grups professionals: En els comerciants
+P44I,P44i. Grau de Confiança en grups professionals: En el funcionariat
+P44J,P44j. Grau de Confiança en grups professionals: En els empresaris
+P44K,"P44k. Grau de Confiança en grups professionals: En els sacerdots, religioses, etc"
+P44L,P44l. Grau de Confiança en grups professionals: En els cossos militars
+P44M,P44m. Grau de Confiança en grups professionals: En els polítics
+P44N,P44n. Grau de Confiança en grups professionals: En els banquers
+P19A,P19a. Crec que els polítics tenen en compte el que pensa la gent
+P19B,P19b. Els polítics només busquen el benefici propi
+P19C,P19c. La gent del carrer pot influir en el que fan els polítics
+P19D,P19d. De vegades la política sembla tan complicada que se'm fa difícil entendre el que està passant
+P21A,P21A. Els tribunals de justícia
+P21B,P21B. Els partits polítics
+P21C,P21C. El seu Ajuntament
+P21D,P21D. El govern espanyol / central
+P21E,P21E. Els sindicats
+P21F,P21F. El govern de la Generalitat
+P21G,P21G. El Congrés dels Diputats
+P21H,P21H. El parlament de Catalunya
+P21I,P21I. La Unió Europea
+P21J,P21J. La monarquia espanyola
+P21K,P21K. L'exèrcit
+P21L,P21L. La policia nacional espanyola i guàrdia urbana
+P21M,P21M. Els mossos d'esquadra
+P21N,P21N. L'església catòlica
+P21O,P21O. L'ONU
+P21P,P21P. La banca
+P21Q,P21Q. Els mitjans de comunicació
+P21R,P21R. El tribunal constitucional
+P21S,P21S. Les universitats
+P21T,P21t. Parlament Europeu (0-10)
+P21U,P21u. Govern de la Unió Europea (0-10)
+P22A,P22a. Confiança 0-10 en els seus familiars
+P22B,P22b. Confiança 0-10 en les seves amistats
+P22C,P22c. Confiança 0-10 en els seus veïns
+P22D,P22d. Confiança 0-10 en els ciutadans del seu poble/ciutat
+P22E,P22e. Confiança 0-10 en els ciutadans de Catalunya
+P22F,P22f. Confiança 0-10 en els ciutadans d'Espanya
+P22G,P22g. Confiança 0-10 en els ciutadans d'Europa
+P22H,P22h. Confiança 0-10 en els ciutadans del mòn
+P56A,"P56a. “Com menys intervingui el Govern en l’economia, millor serà pel país”"
+P56B,"P56b. “Cal baixar els impostos, encara que això impliqui reduir serveis i prestacions públiques”"
+P56C,P56c. “El Govern hauria de prendre mesures per reduir les diferències en els nivells d’ingressos”
+P56D,P56d. “Les parelles de gais i lesbianes han de poder adoptar fills en les mateixes condicions que les parelles heterosexuals”
+P56E,P56e. “L’escola ha d’ensenyar als nens a obeir l’autoritat”
+P56F,P56f. “La religió no hauria de tenir cap influència en la política”
+P56G,"P56g. “En qualsevol circumstància, la llei sempre ha de ser obeïda”"
+P56H,P56h. “Algú amb plenes facultats hauria de poder decidir quan vol morir”
+P56I,"P56i. “Amb tanta immigració, un ja no se sent com a casa”"
+P56J,P56j. “El creixement econòmic ha de tenir prioritat sobre la protecció del medi ambient”
+P67A,P67a. Una  associació de veïns
+P67B,P67b. Una associació o grup juvenil
+P67C,P67c. Un partit polític
+P67D,P67d. Un sindicat
+P67E,P67e. Una associació religiosa o parroquial
+P67F,P67f. Una organització empresarial
+P67G,P67g. Una associació o col•legi professional
+P67H,P67h. Una associació o grup ecologista
+P67I,P67i. Una associació o club esportiu
+P67J,P67j. Una associació de mares i pares d’alumnes (AMPA)
+P67K,P67k. Una associació de consumidors
+P67L,P67l. Una ONG o associació de solidaritat
+P67M,P67m. Una associació cultural
+P67N,P67n. Una associació política que no sigui un partit
+P24,P24. Simpatia de partit
+P24_LITERALS,P24. LITERAL
+P24R,P24. Simpatia de partit (Agrupació Parlament)
+P25,P25. Definició ideològica esquerra-dreta 0_10
+P26A,P26a. Definició ideològica esquerra-dreta 0_10 PPC
+P26B,P26b. Definició ideològica esquerra-dreta 0_10 CiU
+P26C,P26c. Definició ideològica esquerra-dreta 0_10 ERC
+P26D,P26d. Definició ideològica esquerra-dreta 0_10 PSC
+P26E,P26e. Definició ideològica esquerra-dreta 0_10 ICV-EUiA
+P26F,P26f. Definició ideològica esquerra-dreta 0_10 C's
+P26G,P26g. Definició ideològica esquerra-dreta 0_10 CUP
+P26H,P26h. Definició ideològica esquerra-dreta 0_10 Podemos
+P26I,P26i. Definició ideològica esquerra-dreta 0_10 - CDC
+P26J,P26j. Definició ideològica esquerra-dreta 0_10 - Junts pel sí
+P26K,P26k. Definició ideològica esquerra-dreta 0_10 - Catalunya sí­ que es pot
+P26L,P26. Definició ideològica esquerra-dreta 0_10 - PDeCAT
+P27,P27_BASE TOTAL. Propi 0=màxim espanyolisme i 10=màxim catalanisme
+P27A,P27a_50%. Propi 0=màxim espanyolisme i 10=màxim catalanisme
+P27B,P27b_50%. Propi 0=màxim catalanisme i 10=màxim espanyolisme
+P27AC,P27a. Em pot dir on s’ubicaria vostè en una escala de 0 a 10 on 0 significa mínim catalanisme i 10 màxim catalanisme?
+P27BE,P27b. Em pot dir on s’ubicaria vostè en una escala de 0 a 10 on 0 significa mínim espanyolisme i 10 màxim espanyolisme?
+P28A,P28a. PPC 0=màxim espanyolisme i 10=màxim catalanisme
+P28B,P28b. CiU 0=màxim espanyolisme i 10=màxim catalanisme
+P28C,P28c. ERC 0=màxim espanyolisme i 10=màxim catalanisme
+P28D,P28d. PSC 0=màxim espanyolisme i 10=màxim catalanisme
+P28E,P28e. ICV-EUiA 0=màxim espanyolisme i 10=màxim catalanisme
+P28F,P28f. C's 0=màxim espanyolisme i 10=màxim catalanisme
+P28G,P28g. CUP 0=màxim espanyolisme i 10=màxim catalanisme
+P28H,P28h. PODEMOS 0=màxim espanyolisme i 10=màxim catalanisme
+P28I,P28i. CDC 0=màxim espanyolisme i 10=màxim catalanisme
+P28J,P28j. Junts pel Sí 0=màxim espanyolisme i 10=màxim catalanisme
+P28K,P28k. Catalunya sí que es pot 0=màxim espanyolisme i 10=màxim catalanisme
+P28L,P28l. PDeCAT 0=màxim espanyolisme i 10=màxim catalanisme
+P28AA,P28a_50%. PPC 0=màxim espanyolisme i 10=màxim catalanisme
+P28BA,P28b_50%. CiU 0=màxim espanyolisme i 10=màxim catalanisme
+P28CA,P28c_50%. ERC 0=màxim espanyolisme i 10=màxim catalanisme
+P28DA,P28d_50%. PSC 0=màxim espanyolisme i 10=màxim catalanisme
+P28EA,P28e_50%. ICV-EUiA 0=màxim espanyolisme i 10=màxim catalanisme
+P28FA,P28f_50%. C's 0=màxim espanyolisme i 10=màxim catalanisme
+P28GA,P28g_50%. CUP 0=màxim espanyolisme i 10=màxim catalanisme
+P28HA,P28h_50%. PODEMOS 0=màxim espanyolisme i 10=màxim catalanisme
+P28IA,P28i_50%. CDC 0=màxim espanyolisme i 10=màxim catalanisme
+P28JA,P28j_50%. Junts pel Sí 0=màxim espanyolisme i 10=màxim catalanisme
+P28KA,P28k_50%. Catalunya sí que es pot 0=màxim espanyolisme i 10=màxim catalanisme
+P28LA,P28l_50%. PDeCAT 0=màxim espanyolisme i 10=màxim catalanisme
+P28AB,P28a_50%. PPC 0=màxim catalanisme i 10=màxim espanyolisme
+P28BB,P28b_50%. CiU 0=màxim catalanisme i 10=màxim espanyolisme
+P28CB,P28c_50%. ERC 0=màxim catalanisme i 10=màxim espanyolisme
+P28DB,P28d_50%. PSC 0=màxim catalanisme i 10=màxim espanyolisme
+P28EB,P28e_50%. ICV-EUiA 0=màxim catalanisme i 10=màxim espanyolisme
+P28FB,P28f_50%. C's 0=màxim catalanisme i 10=màxim espanyolisme
+P28GB,P28g_50%. CUP 0=màxim catalanisme i 10=màxim espanyolisme
+P28HB,P28h_50%. PODEMOS 0=màxim catalanisme i 10=màxim espanyolisme
+P28IB,P28i_50%. CDC 0=màxim catalanisme i 10=màxim espanyolisme
+P28JB,P28j_50%. Junts pel Sí 0=màxim catalanisme i 10=màxim espanyolisme
+P28KB,P28k_50%. Catalunya sí que es pot 0=màxim catalanisme i 10=màxim espanyolisme
+P28LB,P28l_50%. PDeCAT 0=màxim catalanisme i 10=màxim espanyolisme
+P29,P29. Valoració del nivell d'autonomia de Catalunya
+P30,P30. Relació entre Catalunya i Espanya
+P31,"P31. I més concretament, “Vol que Catalunya esdevingui un Estat independent”?"
+P31A,P31a. Consulta: vol que Catalunya esdevingui un Estat?
+P31B,P31b. Consulta: vol que aquest Estat sigui independent?
+P31A_P31B,P31A_P31B
+PRE_P31C,P31c. Motiu de vot a la consulta
+P31C_LITERALS,P31c. Motiu de vot a la consulta
+P31C_1,Conceptualització identitària de Catalunya com a nació
+P31C_2,Sentiment identitari (em sento català/ana)
+P31C_3,"Desig de model de país (s'ho mereix, és pel que hem lluitat,...)"
+P31C_4,"Guanyar capacitat de decisió, nivell d'autonomia"
+P31C_5,"Catalunya milloraria (major prosperitat, llibertat,...)"
+P31C_6,Capacitat d'autosuficiència (disponibilitat de recursos)
+P31C_7,"Capacitat i desig d'autogestió econòmica (recursos, impostos)"
+P31C_8,Sentiment d'incomprensió (resta de l'Estat amb Catalunya)
+P31C_9,Única via de millora/canvi necessari
+P31C_10,Com a millora de les competències actuals (toc d'atenció)
+P31C_11,Preferència per un model federal/ un estat dins d'Espanya
+P31C_12,Tot/molts motius
+P31C_80,Altres
+P31C_100,Preservació de la unitat d’Espanya
+P31C_101,Sentiment identitari  (tant espanyol/a com català/ana o més espanyol/a que català)
+P31C_102,No seria positiu per Catalunya/ no convé econòmicament
+P31C_103,Independència inviable/ no ho veu factible
+P31C_104,Partidari del procés globalitzador/inclusor (contrari a les divisions territorials)
+P31C_105,"Vol un canvi, mes autonomia política i econòmica dins Espanya"
+P31C_106,L’ independència és una postura extrema
+P31C_107,No té una postura ferma
+P31C_108,No es percep com a procés prioritari i viable
+P31C_109,Ja estem be com estem
+P31C_112,Portaria mes problemes/ no és una solució
+P31C_113,Desconfiança en el procés i en la classe política
+P31C_114,No vol la independència (sense especificar)
+P31C_115,Manca d'informació pros i contres
+P31C_116,No interessa el tema i/o la política. Li és igual
+P31C_117,No estic d'acord amb la consulta/ És il.legal
+P31C_300,No podrà votar
+P31C_9800,No contesta
+P31C_9900,No ho sap
+P32,P32. Nivell de vida dels catalans davant el supòssit d'una Catalunya independent
+P33,P33. Convivència entre els catalans davant el supòssit d'una Catalunya independent
+P34,P34. Probabilitat de quedar automàticament fora de la UE davant el supòssit d'una Catalunya independent
+P35,P35. Probabilitat que el govern espanyol oferti un acord acceptable per la majoria del Parlament de Catalunya
+P66,"P66. Per a algunes persones votar és un dret que es pot exercir o no, i per a altres és un deure. Per a vostè personalment és...?"
+P36,"P36. Dels diferents tipus d'eleccions, quina és per vostè la més important....?"
+P40P,"P40P. Quina és la probabilitat que vostè voti, utilitzant una escala de 0 a 10, on 0 significa “amb tota seguretat no aniré a votar” i 10 significa “amb tota seguretat aniré a votar”"
+P29C_1,El propi partit
+P29C_2,El líder
+P29C_3,La ideologia
+P29C_4,L'actuació en el govern / L'actuació a l'oposició
+P29C_5,Les propostes electorals
+P29C_95,Cap d'aquestes
+P29C_80,Altres
+P29C_98,No ho sap
+P29C_99,No contesta
+P29D,P29d. En quin moment pren vostè la decisió d'anar o no a votar...?
+P29E,P29e. Què creu que té més importància a l’hora de decidir el seu vot en les properes eleccions al Parlament de Catalunya?
+P57A,P57a. Durant la campanya electoral passada: Va veure per la televisió algun espai de propaganda electoral d'algun partit o coalició política
+P57B,"P57b. Durant la campanya electoral passada: Va llegir o va fer un cop d'uull a les cartes, fulls volants o programes d'algun partit o coalició"
+P57C,P57c. Durant la campanya belectoral passada: Va contribuir econòmicament amb algun partit o candidat/da
+P57D,P57d. Durant la campanya electoral passada: Va treballar com a voluntari/a en la campanya d'algun partit o candidat/a
+P57E,P57e. Durant la campanya electoral passada: Va assistir a un míting o reunió d'algun partit polític
+P57F,"P57f. Durant la campanya electoral passada: Va enviar algun missatge de mòbil, SMS, correu electrònic, post, piulada/tuit, etc. sobre les eleccions"
+P57G,P57g. Durant la campanya electoral passada: Va intentar vostè convéncer a algú que hauria de votar a un determinat partit polític
+P57H,P57h. Durant la campanya electoral passada: Va seguir/veure algun debat entre els candidats
+P57I,P57i. Durant la campanya electoral passada: Va llegir enquestes
+P58,P58. Coneixement dels resultats d'alguna de les enquestes o sondeigs preelectorals
+P58A,P58a. Influència dels resultats de les enquestes o sondeigs preelectorals en la opinió dels electors
+P58B,P58b. Influència dels resultats de les enquestes o sondeigs preelectorals en la opinió dels enquestats
+P58C,P58c. Sentit de la influència dels resultats de les enquestes o sondeigs preelectorals en la opinió dels enquestats
+ORDRE1,Ordre Qüest A
+ORDRE2,Ordre Qüest B
+P37_A1,P37. Intenció al Parlament de Catalunya
+P37_A2,P37. Intenció al Parlament de Catalunya
+P37_B1,P37. Intenció al Parlament de Catalunya
+P37_B2,P37. Intenció al Parlament de Catalunya
+P37,P37. Intenció al Parlament de Catalunya
+P37_LITERALS,P37. LITERAL
+P37R,P37. Intenció al Parlament de Catalunya (Agrupació Parlament)
+P32B1,P32b. Vostè m’ha dit que no sap a quin partit o coalició votarà a les properes. Em podria dir entre quins o quines està dubtant? 1er partit dubte
+P32B2,P32b. Vostè m’ha dit que no sap a quin partit o coalició votarà a les properes. Em podria dir entre quins o quines està dubtant?  2on partit dubte
+P32B3,P32b. Vostè m’ha dit que no sap a quin partit o coalició votarà a les properes. Em podria dir entre quins o quines està dubtant?  3r partit dubte
+P32B4,P32b. Vostè m’ha dit que no sap a quin partit o coalició votarà a les properes. Em podria dir entre quins o quines està dubtant?  4rt partit dubte
+P32B_LITERALS,P32b. Vostè m’ha dit que no sap a quin partit o coalició votarà a les properes. Em podria dir entre quins o quines està dubtant? LITERALS
+P32B,P32. Em podria dir a quin partit i coalició votarà? Agrupada
+P32C,P32c. Quin partit o coalició creu vostè que guanyarà les eleccions?
+P32C_LITERALS,P32c. Quin partit o coalició creu vostè que guanyarà les eleccions?
+P38A,"P38a. En concret, quina de les següents frases descriu millor la seva situació en les darreres eleccions al Parlament de Catalunya?"
+P38A2,P38a2. Moment de decisió del vot al Parlament de Catalunya
+P38B,P38b. Record de Parlament de Catalunya
+P38B_LITERALS,P38b LITERAL
+P38BR,P38b. Record de Parlament de Catalunya (Agrupació Parlament)
+P38_CENS,P38/cens. Record de vot al Parlament de Catalunya sobre cens
+P38_CENSR,P38/cens. Record de vot al Parlament de Catalunya sobre cens (Agrupació Parlament)
+P38B2,P38B2. Raó principal per la qual no va votar al Parlament de Catalunya
+P38B2_LITERALS,P38B2. Raó principal per la qual no va votar al Parlament de Catalunya
+P38B3,P38B3. Raó principal del vot al Parlament de Catalunya
+P38B3_LITERALS,P38B3. Raó principal del vot al Parlament de Catalunya
+P59A,P59a. Sentiments front el resultat de les darreres eleccions Parlament de Catalunya: Por
+P59B,P59b. Sentiments front el resultat de les darreres eleccions Parlament de Catalunya: Incertesa
+P59C,P59c. Sentiments front el resultat de les darreres eleccions Parlament de Catalunya: Il·lusió
+P59D,P59d. Sentiments front el resultat de les darreres eleccions Parlament de Catalunya: Esperança
+P59E,P59e. Sentiments front el resultat de les darreres eleccions Parlament de Catalunya: Prudència
+P59F,P59f. Sentiments front el resultat de les darreres eleccions Parlament de Catalunya: Confiança
+P63A,P63a. Sentiments front el nou Govern  de Catalunya: Por
+P63B,P63b. Sentiments front el nou Govern  de Catalunya: Incertesa
+P63C,P63c. Sentiments front el nou Govern  de Catalunya: Il·lusió
+P63D,P63d. Sentiments front el nou Govern  de Catalunya: Esperança
+P63E,P63e. Sentiments front el nou Govern  de Catalunya: Prudència
+P63F,P63f. Sentiments front el nou Govern  de Catalunya: Confiança
+P40g,P40P. Probabilitat de votar al Congrés dels Diputats
+P60_1,P60. El propi partit
+P60_2,P60. El líder
+P60_3,P60. La ideologia
+P60_4,P60. L’actuació en el Govern/L’actuació en l’oposició
+P60_5,P60. Les propostes electorals
+P60_95,P60. Cap d'aquestes
+P60_80,P60. Altres
+P60_98,P60. No ho sap
+P60_99,P60. No contesta
+P61,P61. Moment de decisió d'anar o no a votar. Congrès dels Diputats
+P62,P62. Més importància a l'hora de decidir el seu vot. Congrès dels Diputats
+P59Ac,P59a. Por
+P59Bc,P59b. Incertesa
+P59Cc,P59c. Il·lusió
+P59Dc,P59d. Esperança
+P59Ec,P59e. Prudència
+P59Fc,P59f. Confiança
+P39_A1,P39. Intenció de vot Congrès dels Diputats
+P39_A2,P39. Intenció de vot Congrès dels Diputats
+P39_B1,P39. Intenció de vot Congrès dels Diputats
+P39_B2,P39. Intenció de vot Congrès dels Diputats
+P39,"P39. Si demà se celebressin eleccions al Congrés dels Diputats, a quin partit o formació votaria?"
+P39_LITERALS,P39. LITERAL
+P39R,"P39. Si demà se celebressin eleccions al Congrés dels Diputat, a quin partit o formació votaria (Agrupació Parlament)"
+P39B,P39b. Dubte de vot a les properes eleccions al Congrés dels Diputats.Combinació
+P39B1,P39b. Dubte de vot a les properes eleccions al Congrés dels Diputats. 1er partit dubte
+P39B2,P39b. Dubte de vot a les properes eleccions al Congrés dels Diputats. 2on partit dubte
+P39B3,P39b. Dubte de vot a les properes eleccions al Congrés dels Diputats. 3r partit dubte
+P39B4,P39b. Dubte de vot a les properes eleccions al Congrés dels Diputats. 4rt partit dubte
+P39B_LITERALS,P39b. Dubte de vot a les properes eleccions al Congrés dels Diputats. LITERALS
+P40A,"P40a. En concret, quina de les següents frases descriu millor la seva situació en les darreres eleccions al Congrés dels Diputats"
+P40A2,P40ab. Quan va decidir vostè votar el partit o coalició que va votar finalment
+P40B,P40b. I em podria dir a quin partit o coalició va votar en les darreres eleccions al Congrés dels Diputats celebrades el passat 26 de juny
+P40B_LITERALS,P40b LITERAL
+P40BR,P40b. I em podria dir a quin partit o coalició va votar en les darreres eleccions al Congrés dels Diputats celebrades el passat 26 de juny (Agrupació Parlament)
+P40_CENS,P40/cens. Record de vot Generals sobre cens
+P40_CENSR,P40/cens. Record de vot Generals sobre cens (Agrupació Parlament)
+P40A_DES2015,"P40a. En concret, quina de les següents frases descriu millor la seva situació en les anteriors eleccions al Congrés dels Diputats, el desembre de l’any passat, el 2015"
+P40B_DES2015,"P40b. I em podria dir a quin partit o coalició va votar en les anteriors eleccions al Congrés dels Diputats, el desembre de l’any passat, el 2015"
+P40B_DES2015_a,P40b LITERAL
+P40BR_DES2015,"P40b. I em podria dir a quin partit o coalició va votar en les anteriors eleccions al Congrés dels Diputats, el desembre de l’any passat, el 2015_agrupada"
+P40_CENS_DES2015,P40/cens. Record de vot Generals sobre cens desembre 2015
+P40_CENSR_DES2015,P40/cens. Record de vot Generals sobre cens_agrupada desembre 2015
+coneix_Albiol,P41. Coneixement Xavier García Albiol
+val_Albiol,P41. Valoració Xavier García Albiol Albiol
+coneix_Rajoy,P41. Coneixement Mariano Rajoy
+val_Rajoy,P41. Valoració Mariano Rajoy
+coneix_Puigdemont,P41. Coneixement Carles Puigdemont
+val_Puigdemont,P41. Valoració Carles Puigdemont
+coneix_Junqueras,P41. Coneixement Oriol Junqueras
+val_Junqueras,P41. Valoració Oriol Junqueras
+coneix_Iceta,P41. Coneixement Miquel Iceta
+val_Iceta,P41. Valoració Miquel Iceta
+coneix_Batet,P41. Coneixement Meritxell Batet
+val_Batet,P41. Valoració Meritxell Batet
+coneix_Rabell,P41. Coneixement Lluis Rabell
+val_Rabell,P41. Valoració Lluis Rabell
+coneix_Domènech,P41. Coneixement Xavier Domènech
+val_Domènech,P41. Valoració Xavier Domènech
+coneix_Arrimadas,P41. Coneixement Inés Arrimadas
+val_Arrimadas,P41. Valoració Inés Arrimadas
+coneix_Mejías,P41. Coneixement Carina Mejías
+val_Mejías,P41. Valoració Carina Mejías
+coneix_Gabriel,P41. Coneixement Anna Gabriel
+val_Gabriel,P41. Valoració Anna Gabriel
+coneix_Salellas,P41. Coneixement Benet Salellas
+val_Salellas,P41. Valoració Benet Salellas
+coneix_Camacho,P41a. Coneixement Alícia Sánchez-Camacho
+val_Camacho,P41b. Valoració Alícia Sánchez-Camacho
+coneix_Fernandez,P41a. Coneixement Jorge Fernández Díaz
+val_Fernandez,P41b. Valoració Jorge Fernández Díaz
+coneix_Mas,P41a. Coneixement Artur Mas
+val_Mas,P41b. Valoració Artur Mas
+coneix_Duran,P41a. Coneixement Josep Antoni Duran i Lleida
+val_Duran,P41b. Valoració Josep Antoni Duran i Lleida
+coneix_Bosch,P41a. Coneixement Alfred Bosch
+val_Bosch,P41b. Valoració Alfred Bosch
+coneix_Collboni,P41a. Coneixement Jaume Collboni
+val_Collboni,P41b. Valoració Jaume Collboni
+coneix_Terricabras,P41a. Coneixement Josep Maria Terricabras
+val_Terricabras,P41b. Valoració Josep Maria Terricabras
+coneix_Navarro,P41a. Coneixement Pere Navarro
+val_Navarro,P41b. Valoració Pere Navarro
+coneix_Chacón,P41. Coneixement Carme Chacón
+val_Chacón,P41. Valoració Carme Chacón
+coneix_Lopez,P41a. Coneixement Javi López Fernández
+val_Lopez,P41b. Valoració Javi López Fernández
+coneix_Herrera,P41a. Coneixement Joan Herrera
+val_Herrera,P41b. Valoració Joan Herrera
+coneix_Coscubiela,P41a. Coneixement Joan Coscubiela
+val_Coscubiela,P41b. Valoració Joan Coscubiela
+coneix_Rivera,P41a. Coneixement Albert Rivera
+val_Rivera,P41b. Valoració Albert Rivera
+coneix_DFernandez,P41a. Coneixement David Fernàndez
+val_DFernandez,P41b. Valoració David Fernàndez
+coneix_Baños,P41. Coneixement Antonio Baños
+val_Baños,P41. Valoració Antonio Baños
+P42A,P42A. Posicionament (opcions): Ha firmat una petició
+P42B,P42B. Posicionament (opcions): S'ha posat en contacte amb un polític
+P42C,P42C. Posicionament (opcions): Ha participat en manifestacions autoritzades
+P42D,P42D. Posicionament (opcions): Ha col·laborat amb alguna organització o associació
+P42E,P42E. Posicionament (opcions): Ha secundat boicots o ha deixat d'utilitzar certs productes
+P42F,P42F. Posicionament (opcions): Ha portat insígnies/enganxines d'alguna campanya
+P42G,P42G. Posicionament (opcions): Ha col·laborat amb algun partit polític
+P42H,P42H. Posicionament (opcions): Ha col·laborat amb alguna plataforma d'acció ciutadana
+P43,P43. Posicionament: La protesta social com a factor de canvi
+UE1,UE1. Valoració de la gestió del Parlament europeu
+UE2,UE2. Interès pels temes relacionats amb la Unió Europea
+UE3,UE3. Elements de decisió del vot per a futures eleccions al Parlament Europeu
+UE4,UE4. Probabilitat d'anar a votar a les properes eleccions al Parlament Europeu
+UE5,UE5. Intenció de vot a les properes eleccions al Parlament Europeu
+UE5_LITERALS,UE5 LITERALS
+P45,45. Sentiment independentista
+P45C,45c. Quin és el motiu principal pel qual s’ha fet independentista en els últims anys?
+P45C_LITERALS,45 LITERALS
+P46A,46a. Autoidentificació política 1ER
+P46A_LITERALS,46a. LITERALS 1ER
+P46B,46b. Autoidentificació política 2ON
+P46B_LITERALS,46b. LITERALS 2ON
+ORDRE3,Ordre P47
+P47A,47a. Valoració de la corrupció entre el polítics
+P47B,47b. Valoració de la corrupció entre la ciutadania
+P48,P48. Considera vostè que les polítiques de l’Estat tenen un caràcter recentralitzador?
+P50,P50. Quina de les següents frases s’acosta més a la seva opinió:
+P49A,"49a. La quantitat de diners que l´Estat espanyol recapta a Catalunya i que no retorna a Catalunya en forma de serveis, prestacions i inversions és excessiva, més gran del que és just"
+P49B,49b. El govern espanyol pren decisions que perjudiquen la qualitat i la quantitat de les infraestructures pbliques de Catalunya
+P51,"51. En una escala de 0 a 10, en la qual 0 significa totalment injust i 10 totalment just, com valora vostè el tracte que reben els ciutadans de Catalunya per part del Govern espanyol"
+P68A,P68A. Ha hagut de recórrer a l'ajuda econòmica de familiars
+P68B,P68B. Ha perdut la feina / no ha pogut trobar feina en cas que n'estigués buscant
+P68C,P68C. S'han reduït els ingressos de la seva llar
+P68D,P68D. Ha hagut de canviar de domicili per dificultats econòmiques / laborals
+P68E,P68E. Es planteja anar a treballar a un país estranger
+P68F,P68F.  Ha tingut més problemes per dormir a causa de preocupacions econòmiques o laborals
+P68G,P68G. Ha tingut algun problema de salut a causa de la seva situació econòmica o laboral
+P68H,"P68H. Algú del seu entorn familiar més immediat (parella, fills, pares) s'ha quedat sense feina"
+P69,P69. Quina de les següents afirmacions descriu millor com se sent respecte als ingressos de la seva llar en l'actualitat?
+P70,"P70. Si per algun motiu sobtat deixés de percebre ingressos, quant de temps podria aguantar vostè i el seu nucli familiar abans de trobar-se en greus dificultats econòmiques?"
+P71,"P71. En els últims dotze mesos, la situació econòmica de la seva llar?"
+P72A,P72a. En quina mesura se sent unit/da als següents àmbits territorials: La ciutat o poble en el que viu (0_10)
+P72B,P72b. En quina mesura se sent unit/da als següents àmbits territorials: Catalunya (0_10)
+P72C,P72c. En quina mesura se sent unit/da als següents àmbits territorials: Els territoris de llengua catalana (0_10)
+P72D,P72d. En quina mesura se sent unit/da als següents àmbits territorials: Espanya (0_10)
+P72E,P72e. En quina mesura se sent unit/da als següents àmbits territorials: La Unió Europea (0_10)
+P72F,P72f. En quina mesura se sent unit/da als següents àmbits territorials: Els països de llengua castellana o espanyola (0_10)
+P72G,P72g. En quina mesura se sent unit/da als següents àmbits territorials: El món en general (0_10)
+P73,"P73. Independentment que vostè el practiqui o no, diria que s’interessa  molt, bastant, poc o gens per l’esport"
+P74,P74. Fins a quin punt se sent vostè orgullós/a quan una selecció espanyola realitza una bona actuació en un campionat esportiu?
+P75,P75. Fins a quin punt se sent vostè orgullós/a quan una selecció catalana realitza una bona actuació en un campionat esportiu?
+P76,P76. Se sent vostè proper o té simpatia per algun equip de futbol?
+P77a,P77a. Em podria indicar quin és l’equip de futbol pel qual sent vostè més simpatia?
+P77a_LITERALS,P77a. Em podria indicar quin és l’equip de futbol pel qual sent vostè més simpatia?
+P77b1,P77b. I cap altre equip? Quins?
+P77b2,P77b. I cap altre equip? Quins?
+P77b3,P77b. I cap altre equip? Quins?
+P77b_LITERALS,P77b. I cap altre equip? Quins?
+P78A,"P78a. Veure, sempre que pot, els seus partits per la televisió"
+P78B,P78b. Pagar per a veure els seus partits per la televisió
+P78C,P78c. Assistir a partits al camp
+P78D,P78d. Desplaçar-se a una altra ciutat per a seguir al seu equip
+P78E,"P78e. Tenir a casa banderes, escuts o objectes del seu equip"
+P78F,P78f.  Comprar roba o objectes d’ús personal (com rellotges o carteres etc.) del seu equip
+P78G,P78g. Enfadar-se amb familiars o amics/gues per les crítiques al seu equip
+P78H,P78h. Eliminar del seu cercle d’amics/gues aquells/es que critiquen el seu equip
+P79,P79. Està a favor que es convoqui un referèndum sobre la independència de Catalunya?
+P80,"P80. I si demà es fes un referèndum per decidir la independència de Catalunya convocat i organitzat per la Generalitat i sense l'acord del Govern Espanyol, vostè què faria?"
+P80_LITERALS,P80. LITERALS
+P81,"P81. En aquest referèndum, vostè què farà?"
+P81_LITERALS,P81 LITERAL
+P81A1,P81A. Per quin motiu votarà a favor?
+P81A2,P81A. Per quin motiu votarà a favor?
+P81A3,P81A. Per quin motiu votarà a favor?
+P81A_LITERALS,P81A LITERAL
+P81B1,P81B. Per quin motiu votarà en contra?
+P81B2,P81B. Per quin motiu votarà en contra?
+P81B_LITERALS,P81B LITERAL
+P81C1,P81C. Per quin motiu s'abstindrà?
+P81C2,P81C. Per quin motiu s'abstindrà?
+P81C_LITERALS,P81C LITERAL
+P81D1,P81D. Per quin motiu votarà nul?
+P81D2,P81D. Per quin motiu votarà nul?
+P81D_LITERALS,P81D LITERAL
+P81E1,P81E. Per quin motiu votarà en blanc?
+P81E2,P81E. Per quin motiu votarà en blanc?
+P81E_LITERALS,P81E LITERAL
+P82A,"P82a. Participar en els afers públics és un dret que tothom té, com el de reunir-se o el de manifestar-se, i ningú no està obligat/ada a participar si no pot o no vol fer-ho. En concret, quina de les següents frases descriu millor la seva actuació en el p"
+P82B,P82b. I em podria dir quina va ser l’opció que va triar al referèndum de l’1 d’octubre?
+P82C,P82c. I em podria dir quina hagués estat l’opció que hauria triat al referèndum de l’1 d’octubre?
+P83,P83. Quan va decidir vostè fer allò que va fer finalment l’1 d’octubre?
+P84A,P84a. Govern de la Generalitat
+P84B,P84b. Govern espanyol
+P84C,P84c. Ajuntament de Barcelona
+P84D,P84d. Mossos d’Esquadra
+P84E,P84e. Policia Nacional i Guàrdia Civil
+P85A,P85a. Por
+P85B,P85b. Incertesa
+P85C,P85c. Il·lusió
+P85D,P85d. Esperança
+P85E,P85e. Prudència
+P85F,P85f. Confiança
+P86,"P86. Si Catalunya finalment esdevingués un país independent, voldria vostè que formés part de la Unió Europea?"
+P87,P87. I de l’OTAN?
+C100,C100. Lloc de naixement de l'enquestat/ada
+C101,C101. Comunitat Autònoma de naixement de l'enquestat/ada
+C102,C102. País de la Unió Europea de naixement de l'enquestat/ada
+C103,C103. País del món de naixement de l'enquestat/ada
+C103_LITERALS,C103 LITERALS
+C104,C104. Any d'arribada a Catalunya
+C110,C110. Lloc de naixement del pare
+C111,C111. Comunitat Autònoma de naixement del pare
+C120,C120. Lloc de naixement de la mare
+C121,C121. Comunitat Autònoma de naixement de la mare
+C130,C130. Avis/ies nascuts/udes a Catalunya
+C201,C201. Religió
+C201_LITERALS,C201. LITERALS
+C202,C202. Assistència a oficis religiosos
+C401,C401. Situació laboral actual (enquestat/ada)
+C401A,C401a. Població no ocupada (activa i no activa) (enquestat/ada)
+C401B,C401b. Població ocupada (enquestat/ada)
+C440,C440. Treballadors/es sector públic o privat
+C500,C500. Nivell màxim de formació assolida
+C500_LITERALS,C500 LITERAL
+C600,C600. Estat civil
+C610,C610. Nombre de fills que tè l'entrevistat/da
+C700,C700. Autoubicació a l'escala de sentiment de pertinença
+C704,C704. Pot indicar-me quina ès la seva llengua? Ens referim a quina ès la llengua que vostè considera com a pròpia.
+C705,"C705. Recorda quina llengua va parlar primer vostè, a casa, quan era petit?"
+C706,C706. Pot indicar-me quina ès la seva llengua habitual? Ens referim a la llengua que parla mès sovint.
+C800,C800. Autoubicació en la classe social
+PERSONES,Llar_1. Nombre de persones que viuen a la llar
+SEXE_1,Sexe. Persona 1  (variable anonimitzada)
+EDAT_1,Edat. Persona 1 (variable anonimitzada)
+PARENTIU_1,Parentiu. Persona 1 (variable anonimitzada)
+SEXE_2,Sexe. Persona 2 (variable anonimitzada)
+EDAT_2,Edat. Persona 2 (variable anonimitzada)
+PARENTIU_2,Parentiu. Persona 2 (variable anonimitzada)
+SEXE_3,Sexe. Persona 3 (variable anonimitzada)
+EDAT_3,Edat. Persona 3 (variable anonimitzada)
+PARENTIU_3,Parentiu. Persona 3 (variable anonimitzada)
+SEXE_4,Sexe. Persona 4 (variable anonimitzada)
+EDAT_4,Edat. Persona 4 (variable anonimitzada)
+PARENTIU_4,Parentiu. Persona 4 (variable anonimitzada)
+SEXE_5,Sexe. Persona 5 (variable anonimitzada)
+EDAT_5,Edat. Persona 5 (variable anonimitzada)
+PARENTIU_5,Parentiu. Persona 5 (variable anonimitzada)
+SEXE_6,Sexe. Persona 6 (variable anonimitzada)
+EDAT_6,Edat. Persona 6 (variable anonimitzada)
+PARENTIU_6,Parentiu. Persona 6 (variable anonimitzada)
+SEXE_7,Sexe. Persona 7 (variable anonimitzada)
+EDAT_7,Edat. Persona 7 (variable anonimitzada)
+PARENTIU_7,Parentiu. Persona 7 (variable anonimitzada)
+SEXE_8,Sexe. Persona 8 (variable anonimitzada)
+EDAT_8,Edat. Persona 8 (variable anonimitzada)
+PARENTIU_8,Parentiu. Persona 8 (variable anonimitzada)
+SEXE_9,Sexe. Persona 9 (variable anonimitzada)
+EDAT_9,Edat. Persona 9 (variable anonimitzada)
+PARENTIU_9,Parentiu. Persona 9 (variable anonimitzada)
+SEXE_10,Sexe. Persona 10 (variable anonimitzada)
+EDAT_10,Edat. Persona 10 (variable anonimitzada)
+PARENTIU_10,Parentiu. Persona 10 (variable anonimitzada)
+C900,C900. Ingressos familiars nets mensuals
+C901,C901. Té telèfon fix a la seva llar?
+C902_1,C902. Telèfon mòbil de la feina
+C902_2,C902. Telèfon mòbil particular
+C902_3,C902. Internet a la seva llar
+C902_4,C902. Adreça electrònica de la feina
+C902_5,C902. Adreça electrònica particular
+C902_97,C902. No en té cap
+P64A,P64a. Trucades i sms per telèfon mòbil
+P64B,P64b. Correu electrònic
+P64C,P64c. WhatsApp i similars
+P64D,P64d. Xarxes socials virtuals
+P64E,P64e. Navegar per Internet
+E1,"E1. Enquestador/a, l’entrevistat en algun moment de la conversa t’ha preguntat qui encarregava l’estudi?"
+E2,E2. Ha demanat la persona entrevistada aclariments respecte alguna pregunta?
+E3,E3. Has tingut la sensació que la persona entrevistada es mostrava reticent  a contestar alguna pregunta?
+E4,E4. Has tingut la sensació que la persona entrevistada intentava contestar les preguntes el millor que podia?
+E5,E5. Creus que la persona entrevistada entenia les preguntes?
+E6,"E6. Creus que la persona entrevistada ha estat molt, bastant, poc o gens sincera amb les seves respostes?"
+E7,E7. Hi havia alguna persona més present que interferís o interrompés l’entrevista?
+E81,E8. Cònjuge / parella
+E82,E8. Fills/es
+E83,E8. Pares / sogres
+E84,E8. Algun altre parent
+E85,E8. Amics / veïns
+E86,E8. Cuidadors
+PONDERA,PONDERACIO
+Format_enq,
+POND_NAIX,Coeficients de ponderació
