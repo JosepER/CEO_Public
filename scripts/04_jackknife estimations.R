@@ -62,8 +62,19 @@ rm(first_language_province, place_of_birth)
 
 # ** compute survey designs
 
+if(!file.exists(here("interim_outputs", "jackknife", "jackknife_survey_designs.rds"))){
+
 data_863_jackknife_survey_designs_list <-  data_863_jackknife_resamples_list %>%
   map(~ svydesign(ids = ~ 0, data = .x))
+
+data_863_jackknife_survey_designs_list %>%
+  write_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs.rds"))
+
+}else{
+  
+  data_863_jackknife_survey_designs_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs.rds"))
+  
+}
 
 
 
