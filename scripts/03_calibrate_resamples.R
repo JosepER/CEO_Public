@@ -322,6 +322,12 @@ summary_main_survey_weights <- weights(raked_data_863) %>%
             q995 = quantile(val, 0.995),
             ratio_min_q995 = q995/min)
 
+ggplot(data_frame(weights = weights(raked_data_863)),
+       aes(x = weights)) +
+  geom_density()
+
+# probably don't need to trim these weights.
+
 if(!file.exists(here("interim_outputs", "calibration", "summary_main_survey_weights_03.csv"))){
 
 summary_main_survey_weights %>%
