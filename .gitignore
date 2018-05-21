@@ -14,3 +14,4 @@ interim_outputs/calibration/raked_calibration_weights_resamples_03.rds
 interim_outputs/calibration/weights_resamples_trimmed_1_03.rds
 interim_outputs/calibration/weights_resamples_trimmed_2_03.rds
 interim_outputs/calibration/weights_resamples_untrimmed_03.rds
+interim_outputs/jackknife/jackknife_survey_designs.rds
