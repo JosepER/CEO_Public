@@ -77,13 +77,12 @@ data_863_jackknife_survey_designs_list %>%
 }
 
 
-
 # ** apply calibration
 
-raked_data_863 <- rake(survey_design_data_863, 
-                       sample.margins = list(~first_language_calibration_survey_863, ~place_of_birth_survey_863),
-                       population = list(first_language_calibration_survey_863, place_of_birth_survey_863),
-                       control = list(maxit = 30, epsilon = 1))
 
-interim_outputs/resample_survey_desings_863_bcn/survey_designs_03.rds
-interim_outputs/resample_survey_designs_863_bcn/survey_designs_03.rds
+data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
+  map(~ rake(.x,
+             sample.margins = list(~first_language_calibration_survey_863, ~place_of_birth_survey_863),
+             population = list(first_language_calibration_survey_863, place_of_birth_survey_863),
+             control = list(maxit = 30, epsilon = 1)))
+
