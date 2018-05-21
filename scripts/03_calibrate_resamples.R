@@ -276,7 +276,7 @@ bind_rows(comparison_proportions_place_of_birth, comparison_proportions_first_la
   write_csv(here("interim_outputs", "calibration", "comparison_survey_863_population_calibration_proportions_03.csv"))
 
 
-## calibrate main survey
+## Calibrate main survey ----
 
 first_language_calibration_survey_863 <- first_language_province %>%
   mutate(Freq = prop * nrow(data_863_for_calibration)) %>%
@@ -560,7 +560,7 @@ weigths_summary <- bind_cols(sd = weights_sd, min =  weights_min, max = weights_
     select(resample, everything())
 
 weigths_summary %>%
-  write_csv("summary_resamples_weights_03.csv")
+  write_csv(here("interim_outputs", "calibration", "summary_resamples_weights_03.csv"))
 
   ### max weight is over 5 for a relatively large proportion of resamples
   ### trimming at 0.995 seems very reasonable
