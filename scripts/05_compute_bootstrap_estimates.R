@@ -47,7 +47,13 @@ resamples_calibration_weights_trimmed_2 <- read_rds(here("interim_outputs", "cal
 
 # ** jackknife resamples ----
 
-# jackknife resamples data
+## jackknife resamples data
+
+data_863_jackknife_resamples_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_resamples_03.rds"))
+
+## jackknife resamples weights
+
+data_863_jackknife_weights_list <- read_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_03.rds"))
 
 
 

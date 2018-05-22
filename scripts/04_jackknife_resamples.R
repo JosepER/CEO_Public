@@ -181,7 +181,10 @@ summary_jackknife_resamples_weights %>%
 
 rm(summary_jackknife_resamples_weights)
 
-# Export jackknife weights ----
+# Export jackknife resamples and weights ----
+
+data_863_jackknife_resamples_list %>%
+  write_rds(here("interim_outputs", "jackknife", "jackknife_resamples_03.rds"))
 
 data_863_jackknife_weights_list %>%
   write_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_03.rds"))
