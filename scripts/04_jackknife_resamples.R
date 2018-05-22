@@ -1,13 +1,10 @@
 # 04_jackknife estimations
 
-# Delete note:
-# the output should be the 968 jackknife resamples and their 968 weights.
 
 rm(list = ls())
 
 options(scipen = 999999)
 
-library(tictoc)
 library(furrr)
 library(survey)
 library(sjlabelled)
@@ -76,23 +73,23 @@ rm(test_freq_1, test_freq_2, i)
 
 # ** compute survey designs
 
-if(!file.exists(here("interim_outputs", "jackknife", "jackknife_survey_designs.rds"))){
+if(!file.exists(here("interim_outputs", "jackknife", "jackknife_survey_designs_03.rds"))){
 
 data_863_jackknife_survey_designs_list <-  data_863_jackknife_resamples_list %>%
   map(~ svydesign(ids = ~ 0, data = .x))
 
 data_863_jackknife_survey_designs_list %>%
-  write_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs.rds"))
+  write_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs_03.rds"))
 
 }else{
   
-  data_863_jackknife_survey_designs_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs.rds"))
+  data_863_jackknife_survey_designs_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs_03.rds"))
   
 }
 
 # ** apply calibration
 
-if(!file.exists(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))){
+if(!file.exists(here("interim_outputs", "jackknife", "jackknife_raked_resamples_03.rds"))){
 
 data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
   future_map(~ rake(.x,
@@ -101,9 +98,9 @@ data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
              control = list(maxit = 30, epsilon = 1)))
 
 data_863_jackknife_raked_list %>%
-  write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))
+  write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples_03.rds"))
 
-}else{data_863_jackknife_raked_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))}
+}else{data_863_jackknife_raked_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples_03.rds"))}
 
 rm(data_863_jackknife_survey_designs_list)
 
@@ -184,6 +181,10 @@ summary_jackknife_resamples_weights %>%
 
 rm(summary_jackknife_resamples_weights)
 
+# Export jackknife weights ----
+
+data_863_jackknife_weights_list %>%
+  write_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_03.rds"))
 
 
 
