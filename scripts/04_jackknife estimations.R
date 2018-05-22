@@ -7,12 +7,16 @@ rm(list = ls())
 
 options(scipen = 999999)
 
+library(tictoc)
 library(furrr)
 library(survey)
 library(sjlabelled)
 library(here)
 library(magrittr)
 library(tidyverse)
+
+plan(multiprocess)
+
 
 # Import data ----
 
@@ -46,11 +50,11 @@ for(i in 1:nrow(data_863_for_calibration)){
 
 # ** compute frequencies for calibration ----
 
-first_language_calibration_survey_863 <- first_language_province %>%
+first_language_calibration_jackknife_resamples <- first_language_province %>%
   mutate(Freq = prop/100 * (nrow(data_863_for_calibration)-1)) %>%
   select(-prop)
 
-place_of_birth_survey_863 <- place_of_birth %>%
+place_of_birth_jackknife_resamples <- place_of_birth %>%
   mutate(Freq = prop * (nrow(data_863_for_calibration)-1)) %>%
   select(-prop)
 
@@ -58,9 +62,9 @@ rm(first_language_province, place_of_birth)
 
 # test sum of calibration frequencies
 
-test_freq_1 <- all.equal(first_language_calibration_survey_863$Freq %>% sum(), (nrow(data_863_for_calibration)-1))
+test_freq_1 <- isTRUE(all.equal(first_language_calibration_jackknife_resamples$Freq %>% sum(), (nrow(data_863_for_calibration)-1)))
 
-test_freq_2 <- all.equal(place_of_birth_survey_863$Freq %>% sum(), (nrow(data_863_for_calibration)-1))
+test_freq_2 <- isTRUE(all.equal(place_of_birth_jackknife_resamples$Freq %>% sum(), (nrow(data_863_for_calibration)-1)))
 
 if(!all(test_freq_1, test_freq_2)){
   stop("Failed test: frequencies should of calibration objects should add to rows in jackknife resamples.")
@@ -91,11 +95,46 @@ if(!file.exists(here("interim_outputs", "jackknife", "jackknife_raked_resamples.
 data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
   future_map(~ rake(.x,
              sample.margins = list(~first_language_calibration, ~age_place_of_birth_calibration),
-             population = list(first_language_calibration_survey_863, place_of_birth_survey_863),
+             population = list(first_language_calibration_jackknife_resamples, place_of_birth_jackknife_resamples),
              control = list(maxit = 30, epsilon = 1)))
 
 data_863_jackknife_raked_list %>%
   write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))
 
-}else{data_863_jackknife_raked_list <- write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))}
+}else{data_863_jackknife_raked_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))}
+
+rm(data_863_jackknife_survey_designs_list)
+
+## ** retrieve weights
+
+data_863_jackknife_weights_list <- data_863_jackknife_raked_list %>%
+  map(~weights(.x))
+
+rm(data_863_jackknife_raked_list)
+
+## ** check weighted jackknife resamples
+
+## first language
+
+first_language_calibrated_resamples <- map2(.x = data_863_jackknife_resamples_list, 
+                                                   .y = data_863_jackknife_weights_list,
+                                                   ~ .x %>%
+                                                     bind_cols(weights = .y) %>%
+                                                     count(first_language_calibration, wt = weights))
+
+test_first_language_calibrated_resamples <- map_lgl(first_language_calibrated_resamples, 
+                                                ~ isTRUE(all.equal(.x$n, first_language_calibration_jackknife_resamples$Freq,
+                                                                   tolerance = 0.001)))
+
+if(!all(test_first_language_calibrated_resamples)){
+  stop("Failed test: not all jackknife resamples seem to be correctly calibrated to first language population proportions. 
+       \n *check 'first_language_calibrated_resamples' object.")
+}
+
+
+
+# TO DO: briefly check frequencies fo weighted jackknife resamples
+# TO DO: summarise weights of jackknife resamples
+
+
 
