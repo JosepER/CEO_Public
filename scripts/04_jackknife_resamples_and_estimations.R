@@ -158,6 +158,32 @@ rm(first_language_calibrated_resamples, test_first_language_calibrated_resamples
    place_of_birth_jackknife_resamples)
 
 #** summary of weights for jackknife resamples ----
+# I would expect the weights to be similar to the main survey ones.
+# Probably with the exception of resamples missing the already scarce groups.
+
+# looks ok. no need to trim.
+summary_jackknife_resamples_weights <- data_863_jackknife_weights_list %>%
+  map(~ data_frame(wt = .x) %>%
+        summarise(min = min(wt),
+                  median = median(wt),
+                  max = max(wt),
+                  q95 = quantile(wt, 0.95),
+                  q975 = quantile(wt, 0.975),
+                  q99 = quantile(wt, 0.99),
+                  q995 = quantile(wt, 0.995),
+                  ratio = max/min)) %>%
+  bind_rows(.id = "jackknife_resample")
+
+summary_jackknife_resamples_weights %>%
+  select(-jackknife_resample) %>%
+  summarise_all(.funs = funs(min, mean, max)) %>%
+  gather()
+
+summary_jackknife_resamples_weights %>%
+  write_csv(here("interim_outputs", "jackknife", "summary_jackknife_resamples_weights_03.csv"))
+
+rm(summary_jackknife_resamples_weights)
+
 
 
 
