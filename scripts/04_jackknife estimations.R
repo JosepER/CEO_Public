@@ -3,12 +3,11 @@
 # Delete note:
 # the output should be the 968 jackknife resamples and their 968 weights.
 
-# TO DO: go back to 03 and trim weights of main survey? I'm gonna need estimates from that survey.
-
 rm(list = ls())
 
 options(scipen = 999999)
 
+library(furrr)
 library(survey)
 library(sjlabelled)
 library(here)
@@ -48,7 +47,7 @@ for(i in 1:nrow(data_863_for_calibration)){
 # ** compute frequencies for calibration ----
 
 first_language_calibration_survey_863 <- first_language_province %>%
-  mutate(Freq = prop * (nrow(data_863_for_calibration)-1)) %>%
+  mutate(Freq = prop/100 * (nrow(data_863_for_calibration)-1)) %>%
   select(-prop)
 
 place_of_birth_survey_863 <- place_of_birth %>%
@@ -57,6 +56,15 @@ place_of_birth_survey_863 <- place_of_birth %>%
 
 rm(first_language_province, place_of_birth)
 
+# test sum of calibration frequencies
+
+test_freq_1 <- all.equal(first_language_calibration_survey_863$Freq %>% sum(), (nrow(data_863_for_calibration)-1))
+
+test_freq_2 <- all.equal(place_of_birth_survey_863$Freq %>% sum(), (nrow(data_863_for_calibration)-1))
+
+if(!all(test_freq_1, test_freq_2)){
+  stop("Failed test: frequencies should of calibration objects should add to rows in jackknife resamples.")
+}
 
 # Calibrate jackknife resamples ----
 
@@ -76,13 +84,18 @@ data_863_jackknife_survey_designs_list %>%
   
 }
 
-
 # ** apply calibration
 
+if(!file.exists(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))){
 
 data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
-  map(~ rake(.x,
-             sample.margins = list(~first_language_calibration_survey_863, ~place_of_birth_survey_863),
+  future_map(~ rake(.x,
+             sample.margins = list(~first_language_calibration, ~age_place_of_birth_calibration),
              population = list(first_language_calibration_survey_863, place_of_birth_survey_863),
              control = list(maxit = 30, epsilon = 1)))
+
+data_863_jackknife_raked_list %>%
+  write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))
+
+}else{data_863_jackknife_raked_list <- write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples.rds"))}
 
