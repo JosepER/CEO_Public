@@ -68,11 +68,63 @@ data_863_jackknife_weights_list <- read_rds(here("interim_outputs", "jackknife",
 # note: compute estimates with trimmed and untrimmed weights
 
 
+# for estimates, delete DK/NA.
+
+valid_responses <- c("couldn't participate", "didn't want to participate", 
+                     "they prevented resp to participate", "voted")
 
 # compute actual estimates ----
 # plain estimate from weighted survey
 
+compute_participation <- function(x, weighted = F){
+  
+  results <- list(raw = NA, clean = NA)
+  
+  if(weighted = F){
+    
+    results[["raw"]] <- x %>%
+      count(referendum_participation) %>%
+      mutate(prop = n/sum(n))
+      
+    results[["clean"]] <- x %>%
+      count(referendum_participation) %>%
+      filter(referendum_participation %in% valid_responses) %>%
+      mutate(prop = n/sum(n))
+    
+  }else if(weighted = T) {
+    
+    results[["raw"]] <- x %>%
+      count(referendum_participation, wt = weight) %>%
+      mutate(prop = n/sum(n))
+    
+    results[["clean"]] <- x %>%
+      count(referendum_participation, wt = weight) %>%
+      filter(referendum_participation %in% valid_responses) %>%
+      mutate(prop = n/sum(n))
+    
+  }
+  
+  return(results)
+  
+}
 
+## raw
+
+survey_raw_estimate <- data_863_labelled %>%
+  count(referendum_participation) %>%
+  mutate(prop = n/sum(n))
+
+survey_raw_estimate_wt <- data_863_labelled %>%
+  left_join(data_863_weights, by = "ORDRE_CINE") %>%
+  count(referendum_participation, wt = weights) %>%
+  mutate(prop = n/sum(n))
+
+## clean
+
+survey_raw_estimate %>%
+  filter(referendum_participation %in% valid_responses) %>%
+  select(-prop) %>%
+  mutate(prop = n/sum(n))
 
 
 # bootstrap percentiles estimates ----
