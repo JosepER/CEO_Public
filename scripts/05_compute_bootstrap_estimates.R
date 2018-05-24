@@ -13,6 +13,7 @@ library(tidyverse)
 
 plan(multiprocess)
 
+source(here("scripts", "00_functions.R"))
 
 # Import data ----
 
@@ -76,56 +77,12 @@ valid_responses <- c("couldn't participate", "didn't want to participate",
 # compute actual estimates ----
 # plain estimate from weighted survey
 
-compute_participation <- function(x, weighted = F){
-  
-  results <- list(raw = NA, clean = NA)
-  
-  if(weighted = F){
-    
-    results[["raw"]] <- x %>%
-      count(referendum_participation) %>%
-      mutate(prop = n/sum(n))
-      
-    results[["clean"]] <- x %>%
-      count(referendum_participation) %>%
-      filter(referendum_participation %in% valid_responses) %>%
-      mutate(prop = n/sum(n))
-    
-  }else if(weighted = T) {
-    
-    results[["raw"]] <- x %>%
-      count(referendum_participation, wt = weight) %>%
-      mutate(prop = n/sum(n))
-    
-    results[["clean"]] <- x %>%
-      count(referendum_participation, wt = weight) %>%
-      filter(referendum_participation %in% valid_responses) %>%
-      mutate(prop = n/sum(n))
-    
-  }
-  
-  return(results)
-  
-}
-
-## raw
-
-survey_raw_estimate <- data_863_labelled %>%
-  count(referendum_participation) %>%
-  mutate(prop = n/sum(n))
+survey_raw_estimate <- data_863_labelled %>% 
+  compute_participation(weighted = F)
 
 survey_raw_estimate_wt <- data_863_labelled %>%
-  left_join(data_863_weights, by = "ORDRE_CINE") %>%
-  count(referendum_participation, wt = weights) %>%
-  mutate(prop = n/sum(n))
-
-## clean
-
-survey_raw_estimate %>%
-  filter(referendum_participation %in% valid_responses) %>%
-  select(-prop) %>%
-  mutate(prop = n/sum(n))
-
+  left_join(data_863_weights, by = "ORDRE_CINE") %>% 
+  compute_participation(weighted = T)
 
 # bootstrap percentiles estimates ----
 # authors compute: BS Mean - mean of resamples
@@ -137,6 +94,36 @@ survey_raw_estimate %>%
 # Normal.U95: Actual est. + qnorm(0.975) * SD from bootstrap resamples
 # Percentile.L95: 0.025 percentile of bootstrap resamples 
 # Percentile.U95: 0.975 percentile of bootstrap resamples 
+
+
+#** Prepare data from bootstrap resamples ----
+
+data_863_referendum <- data_863_labelled %>%
+  select(ORDRE_CINE, referendum_participation)
+
+rm(data_863_labelled)
+
+bootstrap_resamples_analysis <- bootstrap_resamples %>%
+  map("ORDRE_CINE")
+
+bootstrap_resamples_analysis %<>%
+  map(~ .x %>%
+        data_frame(ORDRE_CINE = .) %>%
+        left_join(data_863_referendum, by = "ORDRE_CINE"))
+             
+            # %>%
+             #  left_join(data_863_referendum,
+              #           by = "ORDRE_CINE") # need to merge with weights as well!
+               #               )
+
+bootstrap_resamples_analysis_with_weights_untrimmed <- bootstrap_resamples_analysis %>%
+  map2(resamples_calibration_weights, ~.x %>%
+        bind_cols(weights = .y))
+
+  
+
+# TO DO: CAN DO SOME CHECKS TO MAKE SURE MERGING OF RESPONSES WITH WEIGHTS IS CORRECT
+# A SIMPLE CHECK WOULD BE TO MAKE SURE ALL IDs WITHIN BOOTSTRAP RESAMPLES HAVE THE UNIQUE WEIGHT
 
 # bootstrap bca ----
 

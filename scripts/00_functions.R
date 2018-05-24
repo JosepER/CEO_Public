@@ -1,13 +1,11 @@
 
-
+library(dplyr)
 
 compute_participation <- function(x, weighted = F){
 
-  require(dplyr)
-    
-  results <- list(raw = NA, clean = NA)
+  results <- list(raw_ = NA, clean_ = NA)
   
-  if(weighted = F){
+  if(weighted == F){
     
     results[["raw"]] <- x %>%
       count(referendum_participation) %>%
@@ -18,14 +16,19 @@ compute_participation <- function(x, weighted = F){
       filter(referendum_participation %in% valid_responses) %>%
       mutate(prop = n/sum(n))
     
-  }else if(weighted = T) {
+  }else if(weighted == T) {
+    
+      # test weight variable 
+    if(is.null(x[["weights"]])){
+      stop("Failed test: If argument 'weighted' == T, then there should be a variable called 'weights'.")
+    }
     
     results[["raw"]] <- x %>%
-      count(referendum_participation, wt = weight) %>%
+      count(referendum_participation, wt = weights) %>%
       mutate(prop = n/sum(n))
     
     results[["clean"]] <- x %>%
-      count(referendum_participation, wt = weight) %>%
+      count(referendum_participation, wt = weights) %>%
       filter(referendum_participation %in% valid_responses) %>%
       mutate(prop = n/sum(n))
     
