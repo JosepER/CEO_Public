@@ -77,10 +77,10 @@ valid_responses <- c("couldn't participate", "didn't want to participate",
 # compute actual estimates ----
 # plain estimate from weighted survey
 
-survey_raw_estimate <- data_863_labelled %>% 
+estimate_survey_plain <- data_863_labelled %>% 
   compute_participation(weighted = F)
 
-survey_raw_estimate_wt <- data_863_labelled %>%
+estimate_survey_plain_wt <- data_863_labelled %>%
   left_join(data_863_weights, by = "ORDRE_CINE") %>% 
   compute_participation(weighted = T)
 
@@ -120,10 +120,28 @@ bootstrap_resamples_analysis_with_weights_untrimmed <- bootstrap_resamples_analy
   map2(resamples_calibration_weights, ~.x %>%
         bind_cols(weights = .y))
 
-  
+bootstrap_resamples_analysis_with_weights_trimmed1 <- bootstrap_resamples_analysis %>%
+  map2(resamples_calibration_weights_trimmed, ~.x %>%
+         bind_cols(weights = .y))
+
+bootstrap_resamples_analysis_with_weights_trimmed2 <- bootstrap_resamples_analysis %>%
+  map2(resamples_calibration_weights_trimmed_2, ~.x %>%
+         bind_cols(weights = .y))
 
 # TO DO: CAN DO SOME CHECKS TO MAKE SURE MERGING OF RESPONSES WITH WEIGHTS IS CORRECT
 # A SIMPLE CHECK WOULD BE TO MAKE SURE ALL IDs WITHIN BOOTSTRAP RESAMPLES HAVE THE UNIQUE WEIGHT
+
+##** compute estimates for all categories -----
+
+estimate_bootstrap_resamples_untrimmed_weights <-  bootstrap_resamples_analysis_with_weights_untrimmed %>%
+  map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
+
+estimate_bootstrap_resamples_trimmed_weights1 <-  bootstrap_resamples_analysis_with_weights_trimmed1 %>%
+  map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
+
+estimate_bootstrap_resamples_trimmed_weights2 <- bootstrap_resamples_analysis_with_weights_trimmed2 %>%
+  map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
+
 
 # bootstrap bca ----
 

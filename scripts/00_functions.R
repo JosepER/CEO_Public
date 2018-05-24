@@ -7,11 +7,11 @@ compute_participation <- function(x, weighted = F){
   
   if(weighted == F){
     
-    results[["raw"]] <- x %>%
+    results[["raw_"]] <- x %>%
       count(referendum_participation) %>%
       mutate(prop = n/sum(n))
     
-    results[["clean"]] <- x %>%
+    results[["clean_"]] <- x %>%
       count(referendum_participation) %>%
       filter(referendum_participation %in% valid_responses) %>%
       mutate(prop = n/sum(n))
@@ -23,11 +23,11 @@ compute_participation <- function(x, weighted = F){
       stop("Failed test: If argument 'weighted' == T, then there should be a variable called 'weights'.")
     }
     
-    results[["raw"]] <- x %>%
+    results[["raw_"]] <- x %>%
       count(referendum_participation, wt = weights) %>%
       mutate(prop = n/sum(n))
     
-    results[["clean"]] <- x %>%
+    results[["clean_"]] <- x %>%
       count(referendum_participation, wt = weights) %>%
       filter(referendum_participation %in% valid_responses) %>%
       mutate(prop = n/sum(n))
