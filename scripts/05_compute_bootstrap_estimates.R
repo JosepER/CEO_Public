@@ -183,10 +183,8 @@ estimates_all_bootstrap_resamples <- list(resamples_with_untrimmed_weights = est
 
 ##** mean, median, SD and quantiles of all bootstrap resamples -----
 
-estimate_bootstrap_resamples_untrimmed_weights %>%
-  modify_depth(.depth = 2, ~ .x %>% 
-             filter(type == "clean_", referendum_participation == "voted") %$% prop )
 
+    ### first, retrieve the proportions of vote to referendum in each resample
 estimate_proportions_referendum_vote_all_resamples <- estimates_all_bootstrap_resamples %>%
   map(~ .x %>% map_dbl(~ .x %>% filter(type == "clean_", referendum_participation == "voted") %$% prop ) )
 
@@ -229,16 +227,10 @@ estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
 
 stop("atura't")
 
-estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
+ estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
+estimate_normal_u95 <- estimate_survey_plain_wt_referendum_participation + estimate_bootstrap_resamples_sd * qnorm(0.975)
 
-
-estimate_bootstrap_resamples_sd %>%
-  map(~
-estimate_survey_plain$clean_ %>% filter(referendum_participation == "voted") %$% prop + .x * qnorm(0.975)
-)
-
-# ** take only estimates from bootstrap resamples with trimmed weights?
-
+## to do: export all estimates. If possible copy format from authors.
 
 
 # bootstrap bca ----
