@@ -98,11 +98,13 @@ estimate_survey_plain_wt <- data_863_labelled %>%
 
 #** Prepare data from bootstrap resamples ----
 
+  ### map respondent ID (ORDRE_CINE) to response categories in referendum participation (referendum_participation)
 data_863_referendum <- data_863_labelled %>%
   select(ORDRE_CINE, referendum_participation)
 
 rm(data_863_labelled)
 
+  
 bootstrap_resamples_analysis <- bootstrap_resamples %>%
   map("ORDRE_CINE")
 
