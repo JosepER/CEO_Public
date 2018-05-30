@@ -84,6 +84,8 @@ estimate_survey_plain_wt <- data_863_labelled %>%
   left_join(data_863_weights, by = "ORDRE_CINE") %>% 
   compute_participation(weighted = T)
 
+estimate_survey_plain_wt_referendum_participation <-  estimate_survey_plain_wt$clean_ %>% filter(referendum_participation == "voted") %$% prop
+
 # bootstrap percentiles estimates ----
 # authors compute: BS Mean - mean of resamples
 # BS Median - median of resamples
@@ -181,9 +183,6 @@ estimates_all_bootstrap_resamples <- list(resamples_with_untrimmed_weights = est
 
 ##** mean, median, SD and quantiles of all bootstrap resamples -----
 
-# estimates_all_bootstrap_resamples %>%
-#   map (~ .x)
-
 estimate_bootstrap_resamples_untrimmed_weights %>%
   modify_depth(.depth = 2, ~ .x %>% 
              filter(type == "clean_", referendum_participation == "voted") %$% prop )
@@ -191,30 +190,54 @@ estimate_bootstrap_resamples_untrimmed_weights %>%
 estimate_proportions_referendum_vote_all_resamples <- estimates_all_bootstrap_resamples %>%
   map(~ .x %>% map_dbl(~ .x %>% filter(type == "clean_", referendum_participation == "voted") %$% prop ) )
 
-
     #good! estimates don't change much using trimmed or untrimmed weights
-estimate_bootsrap_resamples_mean <- estimate_proportions_referendum_vote_all_resamples %>%
+    #I will keep using only the trimmed2 weights.
+estimate_bootstrap_resamples_mean <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ mean(.x))
 
-estimate_bootsrap_resamples_median <- estimate_proportions_referendum_vote_all_resamples %>%
+              #good, median almost equal to mean. not a skewed distribution on bootstrap resamples.
+estimate_bootstrap_resamples_median <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ median(.x))
 
-estimate_bootsrap_resamples_sd <- estimate_proportions_referendum_vote_all_resamples %>%
+estimate_bootstrap_resamples_sd <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ sd(.x))
   
-estimate_bootsrap_resamples_q025 <- estimate_proportions_referendum_vote_all_resamples %>%
+estimate_bootstrap_resamples_q025 <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ quantile(.x, 0.025))
 
-estimate_bootsrap_resamples_q975 <- estimate_proportions_referendum_vote_all_resamples %>%
+estimate_bootstrap_resamples_q975 <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ quantile(.x, 0.975))
 
+  # select only estimates with trimmed 2 weights
+
+estimate_bootstrap_resamples_mean <- estimate_bootstrap_resamples_mean[["resamples_with_trimmed_weights_2"]]
+estimate_bootstrap_resamples_median <- estimate_bootstrap_resamples_median[["resamples_with_trimmed_weights_2"]] 
+estimate_bootstrap_resamples_sd <- estimate_bootstrap_resamples_sd[["resamples_with_trimmed_weights_2"]]
+estimate_bootstrap_resamples_q025 <- estimate_bootstrap_resamples_q025[["resamples_with_trimmed_weights_2"]]
+estimate_bootstrap_resamples_q975 <- estimate_bootstrap_resamples_q975[["resamples_with_trimmed_weights_2"]]
+
+# ** compute bootstrap bias ----
+
+estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
 
 
-estimate_bootstrap_resamples_untrimmed_weights
 
-estimate_bootstrap_resamples_trimmed_weights1
+# ** compute Normal.L95 and Normal.U95 from trimmed  ----
 
-estimate_bootstrap_resamples_trimmed_weights2
+# Normal.L95: Actual est. - qnorm(0.975) * SD from bootstrap resamples
+# Normal.U95: Actual est. + qnorm(0.975) * SD from bootstrap resamples
+
+stop("atura't")
+
+estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
+
+
+estimate_bootstrap_resamples_sd %>%
+  map(~
+estimate_survey_plain$clean_ %>% filter(referendum_participation == "voted") %$% prop + .x * qnorm(0.975)
+)
+
+# ** take only estimates from bootstrap resamples with trimmed weights?
 
 
 
