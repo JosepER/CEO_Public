@@ -104,50 +104,123 @@ data_863_referendum <- data_863_labelled %>%
 
 rm(data_863_labelled)
 
-  
+  ### subset respondent ID (ORDRE_CINE) variable from bootstrap resamples 
 bootstrap_resamples_analysis <- bootstrap_resamples %>%
   map("ORDRE_CINE")
-
+  
+  ### merge respondent ID from bootstrap resamples with survey response categories in ref participation
 bootstrap_resamples_analysis %<>%
   map(~ .x %>%
         data_frame(ORDRE_CINE = .) %>%
         left_join(data_863_referendum, by = "ORDRE_CINE"))
              
-            # %>%
-             #  left_join(data_863_referendum,
-              #           by = "ORDRE_CINE") # need to merge with weights as well!
-               #               )
-
+  ### merge bootstrap resamples (ID and ref participation) with calibration weights untrimmed
 bootstrap_resamples_analysis_with_weights_untrimmed <- bootstrap_resamples_analysis %>%
   map2(resamples_calibration_weights, ~.x %>%
         bind_cols(weights = .y))
 
+  ### merge bootstrap resamples (ID and ref participation) with calibration weights slighly trimmed
 bootstrap_resamples_analysis_with_weights_trimmed1 <- bootstrap_resamples_analysis %>%
   map2(resamples_calibration_weights_trimmed, ~.x %>%
          bind_cols(weights = .y))
 
+  ### merge bootstrap resamples (ID and ref participation) with calibration weights 'properly' trimmed
 bootstrap_resamples_analysis_with_weights_trimmed2 <- bootstrap_resamples_analysis %>%
   map2(resamples_calibration_weights_trimmed_2, ~.x %>%
          bind_cols(weights = .y))
 
-# TO DO: CAN DO SOME CHECKS TO MAKE SURE MERGING OF RESPONSES WITH WEIGHTS IS CORRECT
-# A SIMPLE CHECK WOULD BE TO MAKE SURE ALL IDs WITHIN BOOTSTRAP RESAMPLES HAVE THE UNIQUE WEIGHT
+# TO DO: SOME CHECKS TO MAKE SURE MERGING OF RESPONSES WITH WEIGHTS IS CORRECT
+# WOULD NEED TO CHECK WEIGHTED FREQUENCIES OF CALIBRATION VARIABLES (AGAIN)
 
-##** compute estimates for all categories -----
+##** compute bootstrap estimates for all resamples -----
+
+  ### with untrimmed weights
+if(!file.exists(here("interim_outputs", "estimates", "bootstrap_estimates_untrimmed_weights_05.rds"))){
 
 estimate_bootstrap_resamples_untrimmed_weights <-  bootstrap_resamples_analysis_with_weights_untrimmed %>%
   map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
 
+estimate_bootstrap_resamples_untrimmed_weights %>%
+  write_rds(here("interim_outputs", "estimates", "bootstrap_estimates_untrimmed_weights_05.rds"))
+
+}else{
+  estimate_bootstrap_resamples_untrimmed_weights <- read_rds(here("interim_outputs", "estimates", "bootstrap_estimates_untrimmed_weights_05.rds"))
+}
+
+  ### with trimmed weights (first trimm method)
+if(!file.exists(here("interim_outputs", "estimates", "bootstrap_estimates_trimmed1_weights_05.rds"))){
+  
 estimate_bootstrap_resamples_trimmed_weights1 <-  bootstrap_resamples_analysis_with_weights_trimmed1 %>%
   map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
 
+estimate_bootstrap_resamples_trimmed_weights1 %>%
+  write_rds(here("interim_outputs", "estimates", "bootstrap_estimates_trimmed1_weights_05.rds"))
+
+}else{
+  estimate_bootstrap_resamples_trimmed_weights1 <- read_rds(here("interim_outputs", "estimates", "bootstrap_estimates_trimmed1_weights_05.rds"))
+}
+
+
+  ### with trimmed weights (second trimm method)
+if(!file.exists(here("interim_outputs", "estimates", "bootstrap_estimates_trimmed2_weights_05.rds"))){
+
 estimate_bootstrap_resamples_trimmed_weights2 <- bootstrap_resamples_analysis_with_weights_trimmed2 %>%
   map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
+
+estimate_bootstrap_resamples_trimmed_weights2 %>%
+  write_rds(here("interim_outputs", "estimates", "bootstrap_estimates_trimmed2_weights_05.rds"))
+
+}else{
+  estimate_bootstrap_resamples_trimmed_weights2 <- read_rds(here("interim_outputs", "estimates", "bootstrap_estimates_trimmed2_weights_05.rds"))
+}
+
+  ### make a list with all estimates from resamples
+estimates_all_bootstrap_resamples <- list(resamples_with_untrimmed_weights = estimate_bootstrap_resamples_untrimmed_weights,
+     resamples_with_trimmed_weights_1 = estimate_bootstrap_resamples_trimmed_weights1,
+     resamples_with_trimmed_weights_2 = estimate_bootstrap_resamples_trimmed_weights2)
+
+##** mean, median, SD and quantiles of all bootstrap resamples -----
+
+# estimates_all_bootstrap_resamples %>%
+#   map (~ .x)
+
+estimate_bootstrap_resamples_untrimmed_weights %>%
+  modify_depth(.depth = 2, ~ .x %>% 
+             filter(type == "clean_", referendum_participation == "voted") %$% prop )
+
+estimate_proportions_referendum_vote_all_resamples <- estimates_all_bootstrap_resamples %>%
+  map(~ .x %>% map_dbl(~ .x %>% filter(type == "clean_", referendum_participation == "voted") %$% prop ) )
+
+
+    #good! estimates don't change much using trimmed or untrimmed weights
+estimate_bootsrap_resamples_mean <- estimate_proportions_referendum_vote_all_resamples %>%
+  map(~ mean(.x))
+
+estimate_bootsrap_resamples_median <- estimate_proportions_referendum_vote_all_resamples %>%
+  map(~ median(.x))
+
+estimate_bootsrap_resamples_sd <- estimate_proportions_referendum_vote_all_resamples %>%
+  map(~ sd(.x))
+  
+estimate_bootsrap_resamples_q025 <- estimate_proportions_referendum_vote_all_resamples %>%
+  map(~ quantile(.x, 0.025))
+
+estimate_bootsrap_resamples_q975 <- estimate_proportions_referendum_vote_all_resamples %>%
+  map(~ quantile(.x, 0.975))
+
+
+
+estimate_bootstrap_resamples_untrimmed_weights
+
+estimate_bootstrap_resamples_trimmed_weights1
+
+estimate_bootstrap_resamples_trimmed_weights2
+
 
 
 # bootstrap bca ----
 
 # inputs: 
-# * point estimates from jacknife resamples (proportion of vote in jacknife resamples)       
+# * point estimates from jacknife resamples (proportion of vote in jacknife resamples) <- I probably need to double-check how to compute this.       
 # * point estimates from resamples (proportion of vote in resample)       
 

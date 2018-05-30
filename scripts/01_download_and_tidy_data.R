@@ -17,7 +17,7 @@ library(tidyverse)
 folder_directories <- list("data", c("data", "from_CEO"), c("data", "from_IDESCAT"), c("data", "subsets"),
   "interim_outputs", c("interim_outputs", "calibration"), c("interim_outputs", "proportions_survey_863"),
   c("interim_outputs", "resample_survey_desings_863_bcn"), c("interim_outputs", "resamples_863_bcn"),
-  c("interim_outputs", "jackknife"),
+  c("interim_outputs", "jackknife"), c("interim_outputs", "estimates"),
   "other",
   "outputs", c("outputs", "all_categories"))
 
@@ -37,6 +37,8 @@ folder_directories %>%
     
   } 
   })
+
+rm(folder_directories)
 
 
 # Import data for all surveys----
