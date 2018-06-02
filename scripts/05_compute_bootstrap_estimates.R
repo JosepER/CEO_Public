@@ -228,8 +228,6 @@ summary_estimates <- c("response_category" = "voted",
 
 estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
 
-
-
 # ** compute Normal.L95 and Normal.U95 from trimmed  ----
 
 # Normal.L95: Actual est. - qnorm(0.975) * SD from bootstrap resamples
@@ -282,10 +280,8 @@ if(!file.exists(here("interim_outputs", "estimates", "jackknife_estimates_05.rds
 estimate_proportions_referendum_vote_all_jackknife <- estimate_jackknife_resamples %>%
   map_dbl(~ .x %>% dplyr::filter(type == "clean_", referendum_participation == "voted") %$% prop ) 
 
-
-
-
-
+rm(data_863_jackknife_resamples_list, data_863_referendum, 
+   data_863_jackknife_resamples_analysis, estimate_jackknife_resamples)
 
 # bootstrap bca ----
 
@@ -303,7 +299,20 @@ uu <- mean(estimate_proportions_referendum_vote_all_jackknife) - estimate_propor
 acc <- sum(uu * uu * uu)/(6 * (sum(uu * uu))^1.5)
 zalpha <- qnorm(c((1-0.95)/2,1-(1-0.95)/2))
 tt <- pnorm(z0 + (z0 + zalpha)/(1 - acc * (z0 + zalpha)))
+
 confpoints <- quantile(x = thetastar, probs = tt, type = 1)
+
+rm(nboot, thetahat, thetastar, z0, uu, acc, zalpha, tt)
+
+# confidence intervals -----
+
+confidence_intervals <- data_frame(indicator = "vote", 
+                                   Normal.L95 = estimate_normal_l95,
+                                   Normal.U95 = estimate_normal_u95,
+                                   Percentile.L95 = estimate_bootstrap_resamples_q025,
+                                   Percentile.U95 = estimate_bootstrap_resamples_q975,
+                                   BCA.L95 = confpoints[1],
+                                   BCA.U95 = confpoints[2])
 
 
 
