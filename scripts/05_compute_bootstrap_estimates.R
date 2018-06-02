@@ -222,8 +222,6 @@ summary_estimates <- c("response_category" = "voted",
                        "BS Median" = estimate_bootstrap_resamples_median,
                        "BS se" = estimate_bootstrap_resamples_sd)
 
-
-
 # ** compute bootstrap bias ----
 
 estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
@@ -314,5 +312,11 @@ confidence_intervals <- data_frame(indicator = "vote",
                                    BCA.L95 = confpoints[1],
                                    BCA.U95 = confpoints[2])
 
+# Export estimates ----
 
+summary_estimates %>%
+  write_rds(here("outputs", "vote_estimates_05.rds"))
+
+confidence_intervals %>%
+  write_rds(here("outputs", "vote_confidence_intervals_05.rds"))
 
