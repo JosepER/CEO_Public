@@ -297,10 +297,13 @@ estimate_proportions_referendum_vote_all_jackknife <- estimate_jackknife_resampl
 
 nboot <- length(estimate_proportions_referendum_vote_all_resamples[["resamples_with_trimmed_weights_2"]])	
 thetahat <- summary_estimates["Actual est."]
-thetastar <- estimate_proportions_referendum_vote_all_resamples[["resamples_with_trimmed_weights_2"]] #J: gets the resample estimates
+thetastar <- estimate_proportions_referendum_vote_all_resamples[["resamples_with_trimmed_weights_2"]] #J: gets the bootstrap resample estimates
 z0 <- qnorm(sum(thetastar < thetahat)/nboot) # qnorm on proportion of resample estimates that are smaller than survey estimate
 uu <- mean(estimate_proportions_referendum_vote_all_jackknife) - estimate_proportions_referendum_vote_all_jackknife
+acc <- sum(uu * uu * uu)/(6 * (sum(uu * uu))^1.5)
+zalpha <- qnorm(c((1-0.95)/2,1-(1-0.95)/2))
+tt <- pnorm(z0 + (z0 + zalpha)/(1 - acc * (z0 + zalpha)))
+confpoints <- quantile(x = thetastar, probs = tt, type = 1)
 
-# to do: need to go back to 04 and compute estimates from jackknife resamples for vote in referendum
 
 
