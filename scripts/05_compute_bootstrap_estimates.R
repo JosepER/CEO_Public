@@ -50,11 +50,11 @@ resamples_calibration_weights_trimmed_2 <- read_rds(here("interim_outputs", "cal
 
 ## jackknife resamples data
 
-data_863_jackknife_resamples_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_resamples_03.rds"))
+data_863_jackknife_resamples_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_resamples_04.rds"))
 
 ## jackknife resamples weights
 
-data_863_jackknife_weights_list <- read_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_03.rds"))
+data_863_jackknife_weights_list <- read_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_04.rds"))
 
 
 
@@ -238,6 +238,54 @@ estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
 estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
 estimate_normal_u95 <- estimate_survey_plain_wt_referendum_participation + estimate_bootstrap_resamples_sd * qnorm(0.975)
 
+# jackknife estimates ----
+# this is needed for computing bootstrap bca
+
+#** Prepare data from jackknife resamples ----
+
+### subset respondent ID (ORDRE_CINE) variable from jackknife resamples 
+
+data_863_jackknife_resamples_analysis <- data_863_jackknife_resamples_list %>% 
+  map(~ .x %>% select("ORDRE_CINE"))
+
+### merge respondent ID from jackknife resamples with survey response categories in ref participation
+
+data_863_jackknife_resamples_analysis %<>%
+  map(~ .x %>% left_join(data_863_referendum, by  = "ORDRE_CINE"))
+
+### merge bootstrap resamples (ID and ref participation) with calibration weights
+
+data_863_jackknife_resamples_analysis %<>%
+  map2(data_863_jackknife_weights_list, ~ .x %>% 
+         bind_cols(weights = .y))
+
+# TO DO: SOME CHECKS TO MAKE SURE MERGING OF RESPONSES WITH WEIGHTS IS CORRECT
+
+##** compute jackknife estimates for all resamples -----
+
+data_863_jackknife_resamples_analysis
+
+if(!file.exists(here("interim_outputs", "estimates", "jackknife_estimates_05.rds"))){
+  
+  estimate_jackknife_resamples <-  data_863_jackknife_resamples_analysis %>%
+    map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
+  
+  estimate_jackknife_resamples %>%
+    write_rds(here("interim_outputs", "estimates", "jackknife_estimates_05.rds"))
+  
+}else{
+  estimate_jackknife_resamples <- read_rds(here("interim_outputs", "estimates", "jackknife_estimates_05.rds"))
+}
+
+### retrieve the proportions of vote to referendum in each resample
+
+estimate_proportions_referendum_vote_all_jackknife <- estimate_jackknife_resamples %>%
+  map_dbl(~ .x %>% dplyr::filter(type == "clean_", referendum_participation == "voted") %$% prop ) 
+
+
+
+
+
 
 # bootstrap bca ----
 
@@ -251,7 +299,7 @@ nboot <- length(estimate_proportions_referendum_vote_all_resamples[["resamples_w
 thetahat <- summary_estimates["Actual est."]
 thetastar <- estimate_proportions_referendum_vote_all_resamples[["resamples_with_trimmed_weights_2"]] #J: gets the resample estimates
 z0 <- qnorm(sum(thetastar < thetahat)/nboot) # qnorm on proportion of resample estimates that are smaller than survey estimate
-uu <- mean(u) - u
+uu <- mean(estimate_proportions_referendum_vote_all_jackknife) - estimate_proportions_referendum_vote_all_jackknife
 
 # to do: need to go back to 04 and compute estimates from jackknife resamples for vote in referendum
 

@@ -24,9 +24,9 @@ data_863_labelled <- read_rds(here("data", "survey_data_863_recoded_01.rds")) %>
 
 ## population proportions for calibration
 
-first_language_province <- read_csv(here("interim_outputs", "calibration", "first_language_calibration_proportions_03.csv"))
+first_language_province <- read_csv(here("interim_outputs", "calibration", "first_language_calibration_proportions_04.csv"))
 
-place_of_birth <- read_csv(here("interim_outputs", "calibration", "place_of_birth_proportions_03.csv"))
+place_of_birth <- read_csv(here("interim_outputs", "calibration", "place_of_birth_proportions_04.csv"))
 
 # Data management ----
 
@@ -73,23 +73,23 @@ rm(test_freq_1, test_freq_2, i)
 
 # ** compute survey designs
 
-if(!file.exists(here("interim_outputs", "jackknife", "jackknife_survey_designs_03.rds"))){
+if(!file.exists(here("interim_outputs", "jackknife", "jackknife_survey_designs_04.rds"))){
 
 data_863_jackknife_survey_designs_list <-  data_863_jackknife_resamples_list %>%
   map(~ svydesign(ids = ~ 0, data = .x))
 
 data_863_jackknife_survey_designs_list %>%
-  write_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs_03.rds"))
+  write_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs_04.rds"))
 
 }else{
   
-  data_863_jackknife_survey_designs_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs_03.rds"))
+  data_863_jackknife_survey_designs_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_survey_designs_04.rds"))
   
 }
 
 # ** apply calibration
 
-if(!file.exists(here("interim_outputs", "jackknife", "jackknife_raked_resamples_03.rds"))){
+if(!file.exists(here("interim_outputs", "jackknife", "jackknife_raked_resamples_04.rds"))){
 
 data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
   future_map(~ rake(.x,
@@ -98,9 +98,9 @@ data_863_jackknife_raked_list <- data_863_jackknife_survey_designs_list %>%
              control = list(maxit = 30, epsilon = 1)))
 
 data_863_jackknife_raked_list %>%
-  write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples_03.rds"))
+  write_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples_04.rds"))
 
-}else{data_863_jackknife_raked_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples_03.rds"))}
+}else{data_863_jackknife_raked_list <- read_rds(here("interim_outputs", "jackknife", "jackknife_raked_resamples_04.rds"))}
 
 rm(data_863_jackknife_survey_designs_list)
 
@@ -177,17 +177,17 @@ summary_jackknife_resamples_weights %>%
   gather()
 
 summary_jackknife_resamples_weights %>%
-  write_csv(here("interim_outputs", "jackknife", "summary_jackknife_resamples_weights_03.csv"))
+  write_csv(here("interim_outputs", "jackknife", "summary_jackknife_resamples_weights_04.csv"))
 
 rm(summary_jackknife_resamples_weights)
 
 # Export jackknife resamples and weights ----
 
 data_863_jackknife_resamples_list %>%
-  write_rds(here("interim_outputs", "jackknife", "jackknife_resamples_03.rds"))
+  write_rds(here("interim_outputs", "jackknife", "jackknife_resamples_04.rds"))
 
 data_863_jackknife_weights_list %>%
-  write_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_03.rds"))
+  write_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_04.rds"))
 
 
 
