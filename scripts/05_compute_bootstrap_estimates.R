@@ -214,6 +214,16 @@ estimate_bootstrap_resamples_sd <- estimate_bootstrap_resamples_sd[["resamples_w
 estimate_bootstrap_resamples_q025 <- estimate_bootstrap_resamples_q025[["resamples_with_trimmed_weights_2"]]
 estimate_bootstrap_resamples_q975 <- estimate_bootstrap_resamples_q975[["resamples_with_trimmed_weights_2"]]
 
+## ** export all estimates ----
+
+summary_estimates <- c("response_category" = "voted",
+                       "Actual est." = estimate_survey_plain_wt_referendum_participation,
+                       "BS Mean" = estimate_bootstrap_resamples_mean,
+                       "BS Median" = estimate_bootstrap_resamples_median,
+                       "BS se" = estimate_bootstrap_resamples_sd)
+
+
+
 # ** compute bootstrap bias ----
 
 estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
@@ -225,12 +235,8 @@ estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
 # Normal.L95: Actual est. - qnorm(0.975) * SD from bootstrap resamples
 # Normal.U95: Actual est. + qnorm(0.975) * SD from bootstrap resamples
 
-stop("atura't")
-
- estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
+estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
 estimate_normal_u95 <- estimate_survey_plain_wt_referendum_participation + estimate_bootstrap_resamples_sd * qnorm(0.975)
-
-## to do: export all estimates. If possible copy format from authors.
 
 
 # bootstrap bca ----
@@ -238,4 +244,15 @@ estimate_normal_u95 <- estimate_survey_plain_wt_referendum_participation + estim
 # inputs: 
 # * point estimates from jacknife resamples (proportion of vote in jacknife resamples) <- I probably need to double-check how to compute this.       
 # * point estimates from resamples (proportion of vote in resample)       
+
+# I'll follow the 'notation' used by Sturgis et al. 
+
+nboot <- length(estimate_proportions_referendum_vote_all_resamples[["resamples_with_trimmed_weights_2"]])	
+thetahat <- summary_estimates["Actual est."]
+thetastar <- estimate_proportions_referendum_vote_all_resamples[["resamples_with_trimmed_weights_2"]] #J: gets the resample estimates
+z0 <- qnorm(sum(thetastar < thetahat)/nboot) # qnorm on proportion of resample estimates that are smaller than survey estimate
+uu <- mean(u) - u
+
+# to do: need to go back to 04 and compute estimates from jackknife resamples for vote in referendum
+
 
