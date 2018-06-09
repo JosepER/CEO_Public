@@ -50,13 +50,14 @@ data_plots_ci %<>%
 #"Adjusted percentile intervals"
 
 p_1 <- ggplot(data_plots_ci, aes(x=type, y=round(point_estimate, 3))) +
-    geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.2, 
+    geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.5, 
                 col = col_vector[[1]],
                 size = 1)+
-  geom_point(col = col_vector[[3]], size = 1.9) +
+  geom_point(col = col_vector[[3]], size = 3) +
+  scale_y_continuous(labels = scales::percent) +
   theme_dark() +
-  labs(title = "Proportion of respondents that voted in the 1st-October referendum",
-    x = "Episode", y = "% respondents") 
+  labs(title = "Figure 1: Proportion of respondents that voted in the 1st-October referendum",
+    x = "Method for variance estimation", y = "% respondents") 
   
 p_1
 

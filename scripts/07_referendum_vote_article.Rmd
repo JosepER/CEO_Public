@@ -1,0 +1,57 @@
+---
+title: "How many people voted on the 1st of October independence referendum?"
+subtitle: "A bootstrap approach using a quota sample survey."
+author: Josep Espasa Reig
+tags: ["R", "survey", "variance estimation", "bootstrap"]
+topics: "Referendum"
+output: html_document
+
+---
+
+The official data offered by the Catalan Government a few days after the independence referendum registered a turnover of almost 2.3 million votes or 43.03% of the census [^1]. This count, however, missed the polls that were seized by Spanish police forces. The by then Catalan Government spokesman, said that, under 'normal circumstances', participation could have easily reached 55% [^2]. 
+
+The real number of votes is thus still unknown, and very little data from surveys on this issue is publicly available. The main exception to this is the ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html) 'barometer' survey. To my knowledge, this poll is the only one that asked respondents about their participation on the 1-O referendum.
+
+The CEO survey, collected data during the last two weeks of that month and used a quota sampling with sample allocation proportional to population estimates [^3]. The proportional allocation meant that the sample size in three out of the four provinces was too small to compute reliable estimates. The sample size of the Province of Barcelona, however, was close to 1,000 respondents and should allow for a decent calculation. 
+
+According to the official information from the Catalan Government the province had a turnover of 41.2% or around 1,6 million votes. My estimate from CEO survey data would be that the turnover was between 50.6% and 56.8%. This would mean that between 2 and 2.26 million people voted in this province. 
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rm(list = ls())
+
+library(here)
+library(magrittr)
+library(tidyverse)
+
+p_1 <- read_rds(here("outputs", "plots", "vote_estimates_intervals.rds"))
+
+
+p_1
+```
+
+
+Notes: 
+
+-measurement error 
+-Explain weighting. What it does and how it was done.
+
+
+
+
+
+
+
+[^1]: Official data on the referendum participation can be found [here](https://estaticos.elperiodico.com/resources/pdf/4/3/1507302086634.pdf?_ga=2.11952052.1654533961.1528484435-1600052709.1528484435).
+
+[^2]: https://www.elperiodico.com/es/politica/20171006/resultados-referendum-cataluna-2017-6319340.
+
+[^3]: The technical specifications of the survey can be found here: 
+http://upceo.ceo.gencat.cat/wsceop/6408/Abstract%20in%20English%20-863.pdf (in English) 
+and with greater detail here:
+http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Catalan)
+
+
+
