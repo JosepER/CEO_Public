@@ -24,9 +24,9 @@ data_863_labelled <- read_rds(here("data", "survey_data_863_recoded_01.rds")) %>
 
 ## population proportions for calibration
 
-first_language_province <- read_csv(here("interim_outputs", "calibration", "first_language_calibration_proportions_04.csv"))
+first_language_province <- read_csv(here("interim_outputs", "calibration", "first_language_calibration_proportions_03.csv"))
 
-place_of_birth <- read_csv(here("interim_outputs", "calibration", "place_of_birth_proportions_04.csv"))
+place_of_birth <- read_csv(here("interim_outputs", "calibration", "place_of_birth_proportions_03.csv"))
 
 # Data management ----
 
