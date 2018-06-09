@@ -60,6 +60,8 @@ p_1 <- ggplot(data_plots_ci, aes(x=type, y=round(point_estimate, 3))) +
   
 p_1
 
+# Export plot ----
+
 p_1 %>%
-  write_rds()
+  write_rds(here("outputs", "plots", "vote_estimates_intervals.rds"))
 
