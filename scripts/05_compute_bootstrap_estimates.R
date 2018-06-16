@@ -57,20 +57,6 @@ data_863_jackknife_resamples_list <- read_rds(here("interim_outputs", "jackknife
 data_863_jackknife_weights_list <- read_rds(here("interim_outputs", "jackknife", "weights_jackknife_resamples_04.rds"))
 
 
-
-
-# referendum_participation = recode(as_factor(P82A),
-#                                   "No hi vaig participar ni votar perquè no vaig poder (feina, malaltia)" = "couldn't participate",
-#                                   "No hi vaig participar ni votar perquè no vaig voler" = "didn't want to participate",
-#                                   "No hi vaig participar ni votar perquè m’ho van impedir" = "they prevented resp to participate",
-#                                   "Estic segur/a que hi vaig participar i votar" = "voted",
-#                                   .default = "DK/NA" )
-
-# note: compute estimates with trimmed and untrimmed weights
-
-
-# for estimates, delete DK/NA.
-
 valid_responses <- c("couldn't participate", "didn't want to participate", 
                      "they prevented resp to participate", "voted")
 
@@ -130,6 +116,9 @@ bootstrap_resamples_analysis_with_weights_trimmed1 <- bootstrap_resamples_analys
 bootstrap_resamples_analysis_with_weights_trimmed2 <- bootstrap_resamples_analysis %>%
   map2(resamples_calibration_weights_trimmed_2, ~.x %>%
          bind_cols(weights = .y))
+
+  ### looks like the bind cols worked well
+bootstrap_resamples_analysis_with_weights_trimmed2[[1]] %>% arrange(ORDRE_CINE)
 
 # TO DO: SOME CHECKS TO MAKE SURE MERGING OF RESPONSES WITH WEIGHTS IS CORRECT
 # WOULD NEED TO CHECK WEIGHTED FREQUENCIES OF CALIBRATION VARIABLES (AGAIN)

@@ -14,13 +14,13 @@ This blog couldn't have been writen without the scripts published by the authors
 
 # How many people voted?
 
-The official data offered by the Catalan Government a few days after the independence referendum registered a turnover of almost 2.3 million votes or 43.03% of the census [^2]. This count, however, missed the polls that were seized by Spanish police forces. The by then Catalan Government spokesman, said that, under 'normal circumstances', participation could have easily reached 55% [^3]. 
+The official data offered by the Catalan Government a few days after the independence referendum registered a turnout of almost 2.3 million votes or 43.03% of the census [^2]. This count, however, missed the polls that were seized by Spanish police forces. The by then Catalan Government spokesman, said that, under 'normal circumstances', participation could have easily reached 55% [^3]. 
 
 The real number of votes is thus still unknown, and very little data from surveys on this issue is publicly available. The main exception to this is the ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html) 'barometer' survey. To my knowledge, this poll is the only one that asked respondents about their participation on the 1-O referendum.
 
 The CEO survey, collected data during the last two weeks of that month and used a quota sampling with sample allocation proportional to population estimates [^4]. The proportional allocation meant that the sample size in three out of the four provinces was too small to compute reliable estimates. The sample size of the Province of Barcelona, however, was close to 1,000 respondents and should allow for a decent calculation [^5]. 
 
-According to the official information from the Catalan Government the province had a turnover of 41.2% or around 1,6 million votes. As shown in Figure 1, my estimate from CEO survey data would be that the turnover was most likely between 50.6% and 56.8%. This would mean that between 2 and 2.26 million people voted in this province. 
+According to the official information from the Catalan Government the province had a turnout of 41.2% or around 1,6 million votes. As shown in Figure 1, my estimate from CEO survey data would be that the turnout was most likely between 50.6% and 56.8%. This would mean that between 2 and 2.26 million people voted in this province. 
 
 Even knowing that some polls were taken away by Spanish police forces, the difference between the official information and the CEO survey is large. Thus, estimates from the survey should be taken with a grain of salt. We know that people tend to lie about their participation in elections, stating that they voted when they actually didn't[^6]. Moreover, a quota sample like the one used by CEO is based on assumptions that might have been violated in this case. These assumptions and the exact methods used to compute the estimates are explained in the next sections in a slightly more technical way.
 
@@ -50,7 +50,35 @@ Non-probabililty samples are those in which the selection of units is not random
 
 Three main issues of probabilty samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list from which the random sample is selected[^8]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. Some statisticians have pointed that, due to non-response, no survey is really a probability sample [^9]. The same voices say that the low response rates that we see in certain research areas might make probability samples worthless. 
 
+## The CEO survey and quota sampling and 
 
+The survey produced by CEO used a quota sample rather than probability sampling. Quotas specify a number of respondents in each category which makes the final sample match the known distributions in the population. Quotas were applied to size of municipality and crossed categories of age, gender and place of birth. From the technical specifications of the survey and CEO's response to my queries about their sampling procedure I understood that:
+  * They first selected the municipalities within each province. They did this by sampling random municipalities within stratums according to the size of these.
+  * The interviewers were sent to do 'random walks'[^10] in sampled municipalities. The starting point was selected at random from a list of streets.
+  * Interviewers then collected responses with face-to-face interviews until quotas by crossed categories of age gender and place of birth were filled.
+
+In this particular survey, some quotas could not be filled because of low response rates and budget constrains. Thus, CEO applied a calibration step after the responses were collected.
+
+The main problem with quota sampling is that the selection of respondents within quotas is not randomised. Therefore, the estimates from the survey will be biased if respondents within quotas differ from those in the population. The estimation of the proportion of people that voted in the 1-O referendum will be biased if, within each quota (e.g. males, 18 to 24 born in Catalonia), the proportion of people that voted isn't the same as that in the population for people with the same characterisctics. 
+
+  
+## Variance estimation for quota sampling
+
+As important as providing an estimate of the proportion of people that voted is the capacity to provide an estimate of it's uncertainty. This means that we don't only want to know how many people voted, but how confident we are on this estimate. This is the point where methodology gets more tricky and the actual reason why I started doing this analysis. 
+
+Most researchers compute the uncertainty of estimates as if the data proceeded from simple random samples from the population [^11]. Thus, they do not take into account the actual design of the survey. Sturgis et al. (2017) suggests a method for calculation the precision of estimates from quota samples. This method is based on 'bootstrap resamples' or resamples with replacement taken from the survey data. In their article, Sturgis et al. explain it in the following way:
+
+> (a) draw M independent samples by sampling respondents from the full achieved sample, with replacement and in a way which matches the quota sampling design;
+> (b) for each sample thus drawn, calculate the point estimates of interest in the same way as for the original sample, including calibration and turnout weighting;
+> (c) use the distribution of the estimates from the M resamples to quantify the uncertainty in the poll estimates.
+
+## Estimation of 1-O turnout using bootstrap resamples
+
+To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompaining the article. The scripts with the code for this analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, I computed the bootstrap resamples 
+
+bootstrap with the quota sampling
+
+calibration: didn't use their calibration method
 
 
 Because we know the probability of getting each sample we select, we can also calculate a sampling
@@ -67,7 +95,7 @@ Why computing the variance with a srs might be wrong
 recruitment method
 * Methods used for variance estimation 
 
-
+Compute standard error with SRS.
 
 
 Notes: 
@@ -99,3 +127,7 @@ http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Cata
 [^8]: See for example: [This article by Andrew Gelman](https://www.washingtonpost.com/news/monkey-cage/wp/2014/04/11/when-should-we-trust-polls-from-non-probability-samples/?noredirect=on&utm_term=.0cc27f8322c8)
 
 [^9]: Some of these designs are explained and commented in the report from the American Association for Public Opinion Research (AAPOR) on [Non-Probability Sampling](https://www.aapor.org/AAPOR_Main/media/MainSiteFiles/NPS_TF_Report_Final_7_revised_FNL_6_22_13.pdf)
+
+[^10]: http://ccsg.isr.umich.edu/index.php/resources/advanced-glossary/random-route-random-walk 
+
+[^11]: I.e. Compute the Standard Error of the estimate using the formula $SE = \sqrt{\frac{s^2}{n} }$
