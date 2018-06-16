@@ -16,3 +16,4 @@ interim_outputs/calibration/weights_resamples_trimmed_2_03.rds
 interim_outputs/calibration/weights_resamples_untrimmed_03.rds
 interim_outputs/jackknife/jackknife_survey_designs.rds
 interim_outputs/jackknife/jackknife_raked_resamples.rds
+scripts/07_referendum_vote_article.html
