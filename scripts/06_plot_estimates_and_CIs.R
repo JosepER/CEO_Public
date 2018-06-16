@@ -52,11 +52,12 @@ data_plots_ci %<>%
 p_1 <- ggplot(data_plots_ci, aes(x=type, y=round(point_estimate, 3))) +
     geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.5, 
                 col = col_vector[[1]],
-                size = 1)+
+                size = 3)+
   geom_point(col = col_vector[[3]], size = 3) +
   scale_y_continuous(labels = scales::percent) +
   theme_dark() +
   labs(title = "Figure 1: Proportion of respondents that voted in the 1st-October referendum",
+       subtitle = "With 95% confidence intervals",
     x = "Method for variance estimation", y = "% respondents") 
   
 p_1
