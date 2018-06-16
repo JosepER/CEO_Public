@@ -72,6 +72,24 @@ estimate_survey_plain_wt <- data_863_labelled %>%
 
 estimate_survey_plain_wt_referendum_participation <-  estimate_survey_plain_wt$clean_ %>% filter(referendum_participation == "voted") %$% prop
 
+# compute variance under SRS ----
+
+## without finite population ----
+
+estimate_survey_sd_srs_nofpc <- sqrt((estimate_survey_plain_wt_referendum_participation * (1-estimate_survey_plain_wt_referendum_participation))/
+                                             nrow(data_863_labelled))
+
+
+## with finite population correction ----
+
+  ### Total population in Barcelona province: 3971666
+  ### Taken from:
+  ### https://estaticos.elperiodico.com/resources/pdf/4/3/1507302086634.pdf?_ga=2.11952052.1654533961.1528484435-1600052709.1528484435
+
+fpc <- sqrt((3971666-nrow(data_863_labelled)) / (3971666-1) )
+
+estimate_survey_sd_srs_withfpc <- estimate_survey_sd_srs_nofpc * fpc
+
 # bootstrap percentiles estimates ----
 # authors compute: BS Mean - mean of resamples
 # BS Median - median of resamples
