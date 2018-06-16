@@ -44,13 +44,13 @@ Before explaining the particluarities of quota sampling, let me give a brief ove
 
 ## Probability vs non-probability sampling
 
-Concisely explained, there are two types of survey sampling: probability sampling and non-probability sampling. In the survey industry the first one is still the gold standard. In probability sampling, we draw a random sample of units from a population. We know the probability of each of them being selected and w this probability must not be equal to 0. The great advantage of probability sampling is that they are unbiased. This is, if the sampling was to be repeated many times, the expected value of the estimates from the samples would be identical to the value for the whole population. Thus, the sample is (or can be made) a small-scale representation of the population from which we can obtain unbiased estimates. 
+Concisely explained, there are two types of survey sampling: probability sampling and non-probability sampling. In the survey industry the first one is still the gold standard. In probability sampling, we draw a random sample of units from a population. We know the probability of each unit being selected. The probability of inclusin should not be equal to 0 for any unit, having all of them a chance to be in the survey. The great advantage of probability sampling is that they are unbiased. This is, if the sampling was to be repeated many times, the expected value of the estimates from the samples would be identical to the value for the whole population. Thus, the sample will tend to be (on average) a small-scale representation of the population from which we can obtain unbiased estimates. 
 
-Three main issues of probabilty samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list from which the random sample is selected[^7]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. The falling response rates 
+Three main issues of probabilty samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list from which the random sample is selected[^7]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. Some statisticians have pointed that, due to non-response, no survey is really a probability sample [^8]. The same voices say that the low response rates that we see in certain research areas make it 
 
 The falling response rates 
 
-Non-probabililty samples are those in which the selection of units is not randomised according to principles of probability theory. There is a wide variety of non-probability sample methods[^8]. They are extensively used in market research but considered of poor quality in many fields. 
+Non-probabililty samples are those in which the selection of units is not randomised according to principles of probability theory. There is a wide variety of non-probability sample methods [^9]. They are extensively used in market research but considered of poor quality in many fields. 
 
 
 Because we know the probability of getting each sample we select, we can also calculate a sampling
@@ -92,8 +92,10 @@ http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Cata
 
 [^5]: See section XXX TO DO: on why I didn't use all provinces.
 
-[^6]: See examples of research done on this issue in Holbrook,A.L. & Krosnick, J.A.(2009) Social Desirability Bias in Voter Turnout Reports: Tests Using the Item Count Technique.
+[^6]: See examples of research done on this issue in Holbrook,A.L. & Krosnick, J.A.(2009) Social Desirability Bias in Voter Turnout Reports: Tests Using the Item Count Technique. Available here: https://web.stanford.edu/dept/communication/faculty/krosnick/Turnout%20Overreporting%20-%20ICT%20Only%20-%20Final.pdf
 
 [^7]: This list is commonly known as [sampling frame](https://stats.oecd.org/glossary/detail.asp?ID=2379).
 
-[^8]: Some of these designs are explained and commented in the report from the American Association for Public Opinion Research (AAPOR) on [Non-Probability Sampling](https://www.aapor.org/AAPOR_Main/media/MainSiteFiles/NPS_TF_Report_Final_7_revised_FNL_6_22_13.pdf)
+[^8]: See for example: [This article by Andrew Gelman](https://www.washingtonpost.com/news/monkey-cage/wp/2014/04/11/when-should-we-trust-polls-from-non-probability-samples/?noredirect=on&utm_term=.0cc27f8322c8)
+
+[^9]: Some of these designs are explained and commented in the report from the American Association for Public Opinion Research (AAPOR) on [Non-Probability Sampling](https://www.aapor.org/AAPOR_Main/media/MainSiteFiles/NPS_TF_Report_Final_7_revised_FNL_6_22_13.pdf)
