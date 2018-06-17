@@ -79,6 +79,11 @@ estimate_survey_plain_wt_referendum_participation <-  estimate_survey_plain_wt$c
 estimate_survey_sd_srs_nofpc <- sqrt((estimate_survey_plain_wt_referendum_participation * (1-estimate_survey_plain_wt_referendum_participation))/
                                              nrow(data_863_labelled))
 
+## CI without finite population correction ----
+
+estimate_srs_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_survey_sd_srs_nofpc * qnorm(0.975)
+
+estimate_srs_u95 <- estimate_survey_plain_wt_referendum_participation + estimate_survey_sd_srs_nofpc * qnorm(0.975)
 
 ## with finite population correction ----
 
@@ -89,6 +94,8 @@ estimate_survey_sd_srs_nofpc <- sqrt((estimate_survey_plain_wt_referendum_partic
 fpc <- sqrt((3971666-nrow(data_863_labelled)) / (3971666-1) )
 
 estimate_survey_sd_srs_withfpc <- estimate_survey_sd_srs_nofpc * fpc
+
+rm(fpc)
 
 # bootstrap percentiles estimates ----
 # authors compute: BS Mean - mean of resamples
@@ -312,6 +319,8 @@ rm(nboot, thetahat, thetastar, z0, uu, acc, zalpha, tt)
 # confidence intervals -----
 
 confidence_intervals <- data_frame(indicator = "vote", 
+                                   SRS.L95 = estimate_srs_l95,
+                                   SRS.U95 = estimate_srs_u95,
                                    Normal.L95 = estimate_normal_l95,
                                    Normal.U95 = estimate_normal_u95,
                                    Percentile.L95 = estimate_bootstrap_resamples_q025,

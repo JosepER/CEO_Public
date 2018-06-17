@@ -116,6 +116,8 @@ recruitment method
 
 # Estimates of turnout in 1-O referendum
 
+**TO DO: TABLE WITH DIFFERENT INTERVALS, STANDARD ERROR AND DESIGN EFFECTS** 
+
 
 Compute standard error with SRS.
 

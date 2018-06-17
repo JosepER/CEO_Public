@@ -54,7 +54,7 @@ p_1 <- ggplot(data_plots_ci, aes(x=type, y=round(point_estimate, 3))) +
                 col = col_vector[[1]],
                 size = 3)+
   geom_point(col = col_vector[[3]], size = 3) +
-  scale_y_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent, limits = c(0.5,0.6)) +
   theme_dark() +
   labs(title = "Figure 1: Proportion of respondents that voted in the 1st-October referendum",
        subtitle = "With 95% confidence intervals",
@@ -62,7 +62,14 @@ p_1 <- ggplot(data_plots_ci, aes(x=type, y=round(point_estimate, 3))) +
   
 p_1
 
-# Export plot ----
+## ** data for summary table ----
+
+data_plots_ci %<>%
+  select(-point_estimate)
+
+names(data_plots_ci) <-  c("Method", "Lower bound CI", "Upper bound CI")
+
+# Export plot and table ----
 
 p_1 %>%
   write_rds(here("outputs", "plots", "vote_estimates_intervals.rds"))
