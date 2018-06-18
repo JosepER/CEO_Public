@@ -20,3 +20,4 @@ interim_outputs/jackknife/jackknife_raked_resamples_05.rds
 interim_outputs/jackknife/jackknife_resamples_05.rds
 interim_outputs/jackknife/weights_jackknife_resamples_05.rds
 scripts/07_referendum_vote_article.html
+interim_outputs/estimates
