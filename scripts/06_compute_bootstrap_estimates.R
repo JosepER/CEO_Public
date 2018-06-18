@@ -242,6 +242,10 @@ estimate_bootstrap_resamples_q975 <- estimate_proportions_referendum_vote_all_re
   map(~ quantile(.x, 0.975))
 
 
+# take SD of unweighted as well to calculate the design effect
+
+estimate_bootstrap_resamples_unweighted_sd <- estimate_bootstrap_resamples_sd[["resamples_unweighted"]]
+
   # select only estimates with trimmed 2 weights
 
 estimate_bootstrap_resamples_mean <- estimate_bootstrap_resamples_mean[["resamples_with_trimmed_weights_2"]]
@@ -250,9 +254,6 @@ estimate_bootstrap_resamples_sd <- estimate_bootstrap_resamples_sd[["resamples_w
 estimate_bootstrap_resamples_q025 <- estimate_bootstrap_resamples_q025[["resamples_with_trimmed_weights_2"]]
 estimate_bootstrap_resamples_q975 <- estimate_bootstrap_resamples_q975[["resamples_with_trimmed_weights_2"]]
 
-  # take SD of unweighted as well to calculate the design effect
-
-estimate_bootstrap_resamples_unweighted_sd <- estimate_bootstrap_resamples_sd[["resamples_unweighted"]]
 
 ## ** export all estimates ----
 
@@ -261,7 +262,7 @@ summary_estimates <- c("response_category" = "voted",
                        "BS Mean" = estimate_bootstrap_resamples_mean,
                        "BS Median" = estimate_bootstrap_resamples_median,
                        "BS se" = estimate_bootstrap_resamples_sd,
-                       "BS se unweighted" = estimate_bootstrap_resamples_unweighted_sd) # use for computation of 
+                       "BS se unweighted" = estimate_bootstrap_resamples_unweighted_sd) # use for computation of deff
 
 # ** compute bootstrap bias ----
 
@@ -297,8 +298,6 @@ data_863_jackknife_resamples_analysis %<>%
          bind_cols(weights = .y))
 
 ##** compute jackknife estimates for all resamples -----
-
-data_863_jackknife_resamples_analysis
 
 if(!file.exists(here("interim_outputs", "estimates", "jackknife_estimates_06.rds"))){
   
