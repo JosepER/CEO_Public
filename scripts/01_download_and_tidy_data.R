@@ -21,6 +21,7 @@ folder_directories <- list("data", c("data", "from_CEO"), c("data", "from_IDESCA
   "other",
   "outputs", c("outputs", "all_categories"),
   "outputs", c("outputs", "plots"),
+  "outputs", c("outputs", "tables"),
   "r_markdown"
   )
 
