@@ -202,13 +202,14 @@ estimate_bootstrap_resamples_trimmed_weights2 %>%
 }
 
   ### make a list with all estimates from resamples
-estimates_all_bootstrap_resamples <- list(resamples_with_untrimmed_weights = estimate_bootstrap_resamples_untrimmed_weights,
-     resamples_with_trimmed_weights_1 = estimate_bootstrap_resamples_trimmed_weights1,
-     resamples_with_trimmed_weights_2 = estimate_bootstrap_resamples_trimmed_weights2)
+estimates_all_bootstrap_resamples <- list(resamples_unweighted = estimate_bootstrap_resamples_unweighted,
+                                          resamples_with_untrimmed_weights = estimate_bootstrap_resamples_untrimmed_weights,
+                                          resamples_with_trimmed_weights_1 = estimate_bootstrap_resamples_trimmed_weights1,
+                                          resamples_with_trimmed_weights_2 = estimate_bootstrap_resamples_trimmed_weights2)
 
 ##** mean, median, SD and quantiles of all bootstrap resamples -----
 
-
+stop("Atura't")
     ### first, retrieve the proportions of vote to referendum in each resample
 estimate_proportions_referendum_vote_all_resamples <- estimates_all_bootstrap_resamples %>%
   map(~ .x %>% map_dbl(~ .x %>% filter(type == "clean_", referendum_participation == "voted") %$% prop ) )
