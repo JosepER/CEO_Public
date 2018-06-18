@@ -209,28 +209,38 @@ estimates_all_bootstrap_resamples <- list(resamples_unweighted = estimate_bootst
 
 ##** mean, median, SD and quantiles of all bootstrap resamples -----
 
-stop("Atura't")
     ### first, retrieve the proportions of vote to referendum in each resample
 estimate_proportions_referendum_vote_all_resamples <- estimates_all_bootstrap_resamples %>%
   map(~ .x %>% map_dbl(~ .x %>% filter(type == "clean_", referendum_participation == "voted") %$% prop ) )
+
+    ##**** mean ----
 
     #good! estimates don't change much using trimmed or untrimmed weights
     #I will keep using only the trimmed2 weights.
 estimate_bootstrap_resamples_mean <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ mean(.x))
 
+    ##**** median ----
               #good, median almost equal to mean. not a skewed distribution on bootstrap resamples.
 estimate_bootstrap_resamples_median <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ median(.x))
 
+    ##**** sd ----
+              # bootstrap estimates with untrimmed weights have the same/lower variance than those for trimmed!
+              # there really is no error!
 estimate_bootstrap_resamples_sd <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ sd(.x))
-  
+
+# resamples_calibration_weights %>% unlist %>% sd()
+# resamples_calibration_weights_trimmed_2%>% unlist %>% sd()
+
+    ##**** quantiles ----
 estimate_bootstrap_resamples_q025 <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ quantile(.x, 0.025))
 
 estimate_bootstrap_resamples_q975 <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ quantile(.x, 0.975))
+
 
   # select only estimates with trimmed 2 weights
 
@@ -240,13 +250,18 @@ estimate_bootstrap_resamples_sd <- estimate_bootstrap_resamples_sd[["resamples_w
 estimate_bootstrap_resamples_q025 <- estimate_bootstrap_resamples_q025[["resamples_with_trimmed_weights_2"]]
 estimate_bootstrap_resamples_q975 <- estimate_bootstrap_resamples_q975[["resamples_with_trimmed_weights_2"]]
 
+  # take SD of unweighted as well to calculate the design effect
+
+estimate_bootstrap_resamples_unweighted_sd <- estimate_bootstrap_resamples_sd[["resamples_unweighted"]]
+
 ## ** export all estimates ----
 
 summary_estimates <- c("response_category" = "voted",
                        "Actual est." = estimate_survey_plain_wt_referendum_participation,
                        "BS Mean" = estimate_bootstrap_resamples_mean,
                        "BS Median" = estimate_bootstrap_resamples_median,
-                       "BS se" = estimate_bootstrap_resamples_sd)
+                       "BS se" = estimate_bootstrap_resamples_sd,
+                       "BS se unweighted" = estimate_bootstrap_resamples_unweighted_sd) # use for computation of 
 
 # ** compute bootstrap bias ----
 
