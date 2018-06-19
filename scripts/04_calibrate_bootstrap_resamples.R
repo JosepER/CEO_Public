@@ -15,7 +15,13 @@ library(tidyverse)
 
   ## Resamples
 
-resamples <-  read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", 10000, ".rds")))
+    ### with quota design
+
+resamples_quotas <-  read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", 10000, ".rds")))
+
+    ### assuming SRS
+
+resamples_srs <-  read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", 10000, "_SRSdesign_03",".rds") ))
 
   ## survey dataset
 
@@ -210,7 +216,7 @@ place_of_birth
 
 ## compute a different calibration frequencies for each length of resample
 
-resamples_length <- map_dbl(resamples, nrow) 
+resamples_length <- map_dbl(resamples_quotas, nrow) 
 
 resamples_length_unique <- resamples_length %>%
   unique %>%
@@ -345,11 +351,11 @@ rm(comparison_proportions_place_of_birth, comparison_proportions_first_language,
    place_of_birth_survey_863, summary_main_survey_weights, survey_design_data_863,
    raked_data_863)
 
-# calibrate resamples ----
+# Calibrate bootstrap resamples from quota design  ----
 
 ## create resamples for calibration
 
-resamples_for_calibration <- resamples %>%
+resamples_for_calibration <- resamples_quotas %>%
   map(~ data_863_for_calibration[match(.x[["ORDRE_CINE"]], data_863_for_calibration[["ORDRE_CINE"]]), ])
 
 ## **create 'survey' survey designs for each resample----
@@ -518,6 +524,21 @@ rm(i, first_language_calibrated_resamples,
    age_place_of_birth_calibrated_resamples_checks,
    number_categories)
 
+# Calibrate bootstrap resamples with SRS design ----
+
+## create resamples for calibration
+
+resamples_for_calibration_srs <- resamples_srs %>%
+  map(~ data_frame(ORDRE_CINE = .x)) %>%
+  map(~ data_863_for_calibration[match(.x[["ORDRE_CINE"]], data_863_for_calibration[["ORDRE_CINE"]]), ])
+
+
+## **create 'survey' survey designs for each resample----
+
+
+
+
+  
 
 
 # variance before trimming----

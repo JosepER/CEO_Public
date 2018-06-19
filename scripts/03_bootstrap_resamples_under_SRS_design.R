@@ -39,7 +39,7 @@ data_for_bootstrap_resamples <- data_863_labelled %$%
 
 # Resample ----
 
-if(!file.exists(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, "_SRSdesign",".rds") ))){
+if(!file.exists(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, "_SRSdesign_03",".rds") ))){
 
 resamples <- list()
 
@@ -49,11 +49,11 @@ resamples <- foreach(icount(n_bootstrap_resamples))%dopar%{
   
 }
 
-write_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, "_SRSdesign",".rds") ))
+resamples %>% write_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, "_SRSdesign_03",".rds") ))
 
 }else{
   
-  resamples <- read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, "_SRSdesign",".rds") ))
+  resamples <- read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", n_bootstrap_resamples, "_SRSdesign_03",".rds") ))
   
 }
 
