@@ -347,8 +347,8 @@ data_frame(ORDRE_CINE = raked_data_863$variables$ORDRE_CINE,
   write_rds(here("interim_outputs", "calibration", "main_survey_weights_04.csv"))
 
 rm(comparison_proportions_place_of_birth, comparison_proportions_first_language,
-   data_863_place_of_birth_prop, data_863_first_language, first_language_calibration_survey_863,
-   place_of_birth_survey_863, summary_main_survey_weights, survey_design_data_863,
+   data_863_place_of_birth_prop, data_863_first_language, summary_main_survey_weights, 
+   survey_design_data_863,
    raked_data_863)
 
 # Calibrate bootstrap resamples from quota design  ----
@@ -374,11 +374,22 @@ resamples_survey_design_list %>%
 
 ## **calibrate resamples ----
 
+if(!file.exists(here("interim_outputs", "resample_survey_desings_863_bcn", "raked_survey_designs_04.rds"))){
+
 raked_resamples_list <- map2(.x = resamples_survey_design_list, .y = resamples_length, 
      ~ try(rake(.x, 
             sample.margins = list(~first_language_calibration, ~age_place_of_birth_calibration),
             population = list(first_language_province_lengths_list[[as.character(.y)]], place_of_birth_different_lengths_list[[as.character(.y)]]),
             control = list(maxit = 30, epsilon = 1))))
+
+raked_resamples_list %>%
+  write_rds(here("interim_outputs", "resample_survey_desings_863_bcn", "raked_survey_designs_04.rds"))
+
+}else{
+  
+  raked_resamples_list <- read_rds(here("interim_outputs", "resample_survey_desings_863_bcn", "raked_survey_designs_04.rds"))
+
+}
 
 error_in_raking <- raked_resamples_list %>%
   map_lgl(~ any(class(.x) == "try-error")) %>%
@@ -533,7 +544,55 @@ resamples_for_calibration_srs <- resamples_srs %>%
   map(~ data_863_for_calibration[match(.x[["ORDRE_CINE"]], data_863_for_calibration[["ORDRE_CINE"]]), ])
 
 
-## **create 'survey' survey designs for each resample----
+## **create 'survey' survey designs for each SRS resample----
+
+if(!file.exists(here("interim_outputs", "resample_survey_desings_863_bcn", "survey_designs_srs_04.rds"))){
+  
+  resamples_survey_design_srs_list <- resamples_for_calibration_srs %>%
+    map(~ svydesign(ids = ~ 0, data = .x))
+  
+  resamples_survey_design_srs_list %>%
+    write_rds(here("interim_outputs", "resample_survey_desings_863_bcn", "survey_designs_srs_04.rds"))
+  
+}else{
+  resamples_survey_design_srs_list <- read_rds(here("interim_outputs", "resample_survey_desings_863_bcn", "survey_designs_srs_04.rds"))
+}
+
+
+## **calibrate SRS resamples ----
+
+if(!file.exists(here("interim_outputs", "calibration", "raked_srs_sampling_designs_resamples_04.rds"))){
+
+raked_resamples_srs_list <- map2(.x = resamples_survey_design_srs_list, .y = nrow(data_863_for_calibration), 
+                             ~ rake(.x, 
+                                        sample.margins = list(~first_language_calibration, ~age_place_of_birth_calibration),
+                                        population = list(first_language_calibration_survey_863, place_of_birth_survey_863),
+                                        control = list(maxit = 30, epsilon = 1)))
+
+raked_resamples_srs_list %>%
+  write_rds(here("interim_outputs", "calibration", "raked_srs_sampling_designs_resamples_04.rds"))
+
+}else{
+  
+  raked_resamples_srs_list <- read_rds(here("interim_outputs", "calibration", "raked_srs_sampling_designs_resamples_04.rds"))  
+  
+}
+
+stop("Atura't. From here")
+
+resamples_srs_calibration_weights <- raked_resamples_srs_list %>%
+  map(~ weights(.x))
+
+resamples_srs_calibration_weights %>%
+  write_rds(here("interim_outputs", "calibration", "raked_calibration_weights_resamples_srs_04.rds"))
+
+rm(raked_resamples_list, resamples_survey_design_list, 
+   first_language_calibration_survey_863,
+   place_of_birth_survey_863,)
+
+
+
+
 
 
 
