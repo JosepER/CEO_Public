@@ -351,6 +351,7 @@ rm(comparison_proportions_place_of_birth, comparison_proportions_first_language,
    survey_design_data_863,
    raked_data_863)
 
+
 # Calibrate bootstrap resamples from quota design  ----
 
 ## create resamples for calibration
@@ -412,128 +413,7 @@ resamples_calibration_weights %>%
 
 rm(raked_resamples_list, resamples_survey_design_list)
 
-# Check calibrated resamples ----
 
-first_language_calibrated_resamples <- map2(.x = resamples_for_calibration, 
-                                            .y = resamples_calibration_weights,
-                                            ~ .x %>%
-                                              bind_cols(weights = .y) %>%
-                                              count(first_language_calibration, wt = weights))
-
-age_place_of_birth_calibrated_resamples <- map2(.x = resamples_for_calibration, 
-                                            .y = resamples_calibration_weights,
-                                            ~ .x %>%
-                                              bind_cols(weights = .y) %>%
-                                              count(age_place_of_birth_calibration, wt = weights))
-
-    ## **first language----
-    ## there seems to be some rounding error. I think it's acceptable overall.
-
-map2(.x = first_language_calibrated_resamples,
-     .y = resamples_length, function(.x, .y){ as.integer(.x[["n"]]) ==  as.integer(first_language_province_lengths_list[[as.character(.y)]][["Freq"]])}) %>%
-  head(15)
-
-first_language_calibrated_resamples_checks <- first_language_calibrated_resamples %>%
-  map("n") %>% unlist %>%
-  matrix(ncol = 3, nrow = length(first_language_calibrated_resamples), byrow = T)
-
-colnames(first_language_calibrated_resamples_checks) <- c("Catalan", "Spanish", "Other")
-
-first_language_calibrated_resamples_checks %<>%
-  as_data_frame
-
-population_margins_first_language_checks <- first_language_province_lengths_list %>%
-  map("Freq") %>% unlist %>%
-  matrix(ncol = 3, nrow = length(first_language_province_lengths_list), 
-         byrow = T, dimnames = list(NULL, c("Catalan_pop", "Spanish_pop", "Other_pop"))) %>%
-  as_data_frame() %>%
-  mutate(resample_length = names(first_language_province_lengths_list))
-  
-first_language_calibrated_resamples_checks %<>%
-  bind_cols(resample_length = as.character(resamples_length)) %>%
-  left_join(population_margins_first_language_checks, by = "resample_length") # need to merge with population estimates
-
-first_language_calibrated_resamples_checks %<>%
-  mutate(check = abs(Catalan-Catalan_pop) + abs(Spanish-Spanish_pop) + abs(Other-Other_pop))
-
-first_language_calibrated_resamples_checks %>%
-  write_csv(here("interim_outputs", "calibration", "raked_calibration_checks_first_language_04.csv"))
-
-first_language_calibrated_resamples_checks %>%
-  arrange(desc(check))
-
-first_language_calibrated_resamples_checks %>%
-  ggplot(aes(x = check)) +
-  geom_density()
-  
-first_language_calibrated_resamples_checks %>%
-  ggplot(aes(x = check)) +
-  geom_density() +
-  facet_wrap(~resample_length)
-
-## **place of birth----
-
-map2(.x = age_place_of_birth_calibrated_resamples,
-     .y = resamples_length, function(.x, .y){ try(as.integer(.x[["n"]]) ==  as.integer(place_of_birth_different_lengths_list[[as.character(.y)]][["Freq"]]))}) %>%
-  head(15)
-            ### careful here because I have samples with different lengths
-age_place_of_birth_calibrated_resamples_checks <- age_place_of_birth_calibrated_resamples %>%
-  bind_rows(.id = "resample")
-  
-age_place_of_birth_calibrated_resamples_checks %<>%
-  mutate(resample = as.numeric(resample)) %>%
-  spread(key = "age_place_of_birth_calibration", value = "n") %>%
-  arrange(resample)
-  
-population_margins_age_place_of_birth_checks <- place_of_birth_different_lengths_list %>%
-  bind_rows(.id = "resample_length") %>% 
-  spread(key = "age_place_of_birth_calibration", value = "Freq")
-
-names(population_margins_age_place_of_birth_checks)[2:ncol(population_margins_age_place_of_birth_checks)] <- str_c(names(population_margins_age_place_of_birth_checks)[2:ncol(population_margins_age_place_of_birth_checks)], "_pop") 
-
-number_categories <- ncol(age_place_of_birth_calibrated_resamples_checks)
-
-age_place_of_birth_calibrated_resamples_checks %<>%
-  bind_cols(resample_length = as.character(resamples_length)) %>%
-  left_join(population_margins_age_place_of_birth_checks, by = "resample_length")
-
-    ### compute a matrix with differences between resamples and population counts
-age_place_of_birth_calibrated_resamples_checks_diffs <- matrix(NA, ncol = (number_categories-1), nrow = nrow(age_place_of_birth_calibrated_resamples_checks))
-
-for(i in 1:(number_categories-1)){
-
-  age_place_of_birth_calibrated_resamples_checks_diffs[,i] <- abs(age_place_of_birth_calibrated_resamples_checks[[i+1]] - age_place_of_birth_calibrated_resamples_checks[[i+number_categories+1]]) 
-} #double check this!
-
-colnames(age_place_of_birth_calibrated_resamples_checks_diffs) <- names(age_place_of_birth_calibrated_resamples_checks)[2:(number_categories)]
-
-    ### Calibration seems to have worked very well 
-
-age_place_of_birth_calibrated_resamples_checks_diffs %>% as_data_frame %>% map(max)
-
-age_place_of_birth_calibrated_resamples_checks_diffs %>% as_data_frame %>% map(sd)
-
-age_place_of_birth_calibrated_resamples_checks$check <- age_place_of_birth_calibrated_resamples_checks_diffs %>%
-  array_branch(1) %>% map_dbl(sum)
-
-age_place_of_birth_calibrated_resamples_checks %>%
-  write_csv(here("interim_outputs", "calibration", "raked_calibration_checks_place_of_birth_04.csv"))
-
-age_place_of_birth_calibrated_resamples_checks %>%
-  arrange(desc(check))
-
-age_place_of_birth_calibrated_resamples_checks %>%
-  ggplot(aes(x = check)) +
-  geom_density()
-
-rm(i, first_language_calibrated_resamples, 
-   age_place_of_birth_calibrated_resamples,
-   first_language_province_lengths_list,
-   place_of_birth_different_lengths_list,
-   resamples_length_unique,
-   age_place_of_birth_calibrated_resamples_checks_diffs,
-   age_place_of_birth_calibrated_resamples_checks,
-   number_categories)
 
 # Calibrate bootstrap resamples with SRS design ----
 
@@ -578,25 +458,170 @@ raked_resamples_srs_list %>%
   
 }
 
-stop("Atura't. From here")
-
 resamples_srs_calibration_weights <- raked_resamples_srs_list %>%
   map(~ weights(.x))
 
 resamples_srs_calibration_weights %>%
   write_rds(here("interim_outputs", "calibration", "raked_calibration_weights_resamples_srs_04.rds"))
 
-rm(raked_resamples_list, resamples_survey_design_list, 
-   first_language_calibration_survey_863,
-   place_of_birth_survey_863,)
+rm(raked_resamples_srs_list, resamples_survey_design_srs_list)
+
+
+# Check calibrated resamples ----
+
+## **bootstrap resamples with QUOTA DESIGN ----
+
+first_language_calibrated_resamples <- map2(.x = resamples_for_calibration, 
+                                            .y = resamples_calibration_weights,
+                                            ~ .x %>%
+                                              bind_cols(weights = .y) %>%
+                                              count(first_language_calibration, wt = weights))
+
+age_place_of_birth_calibrated_resamples <- map2(.x = resamples_for_calibration, 
+                                                .y = resamples_calibration_weights,
+                                                ~ .x %>%
+                                                  bind_cols(weights = .y) %>%
+                                                  count(age_place_of_birth_calibration, wt = weights))
+
+## ****first language----
+## there seems to be some rounding error. I think it's acceptable overall.
+
+  ## check if weighted bootstrap counts (rounded to integers) are equal to those from population
+map2(.x = first_language_calibrated_resamples,
+     .y = resamples_length, function(.x, .y){ as.integer(.x[["n"]]) ==  as.integer(first_language_province_lengths_list[[as.character(.y)]][["Freq"]])}) %>%
+  head(15)
+
+first_language_calibrated_resamples_checks <- first_language_calibrated_resamples %>%
+  map("n") %>% unlist %>%
+  matrix(ncol = 3, nrow = length(first_language_calibrated_resamples), byrow = T)
+
+colnames(first_language_calibrated_resamples_checks) <- c("Catalan", "Spanish", "Other")
+
+first_language_calibrated_resamples_checks %<>%
+  as_data_frame
+
+population_margins_first_language_checks <- first_language_province_lengths_list %>%
+  map("Freq") %>% unlist %>%
+  matrix(ncol = 3, nrow = length(first_language_province_lengths_list), 
+         byrow = T, dimnames = list(NULL, c("Catalan_pop", "Spanish_pop", "Other_pop"))) %>%
+  as_data_frame() %>%
+  mutate(resample_length = names(first_language_province_lengths_list))
+
+first_language_calibrated_resamples_checks %<>%
+  bind_cols(resample_length = as.character(resamples_length)) %>%
+  left_join(population_margins_first_language_checks, by = "resample_length") # need to merge with population estimates
+
+first_language_calibrated_resamples_checks %<>%
+  mutate(check = abs(Catalan-Catalan_pop) + abs(Spanish-Spanish_pop) + abs(Other-Other_pop))
+
+## Output for checks - Difference between calibrated counts and expected counts from population proportions
+first_language_calibrated_resamples_checks %>%
+  write_csv(here("interim_outputs", "calibration", "raked_calibration_checks_first_language_04.csv"))
+
+first_language_calibrated_resamples_checks %>%
+  arrange(desc(check))
+
+  ## Difference between calibrated counts and expected counts from population proportions
+first_language_calibrated_resamples_checks %>%
+  ggplot(aes(x = check)) +
+  geom_density()
+  
+  ## Difference between calibrated counts and expected counts from population proportions by size of resample
+first_language_calibrated_resamples_checks %>%
+  ggplot(aes(x = check)) +
+  geom_density() +
+  facet_wrap(~resample_length)
+
+## ****place of birth----
+
+map2(.x = age_place_of_birth_calibrated_resamples,
+     .y = resamples_length, function(.x, .y){ try(as.integer(.x[["n"]]) ==  as.integer(place_of_birth_different_lengths_list[[as.character(.y)]][["Freq"]]))}) %>%
+  head(15)
+### careful here because I have samples with different lengths
+age_place_of_birth_calibrated_resamples_checks <- age_place_of_birth_calibrated_resamples %>%
+  bind_rows(.id = "resample")
+
+age_place_of_birth_calibrated_resamples_checks %<>%
+  mutate(resample = as.numeric(resample)) %>%
+  spread(key = "age_place_of_birth_calibration", value = "n") %>%
+  arrange(resample)
+
+population_margins_age_place_of_birth_checks <- place_of_birth_different_lengths_list %>%
+  bind_rows(.id = "resample_length") %>% 
+  spread(key = "age_place_of_birth_calibration", value = "Freq")
+
+names(population_margins_age_place_of_birth_checks)[2:ncol(population_margins_age_place_of_birth_checks)] <- str_c(names(population_margins_age_place_of_birth_checks)[2:ncol(population_margins_age_place_of_birth_checks)], "_pop") 
+
+number_categories <- ncol(age_place_of_birth_calibrated_resamples_checks)
+
+age_place_of_birth_calibrated_resamples_checks %<>%
+  bind_cols(resample_length = as.character(resamples_length)) %>%
+  left_join(population_margins_age_place_of_birth_checks, by = "resample_length")
+
+### compute a matrix with differences between resamples and population counts
+age_place_of_birth_calibrated_resamples_checks_diffs <- matrix(NA, ncol = (number_categories-1), nrow = nrow(age_place_of_birth_calibrated_resamples_checks))
+
+for(i in 1:(number_categories-1)){
+  
+  age_place_of_birth_calibrated_resamples_checks_diffs[,i] <- abs(age_place_of_birth_calibrated_resamples_checks[[i+1]] - age_place_of_birth_calibrated_resamples_checks[[i+number_categories+1]]) 
+} #double check this!
+
+colnames(age_place_of_birth_calibrated_resamples_checks_diffs) <- names(age_place_of_birth_calibrated_resamples_checks)[2:(number_categories)]
+
+### Calibration seems to have worked very well 
+
+age_place_of_birth_calibrated_resamples_checks_diffs %>% as_data_frame %>% map(max)
+
+age_place_of_birth_calibrated_resamples_checks_diffs %>% as_data_frame %>% map(sd)
+
+age_place_of_birth_calibrated_resamples_checks$check <- age_place_of_birth_calibrated_resamples_checks_diffs %>%
+  array_branch(1) %>% map_dbl(sum)
+
+age_place_of_birth_calibrated_resamples_checks %>%
+  write_csv(here("interim_outputs", "calibration", "raked_calibration_checks_place_of_birth_04.csv"))
+
+age_place_of_birth_calibrated_resamples_checks %>%
+  arrange(desc(check))
+
+age_place_of_birth_calibrated_resamples_checks %>%
+  ggplot(aes(x = check)) +
+  geom_density()
+
+rm(i, first_language_calibrated_resamples, 
+   age_place_of_birth_calibrated_resamples,
+
+   resamples_length_unique,
+   age_place_of_birth_calibrated_resamples_checks_diffs,
+   age_place_of_birth_calibrated_resamples_checks,
+   number_categories)
+
+#**bootstrap resamples with SRS DESIGN ----
+
+first_language_calibrated_resamples_srs <- map2(.x = resamples_for_calibration_srs, 
+                                            .y = resamples_srs_calibration_weights,
+                                            ~ .x %>%
+                                              bind_cols(weights = .y) %>%
+                                              count(first_language_calibration, wt = weights))
+
+age_place_of_birth_calibrated_resamples_srs <- map2(.x = resamples_for_calibration_srs, 
+                                                .y = resamples_srs_calibration_weights,
+                                                ~ .x %>%
+                                                  bind_cols(weights = .y) %>%
+                                                  count(age_place_of_birth_calibration, wt = weights))
+
+## ****first language ----
+
+    ### checking
+map(.x = first_language_calibrated_resamples_srs, ~ as.integer(.x[["n"]]) == as.integer(first_language_province_lengths_list[["968"]][["Freq"]]) )
+
+
+stop("TO DO: CONTINUE CHECKS FROM HERE")
+
+first_language_province
 
 
 
-
-
-
-
-
+rm(first_language_province_lengths_list, place_of_birth_different_lengths_list)
   
 
 
