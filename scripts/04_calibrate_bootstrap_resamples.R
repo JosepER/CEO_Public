@@ -611,17 +611,51 @@ age_place_of_birth_calibrated_resamples_srs <- map2(.x = resamples_for_calibrati
 
 ## ****first language ----
 
-    ### checking
-map(.x = first_language_calibrated_resamples_srs, ~ as.integer(.x[["n"]]) == as.integer(first_language_province_lengths_list[["968"]][["Freq"]]) )
+    ### check if all categoreis of first language are the same as in population once 
+    ### they are converted to an integer
+map(.x = first_language_calibrated_resamples_srs, ~ as.integer(.x[["n"]]) == as.integer(first_language_province_lengths_list[["968"]][["Freq"]]) ) %>%
+  head(15)
+
+first_language_calibrated_resamples_srs_checks <- first_language_calibrated_resamples_srs %>%
+  map("n") %>% unlist %>%
+  matrix(ncol = 3, nrow = length(first_language_calibrated_resamples_srs), byrow = T)
+
+colnames(first_language_calibrated_resamples_srs_checks) <- c("Catalan", "Spanish", "Other")
+
+first_language_calibrated_resamples_srs_checks %<>%
+  as_data_frame
+
+population_margins_first_language_srs_checks <-  first_language_province_lengths_list[["968"]] %>%
+  spread(key = "first_language_calibration", value = "Freq") %>%
+  select(Catalan, Spanish, Other) %>%
+  map_df(~.x %>% rep(nrow(first_language_calibrated_resamples_srs_checks)))
+
+names(population_margins_first_language_srs_checks) <- str_c(names(population_margins_first_language_srs_checks), "_pop")
+
+first_language_calibrated_resamples_srs_checks %<>%
+  bind_cols(population_margins_first_language_srs_checks) %>%
+  mutate(check = abs(Catalan-Catalan_pop) + abs(Spanish-Spanish_pop) + abs(Other-Other_pop))
+
+## Output for checks - Difference between calibrated counts and expected counts from population proportions
+first_language_calibrated_resamples_srs_checks %>%
+  write_csv(here("interim_outputs", "calibration", "raked_calibration_checks_first_language_srs_04.csv"))
+
+first_language_calibrated_resamples_srs_checks %>%
+  arrange(desc(check))
+
+## Difference between calibrated counts and expected counts from population proportions
+first_language_calibrated_resamples_srs_checks %>%
+  ggplot(aes(x = check)) +
+  geom_density()
 
 
 stop("TO DO: CONTINUE CHECKS FROM HERE")
 
-first_language_province
 
 
 
-rm(first_language_province_lengths_list, place_of_birth_different_lengths_list)
+rm(first_language_calibrated_resamples_srs, 
+   first_language_province_lengths_list, place_of_birth_different_lengths_list)
   
 
 
