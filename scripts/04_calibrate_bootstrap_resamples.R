@@ -649,6 +649,17 @@ first_language_calibrated_resamples_srs_checks %>%
   geom_density()
 
 
+## ****place of birth----
+
+  ### check differences between calibrated srs resamples and expected frequencies from population proportions
+map(.x = age_place_of_birth_calibrated_resamples_srs,
+     ~ as.integer(.x[["n"]]) ==  as.integer(place_of_birth_different_lengths_list[["968"]][["Freq"]])) %>%
+  head(15)
+
+# age_place_of_birth_calibrated_resamples_srs_checks <- age_place_of_birth_calibrated_resamples_srs %>%
+#   bind_rows(.id = "resample")
+
+
 stop("TO DO: CONTINUE CHECKS FROM HERE")
 
 
