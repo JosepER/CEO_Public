@@ -349,7 +349,7 @@ data_frame(ORDRE_CINE = raked_data_863$variables$ORDRE_CINE,
 rm(comparison_proportions_place_of_birth, comparison_proportions_first_language,
    data_863_place_of_birth_prop, data_863_first_language, summary_main_survey_weights, 
    survey_design_data_863,
-   raked_data_863)
+   raked_data_863, place_of_birth)
 
 
 # Calibrate bootstrap resamples from quota design  ----
@@ -464,7 +464,8 @@ resamples_srs_calibration_weights <- raked_resamples_srs_list %>%
 resamples_srs_calibration_weights %>%
   write_rds(here("interim_outputs", "calibration", "raked_calibration_weights_resamples_srs_04.rds"))
 
-rm(raked_resamples_srs_list, resamples_survey_design_srs_list)
+rm(raked_resamples_srs_list, resamples_survey_design_srs_list,
+   first_language_calibration_survey_863, place_of_birth_survey_863)
 
 
 # Check calibrated resamples ----
@@ -589,11 +590,11 @@ age_place_of_birth_calibrated_resamples_checks %>%
 
 rm(i, first_language_calibrated_resamples, 
    age_place_of_birth_calibrated_resamples,
-
    resamples_length_unique,
    age_place_of_birth_calibrated_resamples_checks_diffs,
    age_place_of_birth_calibrated_resamples_checks,
-   number_categories)
+   number_categories,
+   first_language_calibrated_resamples_checks)
 
 #**bootstrap resamples with SRS DESIGN ----
 
@@ -656,21 +657,64 @@ map(.x = age_place_of_birth_calibrated_resamples_srs,
      ~ as.integer(.x[["n"]]) ==  as.integer(place_of_birth_different_lengths_list[["968"]][["Freq"]])) %>%
   head(15)
 
-# age_place_of_birth_calibrated_resamples_srs_checks <- age_place_of_birth_calibrated_resamples_srs %>%
-#   bind_rows(.id = "resample")
+age_place_of_birth_calibrated_resamples_srs_checks <- age_place_of_birth_calibrated_resamples_srs %>%
+   bind_rows(.id = "resample")
+
+age_place_of_birth_calibrated_resamples_srs_checks %<>%
+  mutate(resample = as.numeric(resample)) %>%
+  spread(key = "age_place_of_birth_calibration", value = "n") %>%
+  arrange(resample)
+
+population_margins_age_place_of_birth_checks_968 <- place_of_birth_different_lengths_list[["968"]] %>%
+  spread(key = "age_place_of_birth_calibration", value = "Freq")
+
+if(!identical(names(age_place_of_birth_calibrated_resamples_srs_checks[2:ncol(age_place_of_birth_calibrated_resamples_srs_checks)]),
+             names(population_margins_age_place_of_birth_checks_968))){
+  stop("Failed test: names from population and resample check objects must be the same.")
+}
+
+names(population_margins_age_place_of_birth_checks_968)<- 
+  str_c(names(population_margins_age_place_of_birth_checks_968), "_pop") 
+
+population_margins_age_place_of_birth_checks_968 %<>%
+  map_df(~.x %>% rep(nrow(age_place_of_birth_calibrated_resamples_srs_checks))) %>%
+  as.matrix()
 
 
-stop("TO DO: CONTINUE CHECKS FROM HERE")
+### compute a matrix with differences between resamples and population counts
 
+age_place_of_birth_calibrated_resamples_srs_checks_diffs <- abs(age_place_of_birth_calibrated_resamples_srs_checks[2:ncol(age_place_of_birth_calibrated_resamples_srs_checks)] %>%
+  as.matrix() - population_margins_age_place_of_birth_checks_968)
 
+colnames(age_place_of_birth_calibrated_resamples_srs_checks_diffs) <- str_c(colnames(age_place_of_birth_calibrated_resamples_srs_checks_diffs), "_diff")
 
+### Calibration seems to have worked here as well
+
+age_place_of_birth_calibrated_resamples_srs_checks_diffs %>% as_data_frame %>% map(max)
+
+age_place_of_birth_calibrated_resamples_srs_checks_diffs %>% as_data_frame %>% map(sd)
+
+age_place_of_birth_calibrated_resamples_srs_checks$check <- age_place_of_birth_calibrated_resamples_srs_checks_diffs %>%
+  array_branch(1) %>% map_dbl(sum)
+
+age_place_of_birth_calibrated_resamples_srs_checks %>%
+  write_csv(here("interim_outputs", "calibration", "raked_calibration_checks_place_of_birth_srs_04.csv"))
 
 rm(first_language_calibrated_resamples_srs, 
-   first_language_province_lengths_list, place_of_birth_different_lengths_list)
+   first_language_province,
+   first_language_province_lengths_list, 
+   place_of_birth_different_lengths_list,
+   population_margins_age_place_of_birth_checks,
+   age_place_of_birth_calibrated_resamples_srs_checks,
+   age_place_of_birth_calibrated_resamples_srs_checks_diffs,
+   population_margins_age_place_of_birth_checks_968,
+   age_place_of_birth_calibrated_resamples_srs,
+   first_language_calibrated_resamples_srs_checks,
+   population_margins_first_language_srs_checks)
   
+# Weight variance before trimming----
 
-
-# variance before trimming----
+# **bootstrap resamples with QUOTA DESIGN ----
 
 ## there is a tail with some resamples having rather larger weights
 resamples_calibration_weights %>%
@@ -685,7 +729,7 @@ resamples_calibration_weights %>%
   ggplot(aes(x = standard_devs))+
   geom_density()
 
-###**compute summary of weights----
+###****compute summary of weights----
 ### sd of weights
   ### max weights
   ### q0.95, q0.90 of weights
@@ -733,7 +777,7 @@ weigths_summary %>%
   geom_density()
 
 
-### **check categories with high weights----
+### ****check categories with high weights----
 
 #### largest 10 weights in each resampling
 
@@ -764,7 +808,7 @@ top_10_categories_summary <- top_10_categories_proportions %>%
 top_10_categories_summary
 
 rm(tenth_threshold_list, index_max_weights, top_10_categories_proportions,
-   top_10_categories, weights_quantiles)
+   top_10_categories, weights_quantiles, top_10_categories_summary)
 
 weigths_summary$q0.995 %>% max()
 
@@ -774,6 +818,13 @@ weigths_summary$q0.995 %>% max()
 sum(weigths_summary$weights_ratio > 5)
 
 sum(weigths_summary$weights_ratio > 6)
+
+
+
+# **bootstrap resamples with SRS DESIGN ----
+
+
+
 
 # trim weights ----
 ## trim to 99.5 percentile
