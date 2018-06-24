@@ -823,6 +823,62 @@ sum(weigths_summary$weights_ratio > 6)
 
 # **bootstrap resamples with SRS DESIGN ----
 
+## from plots we see that SRS designs needed much adjustment than quotas.
+## however, there are some cases where srs needed less adjustment than quota design.
+## I'm not sure we would expect these cases under a stratified design.
+## thus, the quota design made the weighting process less variable.
+
+data_frame(
+ sd_weights_quota = resamples_calibration_weights %>% map_dbl(sd), 
+ sd_weights_srs = resamples_srs_calibration_weights %>% map_dbl(sd) 
+)  %>%
+  gather(key = "design", value = "sd") %>%
+  ggplot(aes(y = sd, x = factor(design)))+
+  geom_boxplot()
+
+data_frame(
+  sd_weights_quota = resamples_calibration_weights %>% map_dbl(sd), 
+  sd_weights_srs = resamples_srs_calibration_weights %>% map_dbl(sd) 
+)  %>%
+  gather(key = "design", value = "sd") %>%
+  ggplot(aes(x = sd, group = design, col = design))+
+  geom_density()
+
+
+
+###****compute summary of weights----
+### sd of weights
+### max weights
+### q0.95, q0.90 of weights
+### q0.005
+
+weights_srs_sd <- resamples_srs_calibration_weights %>%
+  map_dbl(sd)
+
+weights_srs_min <- resamples_srs_calibration_weights %>%
+  map_dbl(min)
+
+weights_srs_max <- resamples_srs_calibration_weights %>%
+  map_dbl(max)
+
+weights_srs_ratio <- weights_srs_max/weights_srs_min
+
+weights_srs_quantiles <- resamples_srs_calibration_weights %>%
+  map(~.x %>% quantile(probs = c(0.95,0.99,0.995)) %>% 
+        data_frame(quantile = c("q0.95", "q0.99", "q0.995"),
+                   value = .) ) %>%
+  bind_rows(.id = "resample") %>%
+  mutate(resample = as.numeric(resample))
+
+weights_srs_quantiles %<>%
+  spread(key = "quantile", value = "value")
+
+weigths_srs_summary <- bind_cols(sd = weights_sd, min =  weights_min, max = weights_max, weights_quantiles, weights_ratio = weights_ratio) %>%
+  select(resample, everything())
+
+
+
+
 
 
 
