@@ -756,22 +756,22 @@ weights_quantiles <- resamples_calibration_weights %>%
 weights_quantiles %<>%
   spread(key = "quantile", value = "value")
 
-weigths_summary <- bind_cols(sd = weights_sd, min =  weights_min, max = weights_max, weights_quantiles, weights_ratio = weights_ratio) %>%
+weights_summary <- bind_cols(sd = weights_sd, min =  weights_min, max = weights_max, weights_quantiles, weights_ratio = weights_ratio) %>%
     select(resample, everything())
 
-weigths_summary %>%
+weights_summary %>%
   write_csv(here("interim_outputs", "calibration", "summary_resamples_weights_04.csv"))
 
   ### max weight is over 5 for a relatively large proportion of resamples
   ### trimming at 0.995 seems very reasonable
   ### still need to check which resamples and why are these weights relatively larger
-weigths_summary %>%
+weights_summary %>%
   select(max:q0.995) %>%
   gather(key = "indicator", value = "value") %>%
   ggplot(aes(x = value, group = indicator, col = indicator))+
   geom_density()
 
-weigths_summary %>%
+weights_summary %>%
   select(weights_ratio) %>%
   ggplot(aes(x = weights_ratio))+
   geom_density()
@@ -810,14 +810,14 @@ top_10_categories_summary
 rm(tenth_threshold_list, index_max_weights, top_10_categories_proportions,
    top_10_categories, weights_quantiles, top_10_categories_summary)
 
-weigths_summary$q0.995 %>% max()
+weights_summary$q0.995 %>% max()
 
 ### think about trimming top 4 or 5 weights 
 ### think about trimming by ratio of weights
 
-sum(weigths_summary$weights_ratio > 5)
+sum(weights_summary$weights_ratio > 5)
 
-sum(weigths_summary$weights_ratio > 6)
+sum(weights_summary$weights_ratio > 6)
 
 
 
@@ -873,8 +873,35 @@ weights_srs_quantiles <- resamples_srs_calibration_weights %>%
 weights_srs_quantiles %<>%
   spread(key = "quantile", value = "value")
 
-weigths_srs_summary <- bind_cols(sd = weights_sd, min =  weights_min, max = weights_max, weights_quantiles, weights_ratio = weights_ratio) %>%
+weights_srs_summary <- bind_cols(sd = weights_srs_sd, min =  weights_srs_min, 
+                                 max = weights_srs_max, weights_srs_quantiles, 
+                                 weights_ratio = weights_srs_ratio) %>%
   select(resample, everything())
+
+weights_srs_summary %>%
+  write_csv(here("interim_outputs", "calibration", "summary_resamples_weights_srs_04.csv"))
+
+weights_srs_summary %>%
+  select(max:q0.995) %>%
+  gather(key = "indicator", value = "value") %>%
+  ggplot(aes(x = value, group = indicator, col = indicator))+
+  geom_density()
+
+weights_srs_summary %>%
+  select(weights_ratio) %>%
+  ggplot(aes(x = weights_ratio))+
+  geom_density()
+
+data_frame(srs_design = weights_srs_summary %>% select(max:q0.995),
+           quota_design = weights_summary %>% select(max:q0.995) )
+
+
+
+  gather(key = "indicator", value = "value") %>%
+  ggplot(aes(x = value, group = indicator, col = indicator))+
+  geom_density()
+
+## compare srs weights with those from quota design
 
 
 
@@ -885,14 +912,14 @@ weigths_srs_summary <- bind_cols(sd = weights_sd, min =  weights_min, max = weig
 # trim weights ----
 ## trim to 99.5 percentile
   
-resamples_calibration_weights_trimmed <- map2(.x = resamples_calibration_weights, .y = as.list(weigths_summary$q0.995), function(x = .x, y = .y){ 
+resamples_calibration_weights_trimmed <- map2(.x = resamples_calibration_weights, .y = as.list(weights_summary$q0.995), function(x = .x, y = .y){ 
   x[which(x > y)] <- y 
   return(x)}) 
   
 ### Check. Max in each element of the list should be equal to q0.995
 
  test_trim_0.995 <- all((resamples_calibration_weights_trimmed %>%
-  map_dbl(~ .x %>% max()) ) != (weigths_summary$q0.995))
+  map_dbl(~ .x %>% max()) ) != (weights_summary$q0.995))
 
  if(test_trim_0.995){stop("Failed test: weight trim seems to have failed.")}
 
@@ -1095,7 +1122,7 @@ age_place_of_birth_calibrated_resamples_to_check_tidy %>%
 
 rm(population_margins_first_language_checks, resamples_to_check_index, 
    lengths_resamples_to_check, resamples_sum_trimmed_weights, 
-   weigths_summary, resamples_length, first_language_population_to_check, 
+   weights_summary, resamples_length, first_language_population_to_check, 
    check_language, check_language_summary)
 
 
