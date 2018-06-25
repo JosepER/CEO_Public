@@ -892,20 +892,26 @@ weights_srs_summary %>%
   ggplot(aes(x = weights_ratio))+
   geom_density()
 
-data_frame(srs_design = weights_srs_summary %>% select(max:q0.995),
-           quota_design = weights_summary %>% select(max:q0.995) )
-
-
-
-  gather(key = "indicator", value = "value") %>%
-  ggplot(aes(x = value, group = indicator, col = indicator))+
-  geom_density()
 
 ## compare srs weights with those from quota design
 
+### looks like a srs would give some more extreme weights in certain cases. The pattern is not so clear in some indicators, however.
+
+bind_rows(weights_srs_summary %>% select(max:q0.995) %>% mutate(design = "srs"),
+           weights_summary %>% select(max:q0.995)  %>% mutate(design = "quota") ) %>%
+  gather(key = "indicator", value = "value",-design) %>%
+  ggplot(aes(x = value, col = design, group = design)) +
+  geom_density() +
+  facet_wrap(~ indicator)
 
 
+### pattern is very clear in ratio of maximum vs minimum weight.
 
+bind_rows(
+weights_srs_summary %>% select(weights_ratio) %>% mutate(design = "srs"),
+weights_summary %>% select(weights_ratio) %>% mutate(design = "quota")) %>%
+  ggplot(aes(x = weights_ratio, col = design, group = design)) +
+  geom_density()
 
 
 
