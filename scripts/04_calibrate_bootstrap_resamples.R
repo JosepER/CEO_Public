@@ -916,6 +916,9 @@ weights_summary %>% select(weights_ratio) %>% mutate(design = "quota")) %>%
 
 
 # trim weights ----
+# I will not compute trimmed weights for SRS bootstrap resamples. This is because I just want
+# to compare the variance in (weighed) estimates from these (srs) resamples to the variance from estimates in quota resamples.
+
 ## trim to 99.5 percentile
   
 resamples_calibration_weights_trimmed <- map2(.x = resamples_calibration_weights, .y = as.list(weights_summary$q0.995), function(x = .x, y = .y){ 
