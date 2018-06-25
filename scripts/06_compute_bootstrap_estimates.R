@@ -290,7 +290,17 @@ estimate_normal_u95 <- estimate_survey_plain_wt_referendum_participation + estim
 
 # SRS bootstrap percentiles estimates ----
 
-# ** Prepare data from srs bootsrap resamples
+# ** Prepare data from srs bootsrap resamples ----
+
+data_863_referendum
+
+### merge respondent ID from srs bootstrap resamples with survey response categories in referendum participation
+
+bootstrap_resamples_srs_analysis <- bootstrap_resamples_srs %>%
+  map(~ data_frame(`ORDRE_CINE` = .x) %>%
+        left_join(data_863_referendum, by = "ORDRE_CINE"))
+
+
 
 
 
