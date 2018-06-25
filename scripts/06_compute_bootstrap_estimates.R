@@ -301,8 +301,47 @@ bootstrap_resamples_srs_analysis <- bootstrap_resamples_srs %>%
         left_join(data_863_referendum, by = "ORDRE_CINE"))
 
 
+### merge srs bootstrap resamples (ID and ref participation) with calibration weights untrimmed
+bootstrap_resamples_srs_analysis_with_weights_untrimmed <- bootstrap_resamples_srs_analysis %>%
+  map2(resamples_calibration_weights_srs, ~.x %>%
+         bind_cols(weights = .y))
 
 
+### looks like the bind cols worked well
+bootstrap_resamples_srs_analysis_with_weights_untrimmed[[1]] %>% arrange(ORDRE_CINE)
+
+##** compute srs bootstrap estimates for all resamples -----
+
+### unweighted (used for design effects)
+
+if(!file.exists(here("interim_outputs", "estimates", "bootstrap_srs_estimates_unweighted_06.rds"))){
+  
+  estimate_bootstrap_srs_resamples_unweighted <-  bootstrap_resamples_srs_analysis %>%
+    map(~ .x %>% compute_participation(weighted = F) %>% bind_rows(.id = "type"))
+  
+  estimate_bootstrap_srs_resamples_unweighted %>%
+    write_rds(here("interim_outputs", "estimates", "bootstrap_srs_estimates_unweighted_06.rds"))
+  
+}else{
+  estimate_bootstrap_srs_resamples_unweighted <- read_rds(here("interim_outputs", "estimates", "bootstrap_srs_estimates_unweighted_06.rds"))
+}
+
+
+### with untrimmed weights
+if(!file.exists(here("interim_outputs", "estimates", "bootstrap_srs_estimates_untrimmed_weights_06.rds"))){
+  
+  estimate_bootstrap_resamples_srs_untrimmed_weights <-  bootstrap_resamples_srs_analysis_with_weights_untrimmed %>%
+    map(~ .x %>% compute_participation(weighted = T) %>% bind_rows(.id = "type"))
+  
+  estimate_bootstrap_resamples_srs_untrimmed_weights %>%
+    write_rds(here("interim_outputs", "estimates", "bootstrap_srs_estimates_untrimmed_weights_06.rds"))
+  
+}else{
+  estimate_bootstrap_resamples_srs_untrimmed_weights <- read_rds(here("interim_outputs", "estimates", "bootstrap_srs_estimates_untrimmed_weights_06.rds"))
+}
+
+
+stop("From here")
 
 
 

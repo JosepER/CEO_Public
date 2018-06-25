@@ -137,6 +137,11 @@ Compare:
 
 
 
+TO DO:
+* I can also compute the design effect of weighting on the quota designh bootstrap resamples. Unweighted estimates are already computed.
+* Related to the previous point, I'd be curious to see what's the difference in design effect when weighting srs and quota samples. If SRS really requiered more weighting, this should be shown in their deff.
+
+
 [^1]: Sturgis, P., Kuha, J., Baker, N., Callegaro, M., Fisher, S., Green, J., Jennings, W., Lauderdale, B. E., and Smith, P. (2017) An assessment of the causes of the errors in the 2015 UK General Election opinion polls. Journal of the Royal Statistical Society A. Article available [here](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12329) and code available [here](http://stats.lse.ac.uk/kuha/Publications/publications.html) 
 
 [^2]: Official data on the referendum participation can be found [here](https://estaticos.elperiodico.com/resources/pdf/4/3/1507302086634.pdf?_ga=2.11952052.1654533961.1528484435-1600052709.1528484435).
