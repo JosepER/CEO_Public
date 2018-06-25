@@ -28,7 +28,7 @@ data_863_labelled <- read_rds(here("data", "survey_data_863_recoded_01.rds")) %>
 
 data_863_weights <- read_rds(here("interim_outputs", "calibration", "main_survey_weights_04.csv"))
 
-# ** bootstrap resamples -----
+# ** QUOTA bootstrap resamples -----
 
 ## bootstrap resamples
 
@@ -46,6 +46,18 @@ resamples_calibration_weights_trimmed <- read_rds(here("interim_outputs", "calib
 
 resamples_calibration_weights_trimmed_2 <- read_rds(here("interim_outputs", "calibration", "weights_resamples_trimmed_2_04.rds"))
 
+
+# ** SRS bootstrap resamples -----
+
+## bootstrap resamples
+
+bootstrap_resamples_srs <- read_rds(here("interim_outputs", "resamples_863_bcn", str_c("resamples_", 10000, "_SRSdesign_03", ".rds")))
+
+### untrimmed weights (I didn't trim weights for SRS bootstrap resamples)
+
+resamples_calibration_weights_srs <- read_rds(here("interim_outputs", "calibration", "raked_calibration_weights_resamples_srs_04.rds"))
+
+
 # ** jackknife resamples ----
 
 ## jackknife resamples data
@@ -60,7 +72,7 @@ data_863_jackknife_weights_list <- read_rds(here("interim_outputs", "jackknife",
 valid_responses <- c("couldn't participate", "didn't want to participate", 
                      "they prevented resp to participate", "voted")
 
-# compute actual estimates ----
+# compute actual survey estimates ----
 # plain estimate from weighted survey
 
 estimate_survey_plain <- data_863_labelled %>% 
@@ -74,18 +86,18 @@ estimate_survey_plain_wt_referendum_participation <-  estimate_survey_plain_wt$c
 
 # compute variance under SRS (no bootstrap) ----
 
-## without finite population ----
+## ** without finite population ----
 
 estimate_survey_sd_srs_nofpc <- sqrt((estimate_survey_plain_wt_referendum_participation * (1-estimate_survey_plain_wt_referendum_participation))/
                                              nrow(data_863_labelled))
 
-## CI without finite population correction ----
+## ** CI without finite population correction ----
 
 estimate_srs_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_survey_sd_srs_nofpc * qnorm(0.975)
 
 estimate_srs_u95 <- estimate_survey_plain_wt_referendum_participation + estimate_survey_sd_srs_nofpc * qnorm(0.975)
 
-## with finite population correction ----
+## ** with finite population correction ----
 
   ### Total population in Barcelona province: 3971666
   ### Taken from:
@@ -97,7 +109,7 @@ estimate_survey_sd_srs_withfpc <- estimate_survey_sd_srs_nofpc * fpc
 
 rm(fpc)
 
-# bootstrap percentiles estimates ----
+# QUOTA bootstrap percentiles estimates ----
 # authors compute: BS Mean - mean of resamples
 # BS Median - median of resamples
 # BS se - SD of resamples
@@ -275,6 +287,15 @@ estimate_bootstrap_bias <- estimate_bootstrap_resamples_mean
 
 estimate_normal_l95 <- estimate_survey_plain_wt_referendum_participation - estimate_bootstrap_resamples_sd * qnorm(0.975)
 estimate_normal_u95 <- estimate_survey_plain_wt_referendum_participation + estimate_bootstrap_resamples_sd * qnorm(0.975)
+
+# SRS bootstrap percentiles estimates ----
+
+# ** Prepare data from srs bootsrap resamples
+
+
+
+
+
 
 # jackknife estimates ----
 # this is needed for computing bootstrap bca
