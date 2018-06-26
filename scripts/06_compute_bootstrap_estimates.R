@@ -450,13 +450,33 @@ stop("Fins aqui")
 
 # compare QUOTA with SRS bootstrap resamples -----
 
+# this is curious: quota design is slightly more efficient when looking at unweighted estimates
+# but it seems to lose this efficiency when checking weighted estimates.
+
+# weights were larger for srs design
 
 #estimate_proportions_referendum_vote_all_resamples
 #estimate_proportions_referendum_vote_all_srs_resamples
 
+comparison_se_designs <- data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]],
+           `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_unweighted"]],
+           weights = "unweighted") %>%
+  bind_rows(data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
+            `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]],
+            weights = "weighted & untrimmed"))
+
+comparison_se_designs %>%
+  gather(key = "design", value = "estimate", -weights) %>%
+  ggplot(aes(x = estimate, col = design, group = design)) +
+  geom_density() +
+  facet_wrap(~weights, nrow = 2)
+
+
 data_frame(estimates_quota_untrimmed = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
            estimates_srs_untrimmed = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]]) %>%
-  gather(key = "design", value = )
+  gather(key = "design", value = "estimate") %>%
+  ggplot(aes(x = estimate, col = design, group = design)) +
+  geom_density()
 
 
 # Export estimates ----
