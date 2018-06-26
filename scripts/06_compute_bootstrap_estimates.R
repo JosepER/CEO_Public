@@ -253,10 +253,13 @@ estimate_bootstrap_resamples_q025 <- estimate_proportions_referendum_vote_all_re
 estimate_bootstrap_resamples_q975 <- estimate_proportions_referendum_vote_all_resamples %>%
   map(~ quantile(.x, 0.975))
 
-
 # take SD of unweighted as well to calculate the design effect
 
 estimate_bootstrap_resamples_unweighted_sd <- estimate_bootstrap_resamples_sd[["resamples_unweighted"]]
+
+# take SD of untrimmed as well to compare it with SRS design
+
+estimate_bootstrap_resamples_untrimmed_weights_sd <- estimate_bootstrap_resamples_sd[["resamples_with_untrimmed_weights"]]
 
   # select only estimates with trimmed 2 weights
 
@@ -274,7 +277,8 @@ summary_estimates <- c("response_category" = "voted",
                        "BS Mean" = estimate_bootstrap_resamples_mean,
                        "BS Median" = estimate_bootstrap_resamples_median,
                        "BS se" = estimate_bootstrap_resamples_sd,
-                       "BS se unweighted" = estimate_bootstrap_resamples_unweighted_sd) # use for computation of deff
+                       "BS se unweighted" = estimate_bootstrap_resamples_unweighted_sd,
+                       "BS se untrimmed weights"  = estimate_bootstrap_resamples_untrimmed_weights_sd) # use for computation of deff
 
 # ** compute bootstrap bias ----
 
@@ -341,9 +345,29 @@ if(!file.exists(here("interim_outputs", "estimates", "bootstrap_srs_estimates_un
 }
 
 
-stop("From here")
+### make a list with all estimates from resamples
+estimates_all_bootstrap_srs_resamples <- list(resamples_unweighted = estimate_bootstrap_srs_resamples_unweighted,
+                                          resamples_with_untrimmed_weights = estimate_bootstrap_resamples_srs_untrimmed_weights)
+
+##** SD of all bootstrap resamples -----
+## I could also compute mean, median and quantiles, but I don't think I'm gonna use them.
+
+### first, retrieve the proportions of vote to referendum in each resample
+estimate_proportions_referendum_vote_all_srs_resamples <- estimates_all_bootstrap_srs_resamples %>%
+  map(~ .x %>% map_dbl(~ .x %>% filter(type == "clean_", referendum_participation == "voted") %$% prop ) )
+
+## **** sd ----
+
+estimate_bootstrap_resamples_sd <- estimate_proportions_referendum_vote_all_srs_resamples %>%
+  map(~ sd(.x))
 
 
+## ** export all estimates ----
+# add these estimates to the previously computed object 'summary_estimates'
+# this object contains the estimates from the bootstrap resamples using quota design
+
+summary_estimates <- c(summary_estimates, "BS (SRS) se unweighted" = estimate_bootstrap_resamples_sd[["resamples_unweighted"]],
+                       "BS (SRS) se untrimmed weights" = estimate_bootstrap_resamples_sd[["resamples_with_untrimmed_weights"]])
 
 
 # jackknife estimates ----
@@ -421,6 +445,19 @@ confidence_intervals <- data_frame(indicator = "vote",
                                    Percentile.U95 = estimate_bootstrap_resamples_q975,
                                    BCA.L95 = confpoints[1],
                                    BCA.U95 = confpoints[2])
+
+stop("Fins aqui")
+
+# compare QUOTA with SRS bootstrap resamples -----
+
+
+#estimate_proportions_referendum_vote_all_resamples
+#estimate_proportions_referendum_vote_all_srs_resamples
+
+data_frame(estimates_quota_untrimmed = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
+           estimates_srs_untrimmed = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]]) %>%
+  gather(key = "design", value = )
+
 
 # Export estimates ----
 

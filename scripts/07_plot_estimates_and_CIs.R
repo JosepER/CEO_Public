@@ -77,3 +77,8 @@ p_1 %>%
 t_1 %>%
   write_rds(here("outputs", "tables", "table_vote_estimates_intervals_07.rds"))
 
+# # to do:
+# the comparison of quota SE vs SRS se requieres using:
+#   'BS se untrimmed weights' from vote_estimates_06.rds (quota SE)
+#   
+
