@@ -897,13 +897,14 @@ weights_srs_summary %>%
 
 ### looks like a srs would give some more extreme weights in certain cases. The pattern is not so clear in some indicators, however.
 
-bind_rows(weights_srs_summary %>% select(max:q0.995) %>% mutate(design = "srs"),
+p_bind_rows(weights_srs_summary %>% select(max:q0.995) %>% mutate(design = "srs"),
            weights_summary %>% select(max:q0.995)  %>% mutate(design = "quota") ) %>%
   gather(key = "indicator", value = "value",-design) %>%
   ggplot(aes(x = value, col = design, group = design)) +
   geom_density() +
   facet_wrap(~ indicator)
 
+ggsave(c("interim_outputs", "calibration", "plots"))
 
 ### pattern is very clear in ratio of maximum vs minimum weight.
 
