@@ -895,16 +895,33 @@ weights_srs_summary %>%
 
 ## compare srs weights with those from quota design
 
+bind_rows(weights_srs_summary %>% select(sd) %>% mutate(design = "srs"),
+          weights_summary %>% select(sd)  %>% mutate(design = "quota") ) %>%
+  group_by(design) %>%
+  summarise(mean(sd), median(sd))
+
+
+bind_rows(weights_srs_summary %>% select(sd) %>% mutate(design = "srs"),
+          weights_summary %>% select(sd)  %>% mutate(design = "quota") ) %>%
+  ggplot(aes(x = sd, col = design, group = design)) +
+  geom_density()
+
+ggsave(here("interim_outputs", "calibration", "plots", "comparison_weights_bootstrap_designs_sd"),
+       device =  "pdf")
+
+
+
 ### looks like a srs would give some more extreme weights in certain cases. The pattern is not so clear in some indicators, however.
 
-p_bind_rows(weights_srs_summary %>% select(max:q0.995) %>% mutate(design = "srs"),
+bind_rows(weights_srs_summary %>% select(max:q0.995) %>% mutate(design = "srs"),
            weights_summary %>% select(max:q0.995)  %>% mutate(design = "quota") ) %>%
   gather(key = "indicator", value = "value",-design) %>%
   ggplot(aes(x = value, col = design, group = design)) +
   geom_density() +
-  facet_wrap(~ indicator)
+  facet_wrap(~ indicator, ncol = 1)
 
-ggsave(c("interim_outputs", "calibration", "plots"))
+ggsave(here("interim_outputs", "calibration", "plots", "comparison_weights_bootstrap_designs_indicators"),
+       device =  "pdf")
 
 ### pattern is very clear in ratio of maximum vs minimum weight.
 
@@ -914,7 +931,8 @@ weights_summary %>% select(weights_ratio) %>% mutate(design = "quota")) %>%
   ggplot(aes(x = weights_ratio, col = design, group = design)) +
   geom_density()
 
-
+ggsave(here("interim_outputs", "calibration", "plots", "comparison_weights_bootstrap_designs_ratio"),
+       device =  "pdf")
 
 # trim weights ----
 # I will not compute trimmed weights for SRS bootstrap resamples. This is because I just want

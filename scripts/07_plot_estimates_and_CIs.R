@@ -1,4 +1,4 @@
-# 06_plot_estimates_and_CIs
+# 07_plot_estimates_and_CIs
 
 rm(list = ls())
 
@@ -19,6 +19,8 @@ col_vector <- unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_c
 summary_estimates <- read_rds(here("outputs", "vote_estimates_06.rds"))
 
 confidence_intervals <- read_rds(here("outputs", "vote_confidence_intervals_06.rds"))
+
+comparison_se_designs <- read_rds(here("outputs", "comparison_bootstrap_designs_06.rds"))
 
 # Create graphs ----
 
@@ -68,6 +70,17 @@ t_1 <- data_plots_ci %>%
   select(-point_estimate)
 
 names(t_1) <-  c("Method", "Lower bound CI", "Upper bound CI")
+
+
+# Comparison of bootstrap designs ----
+
+p_comparison_se_designs <- comparison_se_designs %>%
+  gather(key = "design", value = "estimate", -weights) %>%
+  ggplot(aes(x = estimate, col = design, group = design)) +
+  geom_density() +
+  facet_wrap(~weights, nrow = 2)
+
+
 
 # Export plot and table ----
 

@@ -358,7 +358,7 @@ estimate_proportions_referendum_vote_all_srs_resamples <- estimates_all_bootstra
 
 ## **** sd ----
 
-estimate_bootstrap_resamples_sd <- estimate_proportions_referendum_vote_all_srs_resamples %>%
+estimate_bootstrap_srs_resamples_sd <- estimate_proportions_referendum_vote_all_srs_resamples %>%
   map(~ sd(.x))
 
 
@@ -366,8 +366,9 @@ estimate_bootstrap_resamples_sd <- estimate_proportions_referendum_vote_all_srs_
 # add these estimates to the previously computed object 'summary_estimates'
 # this object contains the estimates from the bootstrap resamples using quota design
 
-summary_estimates <- c(summary_estimates, "BS (SRS) se unweighted" = estimate_bootstrap_resamples_sd[["resamples_unweighted"]],
-                       "BS (SRS) se untrimmed weights" = estimate_bootstrap_resamples_sd[["resamples_with_untrimmed_weights"]])
+summary_estimates <- c(summary_estimates, 
+                       "BS (SRS) se unweighted" = estimate_bootstrap_srs_resamples_sd[["resamples_unweighted"]],
+                       "BS (SRS) se untrimmed weights" = estimate_bootstrap_srs_resamples_sd[["resamples_with_untrimmed_weights"]])
 
 
 # jackknife estimates ----
@@ -446,9 +447,10 @@ confidence_intervals <- data_frame(indicator = "vote",
                                    BCA.L95 = confpoints[1],
                                    BCA.U95 = confpoints[2])
 
-stop("Fins aqui")
 
 # compare QUOTA with SRS bootstrap resamples -----
+
+## plots of bootstrap resamples -----
 
 # this is curious: quota design is slightly more efficient when looking at unweighted estimates
 # but it seems to lose this efficiency when checking weighted estimates.
@@ -458,26 +460,30 @@ stop("Fins aqui")
 #estimate_proportions_referendum_vote_all_resamples
 #estimate_proportions_referendum_vote_all_srs_resamples
 
-comparison_se_designs <- data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]],
+comparison_se_designs_graph <- data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]],
            `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_unweighted"]],
            weights = "unweighted") %>%
   bind_rows(data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
             `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]],
             weights = "weighted & untrimmed"))
 
-comparison_se_designs %>%
+comparison_se_designs_graph %>%
   gather(key = "design", value = "estimate", -weights) %>%
   ggplot(aes(x = estimate, col = design, group = design)) +
   geom_density() +
   facet_wrap(~weights, nrow = 2)
 
 
-data_frame(estimates_quota_untrimmed = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
-           estimates_srs_untrimmed = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]]) %>%
-  gather(key = "design", value = "estimate") %>%
-  ggplot(aes(x = estimate, col = design, group = design)) +
-  geom_density()
+## compute SE, DEFTs and a table -----
 
+sd(estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]])
+
+comparison_se_designs_table <- data_frame(design = c("SRS unweighted", "SRS weighted (untrimmed)", 
+                                                     "Quota unweighted", "Quota weighted (untrimmed)"),
+                                          `estimated SE` = c(estimate_bootstrap_srs_resamples_sd[["resamples_unweighted"]],
+                                                             estimate_bootstrap_srs_resamples_sd[["resamples_with_untrimmed_weights"]],
+                                                             estimate_bootstrap_resamples_unweighted_sd,
+                                                             estimate_bootstrap_resamples_untrimmed_weights_sd))
 
 # Export estimates ----
 
@@ -486,4 +492,12 @@ summary_estimates %>%
 
 confidence_intervals %>%
   write_rds(here("outputs", "vote_confidence_intervals_06.rds"))
+
+## comparison of bootstrap designs
+
+comparison_se_designs_graph %>%
+  write_rds(here("outputs", "data_graph_comparison_bootstrap_designs_06.rds"))
+
+comparison_se_designs_table %>%
+  write_rds(here("outputs", "data_graph_comparison_bootstrap_designs_06.rds"))
 

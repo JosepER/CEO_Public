@@ -39,6 +39,9 @@ p_1 <- read_rds(here("outputs", "plots", "plot_vote_estimates_intervals_07.rds")
 
 t_1 <- read_rds(here("outputs", "tables", "table_vote_estimates_intervals_07.rds"))
 
+t_2 <- read_rds(here("outputs", "data_graph_comparison_bootstrap_designs_06.rds"))
+
+
 p_1
 ```
 
@@ -78,8 +81,8 @@ Most researchers compute the uncertainty of estimates as if the data proceeded f
 
 For drawing the M independent resamples simulating quota designs (point A above) Sturgis et al. (2017) proposed an algorithm in page 8 of their article (also available from their R code). Explained in my own words, this would be:
 
-1. Set quota targets for the quota variables of the survey;
-2. Do a first iteration of resampling with replacement with size equal to the total number of observations in the survey. The order of the resampled units is important for the next steps. Thus, do not sort the resample nor re-arrange the sequence in any way.;
+1. Set quota targets for the quota variables of the survey. It´s important to note that quota variables, unlike stratums, don´t need to form mutually exclusive categories[^XXX];
+2. Do a first iteration of resampling with replacement with size equal to the total number of observations in the survey. The order of the resampled units is important for the next steps. Thus, do not sort the resample nor re-arrange the sequence in any way;
 3. Drop those responses from the first iteration resample that overfill a quota category, retain the rest[^XXX]. 
 4. Do another iteration of resampling to fill the respondents dropped in the previous point. Use only those respondents from non-completed quotas as pool of potential resampled units.
 5. Repeat points 3 and 4 iteratively until all quotas are full or until there are no respondents from the survey which fit in the non-completed quotas. In this later case, the resample will be shorter than the original survey.
@@ -87,7 +90,7 @@ For drawing the M independent resamples simulating quota designs (point A above)
 
 ## Estimation of 1-O turnout using bootstrap resamples
 
-To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompaining the article. The scripts with the code for this analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, after cleaning and rearranging the data I computed the bootstrap resamples simulating 10,000 different samples with the quota design. Some of these bootstrap resamples had sligthly less observations than the intial data due to no respondents available which would fit non-completed quotas (explained in point 5 [of the algorithm above](## Variance estimation for quota sampling)). The analysis of these resamples should represent the variablility in the quota sampling process if this was to be implemented a large number of times. An important difference with the original CEO's sampling design is that I included the size of municipalities as another quota. Ideally, there should probably be first a step with a resample of municipalities[^12]. The publicly available data, however, didn't have an identification variable for all municipalities.
+To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompaining the article. The scripts with the code for this analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, after cleaning and rearranging the data I computed the bootstrap resamples simulating 10,000 different samples with the quota design. Some of these bootstrap resamples had sligthly less observations than the intial data due to no respondents available which would fit non-completed quotas (explained in point 5 [of the algorithm above](## Variance estimation for quota sampling)). The analysis of these resamples should represent the variablility in the quota sampling process if this was to be implemented a large number of times. An important difference with the original CEO's sampling design is that I included the size of municipalities as another quota (with categories not crossed with other quota variables). Ideally, there should probably be first a step with a resample of municipalities[^12]. The publicly available data, however, didn't have an identification variable for all municipalities.
 
 Once the bootstrap resamples were drawn, I calibrated these using official statistics data from IDESCAT, the official body responsible for collecting and publishing statistics in Catalonia. I performed calibration using: 
 1. Crossed categories of age and place of birth and
@@ -166,6 +169,8 @@ http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Cata
 [^10]: http://ccsg.isr.umich.edu/index.php/resources/advanced-glossary/random-route-random-walk 
 
 [^11]: I.e. Compute the Standard Error of the estimate under simple random sampling and no finite population correction using the formula $SE = \sqrt{\frac{s^2}{n} }$ or $SE = \sqrt{\frac{p(1-p)}{n} }$ for proportions.
+
+[^XXX]: For example, we can have a sample which resembles the population by categories in quota variable A and quota variable B but not for crossed categories of A and B.
 
 [^XXX]: For example, if the quota target was 10 males 18-24 and the resample included 13 of these, drop the last 3.
 
