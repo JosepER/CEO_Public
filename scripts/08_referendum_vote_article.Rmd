@@ -132,7 +132,9 @@ Differences between the three types of confidence intervals computed are really 
 
 # How much more efficient was the Quota sample?
 
-As an extra step of the analysis, I compared the estimated variance from the bootstrap 
+As an extra step of the analysis, I compared the estimated variance from the bootstrap samples using the quota design (seen in previous sections) with that of bootstrap samples assuming a simple random sample (SRS) design. The later is a mere resample with replacement with weights computed at each resample. The comparison of the properties of estimates computed assuming both designs should give us an insight of the theoretical 'gains' of using a quota sampe instead of just interviewing the same number of people without quotas. This exercise is similar to what Kuha and Sturgis presented last year in the ESRA Conference on Inference for Non-Probability Samples[^18] and could potentially be used to assess the effect of using different variables in quotas and/or calibration steps. Alike procedures are also common for testing other sampling design changes such as how accurate surveys would be if the sample size increased or decreased[^19]. 
+
+
 
 Compare: 
 * SE of weighted bootstrap estimates (I don't think it matters which method is used, all produce same SE);
@@ -144,6 +146,9 @@ Compare:
 TO DO:
 * I can also compute the design effect of weighting on the quota designh bootstrap resamples. Unweighted estimates are already computed.
 * Related to the previous point, I'd be curious to see what's the difference in design effect when weighting srs and quota samples. If SRS really requiered more weighting, this should be shown in their deff.
+
+
+* Limitation: treatment of item non-response
 
 
 [^1]: Sturgis, P., Kuha, J., Baker, N., Callegaro, M., Fisher, S., Green, J., Jennings, W., Lauderdale, B. E., and Smith, P. (2017) An assessment of the causes of the errors in the 2015 UK General Election opinion polls. Journal of the Royal Statistical Society A. Article available [here](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12329) and code available [here](http://stats.lse.ac.uk/kuha/Publications/publications.html) 
@@ -182,3 +187,8 @@ http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Cata
 [^16]: I trimmed the top 0.5% of weights for all samples and limited the ratio between the minimum and maximum weight in each resample to be equal to 8. The code for this can be found in [script 03_calibrate_bootstrap_resamples.R](https://github.com/JosepER/CEO_public/blob/master/scripts/03_calibrate_bootstrap_resamples.R)
 
 [^17]: This correction uses both the bootstrap and the jackknife resample estimates. For more details see pag 184 of Efron, B. & Tibshirani, R.J. (1993) An Introduction to the Bootstrap. New York: Chapman & Hall.
+
+[^18]: Presentation slides can be found here: https://www.europeansurveyresearch.org/news/non-prob/INPS_06_Kuha.pdf
+
+[^19]: This is mentioned in page 19 of Hesterberg, T. (2014) What Teachers Should Know about the Bootstrap: Resampling in the Undergraduate Statistics Curriculum
+[available here](https://arxiv.org/pdf/1411.5279.pdf)

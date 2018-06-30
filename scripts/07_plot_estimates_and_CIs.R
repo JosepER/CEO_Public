@@ -53,7 +53,7 @@ data_plots_ci %<>%
 
 p_1 <- ggplot(data_plots_ci, aes(x=type, y=round(point_estimate, 3))) +
     geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.5, 
-                col = col_vector[[1]],
+                col = col_vector[[7]],
                 size = 3)+
   geom_point(col = col_vector[[3]], size = 3) +
   scale_y_continuous(labels = scales::percent, limits = c(0.5,0.6)) +
@@ -76,11 +76,16 @@ names(t_1) <-  c("Method", "Lower bound CI", "Upper bound CI")
 
 p_2 <- comparison_se_designs %>%
   gather(key = "design", value = "estimate", -weights) %>%
-  ggplot(aes(x = estimate, col = design, group = design)) +
-  geom_density() +
-  facet_wrap(~weights, nrow = 2)
+  ggplot(aes(x = estimate, col = design, group = design, fill = design, colour = design)) +
+  geom_density( alpha = 0.2) +
+  facet_wrap(~weights, nrow = 2) + 
+    theme_dark() +
+ scale_color_manual(values=col_vector[c(3,7)]) + 
+  scale_fill_manual(values=col_vector[c(3,7)]) +
+  labs(title = "Figure 2: Bootstrap estimates by design",
+       x = "Estimate", y = "Density")
 
-
+p_2
 
 # Export plot and table ----
 
