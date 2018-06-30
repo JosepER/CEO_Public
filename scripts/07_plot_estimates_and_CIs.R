@@ -74,7 +74,7 @@ names(t_1) <-  c("Method", "Lower bound CI", "Upper bound CI")
 
 # Comparison of bootstrap designs ----
 
-p_comparison_se_designs <- comparison_se_designs %>%
+p_2 <- comparison_se_designs %>%
   gather(key = "design", value = "estimate", -weights) %>%
   ggplot(aes(x = estimate, col = design, group = design)) +
   geom_density() +
@@ -87,11 +87,8 @@ p_comparison_se_designs <- comparison_se_designs %>%
 p_1 %>%
   write_rds(here("outputs", "plots", "plot_vote_estimates_intervals_07.rds"))
 
+p_2 %>%
+  write_rds(here("outputs", "plots", "plot_comparison_bootstrap_designs_07.rds"))
+
 t_1 %>%
   write_rds(here("outputs", "tables", "table_vote_estimates_intervals_07.rds"))
-
-# # to do:
-# the comparison of quota SE vs SRS se requieres using:
-#   'BS se untrimmed weights' from vote_estimates_06.rds (quota SE)
-#   
-

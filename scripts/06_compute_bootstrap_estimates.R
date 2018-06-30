@@ -454,11 +454,8 @@ confidence_intervals <- data_frame(indicator = "vote",
 
 # this is curious: quota design is slightly more efficient when looking at unweighted estimates
 # but it seems to lose this efficiency when checking weighted estimates.
-
-# weights were larger for srs design
-
-#estimate_proportions_referendum_vote_all_resamples
-#estimate_proportions_referendum_vote_all_srs_resamples
+# that's curious, because weights were larger for srs design
+# might be because of this: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.692.507&rep=rep1&type=pdf
 
 comparison_se_designs_graph <- data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]],
            `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_unweighted"]],
@@ -499,5 +496,5 @@ comparison_se_designs_graph %>%
   write_rds(here("outputs", "data_graph_comparison_bootstrap_designs_06.rds"))
 
 comparison_se_designs_table %>%
-  write_rds(here("outputs", "data_graph_comparison_bootstrap_designs_06.rds"))
+  write_rds(here("outputs", "data_table_comparison_bootstrap_designs_06.rds"))
 
