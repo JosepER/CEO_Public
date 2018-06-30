@@ -11,11 +11,11 @@ output: html_document
 
 # Acknowledgements
 
-This blog couldn't have been writen without the scripts published by the authors of Sturgis et al 2017 [^1] and the responses to my questions provided by people at ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html).
+This blog couldn't have been writen without the scripts published by the authors of Sturgis et al 2017[^1] and the responses to my questions provided by people at ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html).
 
 # How many people voted?
 
-The official data offered by the Catalan Government a few days after the independence referendum registered a turnout of almost 2.3 million votes or 43.03% of the census [^2]. This count, however, missed the ballot boxes seized by Spanish police forces. The by then Catalan Government spokesman, said that, under 'normal circumstances', participation could have easily reached 55% [^3]. 
+The official data offered by the Catalan Government a few days after the independence referendum registered a turnout of almost 2.3 million votes or 43.03% of the census[^2]. This count, however, missed the ballot boxes seized by Spanish police forces. The by then Catalan Government spokesman, said that, under 'normal circumstances', participation could have easily reached 55%[^3]. 
 
 The real number of votes is thus still unknown, and very little data from surveys on this issue is publicly available. The main exception to this is the ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html) 'barometer' survey. To my knowledge, this poll is the only one that asked respondents about their participation on the 1-O referendum.
 
@@ -44,7 +44,8 @@ t_2 <- read_rds(here("outputs", "data_graph_comparison_bootstrap_designs_06.rds"
 
 p_1
 ```
-_Note: See section ['Estimates of turnout in 1-O referendum' below](# Estimates of turnout in 1-O referendum) for details on the computation of these estimates._
+
+_Note: See section ['Estimates of turnout in 1-O referendum'](#estimates_of_turnout) below for details on the computation of these estimates._
 
 # Quota sampling
 
@@ -54,9 +55,9 @@ Before explaining the particluarities of quota sampling, let me give a brief ove
 
 Concisely explained, there are two approaches to survey sampling: probability and non-probability sampling. In the survey industry the first one is still the gold standard. In probability sampling, we draw a random sample of units from a population. This might take various forms (e.g. within stratums, proportional to some variable), but the important fact is that we know the probability of each unit being selected. In probability sampling, all units should have a chance to be in the survey (i.e. their probability of inclusion should not be equal to 0). The great advantage of probability sampling is that it's unbiased. This is, if the sampling was to be repeated many times, the expected value of the estimates from the samples would be identical to the value for the whole population. Thus, the sample will tend to be (on average) a small-scale representation of the population from which we can obtain unbiased estimates. 
 
-Non-probabililty samples are those in which the selection of units is not randomised according to principles of probability theory. There are a wide variety of non-probability sample methods [^6]. They are extensively used in market research but considered of poor quality in many other fields. When compared to probability sample surveys, they don't have the 'unbiasedness' characteristic by design. This type of surveys tend to rely on adjustments made by statisticians once the sample is collected. Making inferences from non-probability surveys requires some reliance on modeling assumptions and thus significant statistical expertise.
+Non-probabililty samples are those in which the selection of units is not randomised according to principles of probability theory. There are a wide variety of non-probability sample methods[^6]. They are extensively used in market research but considered of poor quality in many other fields. When compared to probability sample surveys, they don't have the 'unbiasedness' characteristic by design. This type of surveys tend to rely on adjustments made by statisticians once the sample is collected. Making inferences from non-probability surveys requires some reliance on modeling assumptions and thus significant statistical expertise.
 
-Three main issues of probabilty samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list of units from which the random sample is selected[^7]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. Some statisticians have pointed that, due to non-response, no survey is really a probability sample [^8]. The same voices say that the low response rates that we see in certain research areas might make probability samples worthless. 
+Three main issues of probabilty samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list of units from which the random sample is selected[^7]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. Some statisticians have pointed that, due to non-response, no survey is really a probability sample[^8]. The same voices say that the low response rates that we see in certain research areas might make probability samples worthless. 
 
 ## Quota sampling and the CEO survey 
 
@@ -70,11 +71,11 @@ In this particular survey, some quotas could not be filled because of low respon
 The main problem with quota sampling is that the selection of respondents within quotas is not randomised. Interviewers can replace any potential respondent with another one with the same characteristics in quota variables. The estimates from a quota sampling survey will be biased if respondents within quotas differ from those in the population. Therefore, the estimation of the proportion of people that voted in the 1-O referendum will be biased if, within each quota (e.g. males, 18 to 24 born in Catalonia), the proportion of people that voted isn't the same as that in the population for people with the same characterisctics. 
 
   
-## Variance estimation for quota sampling
+## Variance estimation for quota sampling {#variance_estimation_quota_sampling}
 
 As important as providing an estimate of the proportion of people that voted is the capacity to provide an estimate of its uncertainty. This means that we don't only want to know how many people voted, but how confident we are on this estimate. This is the point where methodology gets more tricky and the actual reason why I started doing this analysis. 
 
-Most researchers compute the uncertainty of estimates as if the data proceeded from simple random samples from the population [^10]. Thus, they do not take into account the actual design of the survey. Sturgis et al. (2017) suggests a method for calculation the precision of estimates from quota samples. This method is based on 'bootstrap resamples' or resamples with replacement taken from the survey data. In their article, Sturgis et al. explain it in the following way:
+Most researchers compute the uncertainty of estimates as if the data proceeded from simple random samples from the population[^10]. Thus, they do not take into account the actual design of the survey. Sturgis et al. (2017) suggests a method for calculation the precision of estimates from quota samples. This method is based on 'bootstrap resamples' or resamples with replacement taken from the survey data. In their article, Sturgis et al. explain it in the following way:
 
 > (a) draw M independent samples by sampling respondents from the full achieved sample, with replacement and in a way which matches the quota sampling design;
 > (b) for each sample thus drawn, calculate the point estimates of interest in the same way as for the original sample, including calibration and turnout weighting;
@@ -82,39 +83,38 @@ Most researchers compute the uncertainty of estimates as if the data proceeded f
 
 For drawing the M independent resamples simulating quota designs (point A above) Sturgis et al. (2017) proposed an algorithm in page 8 of their article (also available from their R code). Explained in my own words, this would be:
 
-1. Set quota targets for the quota variables of the survey. Quota variables, unlike stratums, don´t need to form mutually exclusive categories[^12];
+1. Set quota targets for the quota variables of the survey. Quota variables, unlike stratums, don´t need to form mutually exclusive categories[^11];
 2. Do a first iteration of resampling with replacement with size equal to the total number of observations in the survey. The order of the resampled units is important for the next steps. Thus, do not sort the resample nor re-arrange the sequence in any way;
-3. Drop those responses from the first iteration resample that overfill a quota category, retain the rest[^13]. 
+3. Drop those responses from the first iteration resample that overfill a quota category, retain the rest[^12]. 
 4. Do another iteration of resampling to fill the respondents dropped in the previous point. Use only those respondents from non-completed quotas as pool of potential resampled units.
 5. Repeat points 3 and 4 iteratively until all quotas are full or until there are no respondents from the survey which fit in the non-completed quotas. In this later case, the resample will be shorter than the original survey.
 
 
 ## Estimation of 1-O turnout using bootstrap resamples
 
-To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompaining the article. The scripts with the code for my analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, after cleaning and rearranging the data I computed the bootstrap resamples simulating 10,000 different samples with the quota design. Some of these bootstrap resamples had sligthly less observations than the intial data due to no respondents available which would fit non-completed quotas (explained in point 5 [of the algorithm above](## Variance estimation for quota sampling)). The analysis of these resamples should represent the variablility in the quota sampling process if this was to be implemented a large number of times. An important difference with the original CEO's sampling design is that I included the size of municipalities as another quota (with its categories not crossed with other quota variables). Ideally, there should probably be first a step with a resample of municipalities[^14]. The publicly available data, however, didn't have an identification variable for all municipalities.
+To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompaining the article. The scripts with the code for my analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, after cleaning and rearranging the data I computed the bootstrap resamples simulating 10,000 different samples with the quota design. Some of these bootstrap resamples had sligthly less observations than the intial data due to no respondents available which would fit non-completed quotas (explained in point 5 [of the algorithm above](#variance_estimation_quota_sampling)). The analysis of these resamples should represent the variablility in the quota sampling process if this was to be implemented a large number of times. An important difference with the original CEO's sampling design is that I included the size of municipalities as another quota (with its categories not crossed with other quota variables). Ideally, there should probably be first a step with a resample of municipalities[^13]. The publicly available data, however, didn't have an identification variable for all municipalities.
 
 After I finished drawing the bootstrap resamples simulating the quota design, I calibrated these using official statistics data from IDESCAT, the official body responsible for collecting and publishing statistics in Catalonia. I performed calibration using: 
 1. Crossed categories of age and place of birth and
-2. First language of respondent[^15].  
+2. First language of respondent[^14].  
 
-Calibration for each resample as well as for the main survey was implemented with a raking algorithm. This procedure is different from that used by CEO when computing their survey weights. They use a post-stratification calibration with crossed categories age, place of birth and first language[^16]. I didn't repeat their procedure for two resasons: 
+Calibration for each resample as well as for the main survey was implemented with a raking algorithm. This procedure is different from that used by CEO when computing their survey weights. They use a post-stratification calibration with crossed categories age, place of birth and first language[^15]. I didn't repeat their procedure for two resasons: 
 
 1. I couldn't find estimates from official statistics for the cross-classification of these three variables. 
 2. This results in some very small cells and thus some extreme weights.
 
-Some resamples had some large weights, so I applied a minor trim to limit the most extreme weights[^17]. The code accompaning Sturgis et al. (2017) does not include this step. I think it's reasonable to include it, however, to make simulations close to the actual process which they are meant to reproduce. We would expect researchers to trim the weights of their surveys if they found some extreme weights. At the same time, some resamples will need more trimming than others. Thus, we should incorporate this uncertainty in the variance computation. The final estimates, however, were computed using both trimmed and untrimmed weights for robustness checks. This sensitivity analysis showed that trimming weights had only a very small impact on point estimates. 
+Some resamples had some large weights, so I applied a minor trim to limit the most extreme weights[^16]. The code accompaning Sturgis et al. (2017) does not include this step. I think it's reasonable to include it, however, to make simulations close to the actual process which they are meant to reproduce. We would expect researchers to trim the weights of their surveys if they found some extreme weights. At the same time, some resamples will need more trimming than others. Thus, we should incorporate this uncertainty in the variance computation. The final estimates, however, were computed using both trimmed and untrimmed weights for robustness checks. This sensitivity analysis showed that trimming weights had only a very small impact on point estimates. 
 
 For computing the bootstrap adjusted percentile intervals (see section below) I also computed and calibrate jackknife resamples from the CEO survey. For these, as for the main sample, I left the weights untrimmed as they didn't have extreme values.
 
 
-# Estimates of turnout in 1-O referendum
+# Estimates of turnout in 1-O referendum {#estimates_of_turnout}
 
 Following the methods implemented by Sturgis et al. (2017) I calculated three kinds of bootstrap confidence intervals. These three kinds of CIs are shown in the table below as well as in the figure at the top of the blog:
 
 * Bootstrap symmetric normal interval (Normal): Uses the standard deviation from the bootstrap estimates as Standard Error.
 * Bootstrap standard percentile interval (Percentile): Uses the 2.5% (lower bound) and 97.5% (upper bound) percentiles of the bootstrap distribution of estimates.
-* Bootstrap bias-corrected and accelerated interval (BCa): It is also based on percentiles from the bootstrap distribution of estimates, but these might not be the same as in the 'standard percentile interval' method. The percentiles depend on the 'acceleration' and 'bias-correction'. These changes are meant to correct deficiencies of the other bootstrap methods. This correction uses both the bootstrap and the jackknife resample estimates.
-
+* Bootstrap bias-corrected and accelerated interval (BCa): It is also based on percentiles from the bootstrap distribution of estimates, but these depend on the 'acceleration' and 'bias-correction'. These changes are meant to correct deficiencies of the other bootstrap methods[^17]. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -127,11 +127,12 @@ t_1 %>%
 
 ```
 
-Differences between the three types of confidence intervals computed are really small. 
+Differences between the three types of confidence intervals computed are really small, meaning that the variance estimation doesn't really depend on the exact method used. They all point at an estimated proportion of turnout in the province roughly between 50% and  57%. Again, this is way above the official proportion of 41% and thus difficult to believe. The fact that the confidence intervals are so distant from the official data would seem to discard sampling error as a main reason for the difference between official and survey estimates. In other words, it's very unlikely that if the survey was repeated under the exact conditions, it would produce an estimate of turnout around 41%. Measurement error (i.e. people declaring that they voted when they actually didn't) and/or a biased sample seem more plausible options of error for the CEO survey. A way of checking the later source of error would be to include further variables in the survey which can be benchmarked against official estimates. 
 
-**TO DO: EXPLAIN FIGURE 1 IN THIS SECTION.**
 
 # How much more efficient was the Quota sample?
+
+As an extra step of the analysis, I compared the estimated variance from the bootstrap 
 
 Compare: 
 * SE of weighted bootstrap estimates (I don't think it matters which method is used, all produce same SE);
@@ -168,16 +169,16 @@ http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Cata
 
 [^10]: I.e. They compute the Standard Error of the estimate under simple random sampling and no finite population correction using the formula $SE = \sqrt{\frac{s^2}{n} }$ or $SE = \sqrt{\frac{p(1-p)}{n} }$ for proportions.
 
-[^12]: For example, we can have a sample which resembles the population by categories in quota variable A and quota variable B but not for crossed categories of A and B.
+[^11]: For example, we can have a sample which resembles the population by categories in quota variable A and quota variable B but not for crossed categories of A and B.
 
-[^13]: For example, if the quota target was 10 males 18-24 and the resample included 13 of these, drop the last 3.
+[^12]: For example, if the quota target was 10 males 18-24 and the resample included 13 of these, drop the last 3.
 
-ORDER FROM HERE:
+[^13]: This would be something similar to the bootstrap for Stratified or Multistage Sampling explained in pages 207 to 213 of Wolter, K. M. (2007) Introduction to Variance Estimation, 2nd edn. New York: Springer.
 
-[^14]: This would be something similar to the bootstrap for Stratified or Multistage Sampling explained in pages 207 to 213 of Wolter, K. M. (2007) Introduction to Variance Estimation, 2nd edn. New York: Springer.
+[^14]: The language that respondents first used when they were children.
 
-[^15]: The language that respondents first used when they were children.
+[^15]: See the table at the end of the technical report of the survey (In Catalan): http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf
 
-[^16]: See the table at the end of the technical report of the survey (In Catalan): http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf
+[^16]: I trimmed the top 0.5% of weights for all samples and limited the ratio between the minimum and maximum weight in each resample to be equal to 8. The code for this can be found in [script 03_calibrate_bootstrap_resamples.R](https://github.com/JosepER/CEO_public/blob/master/scripts/03_calibrate_bootstrap_resamples.R)
 
-[^17]: I trimmed the top 0.5% of weights for all samples and limited the ratio between the minimum and maximum weight in each resample to be equal to 8. The code for this can be found in [script 03_calibrate_bootstrap_resamples.R](https://github.com/JosepER/CEO_public/blob/master/scripts/03_calibrate_bootstrap_resamples.R)
+[^17]: This correction uses both the bootstrap and the jackknife resample estimates. For more details see pag 184 of Efron, B. & Tibshirani, R.J. (1993) An Introduction to the Bootstrap. New York: Chapman & Hall.
