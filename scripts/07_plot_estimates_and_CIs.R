@@ -74,16 +74,18 @@ names(t_1) <-  c("Method", "Lower bound CI", "Upper bound CI")
 
 # Comparison of bootstrap designs ----
 
+names(comparison_se_designs) <- c("Estimates quota design", "Estimates srs design", "weights")
+
 p_2 <- comparison_se_designs %>%
   gather(key = "design", value = "estimate", -weights) %>%
   ggplot(aes(x = estimate, col = design, group = design, fill = design, colour = design)) +
   geom_density( alpha = 0.2) +
   facet_wrap(~weights, nrow = 2) + 
     theme_dark() +
- scale_color_manual(values=col_vector[c(3,7)]) + 
-  scale_fill_manual(values=col_vector[c(3,7)]) +
+ scale_color_manual(values=col_vector[c(1,7)]) + 
+  scale_fill_manual(values=col_vector[c(1,7)]) +
   labs(title = "Figure 2: Bootstrap estimates by design",
-       x = "Estimate", y = "Density")
+       x = "Estimate", y = "Density", fill = "", colour = "")
 
 p_2
 

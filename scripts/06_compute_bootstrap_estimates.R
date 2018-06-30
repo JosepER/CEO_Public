@@ -457,11 +457,11 @@ confidence_intervals <- data_frame(indicator = "vote",
 # that's curious, because weights were larger for srs design
 # might be because of this: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.692.507&rep=rep1&type=pdf
 
-comparison_se_designs_graph <- data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]],
-           `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_unweighted"]],
+comparison_se_designs_graph <- data_frame(`Estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_unweighted"]],
+           `Estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_unweighted"]],
            weights = "unweighted") %>%
-  bind_rows(data_frame(`estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
-            `estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]],
+  bind_rows(data_frame(`Estimates quota design` = estimate_proportions_referendum_vote_all_resamples[["resamples_with_untrimmed_weights"]],
+            `Estimates srs design` = estimate_proportions_referendum_vote_all_srs_resamples[["resamples_with_untrimmed_weights"]],
             weights = "weighted & untrimmed"))
 
 comparison_se_designs_graph %>%
