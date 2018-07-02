@@ -23,7 +23,7 @@ The CEO survey, collected data during the last two weeks of that month and used 
 
 According to the official information from the Catalan Government the province had a turnout of 41.2% or around 1,6 million votes. As shown in Figure 1, my estimate from CEO survey data would be that the turnout was most likely between 50.6% and 56.8%. This would mean that between 2 and 2.26 million people voted in this province. 
 
-Even knowing that some ballot boxes were taken away by Spanish police forces, the difference between the official information and the CEO survey is large. Thus, estimates from the survey should be taken with a grain of salt. We know that people tend to lie about their participation in elections, stating that they voted when they actually didn't[^5]. Moreover, a quota sample like the one used by CEO is based on assumptions that might have been violated in this case. These assumptions and the exact methods used to compute the estimates are explained in the next sections in a slightly more technical way.
+Even knowing that some ballot boxes were taken away by Spanish police forces, the difference between the official information and the CEO survey is large. Thus, estimates from the survey should be taken with a grain of salt. We know that people tend to lie about their participation in elections, stating that they voted when they actually didn't[^5]. Moreover, a quota sample like the one used by CEO is based on assumptions that might have been violated in this case. These assumptions and the exact methods used to compute the estimates are explained in the next sections in a slightly more technical way. The [last part of this blog](#comparison_designs) also compares the current design of the survey with simpler alternatives. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -136,7 +136,7 @@ t_1 %>%
 
 
 
-# How much more efficient was the Quota sample?
+# How much more efficient was the Quota sample? {#comparison_designs}
 
 As an extra step of the analysis, I compared the estimated variance from the bootstrap samples using the quota design (seen in previous sections) with that of bootstrap samples assuming a "simple random sample" (SRS) design[^18][^19]. The later is a mere resample with replacement from the initial survey respondents, with weights computed for each resample. The comparison of the properties of estimates computed assuming both designs should give us an insight of the theoretical 'gains' of using a quota sampe instead of just interviewing the same number of people without quotas. This exercise is similar to what Kuha and Sturgis presented last year in the ESRA 'Conference on Inference for Non-Probability Samples'[^20] and could be used to assess the impact of changes in design of surveys. For example, we could analyse the effect of using different variables in quotas and/or calibration steps. Alike procedures are also common for testing other sampling design changes such as how accurate surveys would be if the sample size increased or decreased[^21]. 
 
@@ -159,10 +159,13 @@ t_2 %>%
 
 ```
 
+# Summary, discussion and limitations
 
-* Point that, by chance the SRS estimate of +-3% would have been adequate here
+The (survey) data and methods used here are unlikely to have produced a good estimate of vote turnout in the 1st of October referendum. The distance from the official estimates is very large and most certainly not due to sampling error. Thus, the CEO survey data, most probably has underlying problems that persist even after being adjusted with population information from official statistics. Two usual suspects here might be 1) measurement error (i.e. people lying about their participation in the referendum) and 2) violation of the assumptions of quota design (i.e. some sort of bias/self-selection mechanism).
 
-* Limitation: treatment of item non-response
+Hopefully, the blog presented a way of calculating uncertainty of surveys implementing quota sampling. This bootstrap techinque was suggested in Sturgis et al. (2017). Similar applications can also be used to compare the efficiency of different survey designs as presented by Kuha, J. and Sturgis, P. (2017).
+
+A limitation that wasn't addressed in this blog is the presence of missing values in the dependent variable (participation in the 1-O referendum). It would certainly have been useful to check for patterns of missing data and, if needed, use some imputation technique combined with the bootstrap resamples. 
 
 
 [^1]: Sturgis, P., Kuha, J., Baker, N., Callegaro, M., Fisher, S., Green, J., Jennings, W., Lauderdale, B. E., and Smith, P. (2017) An assessment of the causes of the errors in the 2015 UK General Election opinion polls. Journal of the Royal Statistical Society A. Article available [here](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12329) and code available [here](http://stats.lse.ac.uk/kuha/Publications/publications.html).
