@@ -45,8 +45,7 @@ p_2 <- read_rds(here("outputs", "plots", "plot_comparison_bootstrap_designs_07.r
 
 t_1 <- read_rds(here("outputs", "tables", "table_vote_estimates_intervals_07.rds"))
 
-t_2 <- read_rds(here("outputs", "data_table_comparison_bootstrap_designs_06.rds"))
-
+t_2 <- read_rds(here("outputs", "tables", "table_comparison_bootstrap_designs_07.rds"))
 
 p_1
 ```
@@ -104,7 +103,7 @@ After I finished drawing the bootstrap resamples simulating the quota design, I 
 1. Crossed categories of age and place of birth and
 2. First language of respondent[^14].  
 
-Calibration for each resample as well as for the main survey was implemented with a raking algorithm. This procedure is different from that used by CEO when computing their survey weights. They use a post-stratification calibration with crossed categories age, place of birth and first language[^15]. I didn't repeat their procedure for two resasons: 
+Calibration for each resample as well as for the main survey was implemented with a raking algorithm. This procedure is different from that used by CEO when computing their survey weights. They use a post-stratification calibration with crossed categories of age, place of birth and first language[^15]. I didn't repeat their procedure for two resasons: 
 
 1. I couldn't find estimates from official statistics for the cross-classification of these three variables. 
 2. This results in some very small cells and thus some extreme weights.
@@ -139,37 +138,34 @@ t_1 %>%
 
 # How much more efficient was the Quota sample?
 
-As an extra step of the analysis, I compared the estimated variance from the bootstrap samples using the quota design (seen in previous sections) with that of bootstrap samples assuming a simple random sample (SRS) design. The later is a mere resample with replacement with weights computed at each resample. The comparison of the properties of estimates computed assuming both designs should give us an insight of the theoretical 'gains' of using a quota sampe instead of just interviewing the same number of people without quotas. This exercise is similar to what Kuha and Sturgis presented last year in the ESRA 'Conference on Inference for Non-Probability Samples'[^18] and could  be used to assess the effect of using different variables in quotas and/or calibration steps. Alike procedures are also common for testing other sampling design changes such as how accurate surveys would be if the sample size increased or decreased[^19]. 
+As an extra step of the analysis, I compared the estimated variance from the bootstrap samples using the quota design (seen in previous sections) with that of bootstrap samples assuming a "simple random sample" (SRS) design[^18][^19]. The later is a mere resample with replacement from the initial survey respondents, with weights computed for each resample. The comparison of the properties of estimates computed assuming both designs should give us an insight of the theoretical 'gains' of using a quota sampe instead of just interviewing the same number of people without quotas. This exercise is similar to what Kuha and Sturgis presented last year in the ESRA 'Conference on Inference for Non-Probability Samples'[^20] and could be used to assess the impact of changes in design of surveys. For example, we could analyse the effect of using different variables in quotas and/or calibration steps. Alike procedures are also common for testing other sampling design changes such as how accurate surveys would be if the sample size increased or decreased[^21]. 
+
+Figure 2 shows the distribution of bootstrap estimates by comparing the quota and "SRS" designs. Summary estimates for the variance of these distributions can be found in Table 2 below.The weights clearly pushed the estimates for vote on the referendum down. Comparing the upper and lower graphs, we see that the unweighted estimates are centered around 61%, while the weighted ones are around 54%. This means that the original sample underrepresented profiles of people that had lower propensity to vote in the referendum. It also means that the variables used in the weighting procedure (age crossed by place of birth and first language) are strongly related to the probability of people voting on the referendum. This won't come as a great surprise for people with knowledge on Catalan politics.
+
+The distributions in the upper graph compare 10,000 unweighted bootstrap estimates. We see that without quotas, the estimates are more disperse. The standard deviation of the distribution without quotas is 1.56% and that of the distribution with quotas is 1.44%. Thus, the estimated standard error using quota sample is 0.92 times what it would be if the survey didn't use them. In survey statistics jargon, this ratio is usually called 'design factor'. In terms of effective sample, this would mean that the initial sample of 968 respondents in Barcelona province obtained from a quota design would be as informative as ~1144 respondents obtained from design withot quotas (SRS)[^22].
 
 
-Figure 2 shows the distribution of bootstrap estimates by design. Summary estimates for these can be found in Table 2 below. The distributions in the upper graph compare 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 p_2
 ```
 
+This advantage in efficiency of the quota design seems to almost disappear once the resamples are weighted to match population proportions in auxiliary variables. This can be seen in the lower graph of Figure 2 and summarised in Table 2. The ratio between the estimated SE of the design with quotas and that without these is close to 1, meaning that the gain in information would have been small, with a gain in effective sample size equivalent to 20 respondents. This is slightly surprising (although plausible) as the weights applied to bootstrap resamples under "SRS" design were slightly larger than those computed for resamples with quota designs.
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 t_2 %>%
-  kable() %>%
-  kableExtra::kable_styling()
+  kable(caption = "Table 2: Standard errors under different samplig designs") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"),
+                            full_width = F)
 
 ```
 
-Compare: 
-* SE of weighted bootstrap estimates (I don't think it matters which method is used, all produce same SE);
-* SE of unweighted bootstrap estimates; 
-* SE of bootstrap estimates under SRS design;
 
-
-
-TO DO:
-* I can also compute the design effect of weighting on the quota designh bootstrap resamples. Unweighted estimates are already computed.
-* Related to the previous point, I'd be curious to see what's the difference in design effect when weighting srs and quota samples. If SRS really requiered more weighting, this should be shown in their deff.
-
+* Point that, by chance the SRS estimate of +-3% would have been adequate here
 
 * Limitation: treatment of item non-response
 
 
-[^1]: Sturgis, P., Kuha, J., Baker, N., Callegaro, M., Fisher, S., Green, J., Jennings, W., Lauderdale, B. E., and Smith, P. (2017) An assessment of the causes of the errors in the 2015 UK General Election opinion polls. Journal of the Royal Statistical Society A. Article available [here](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12329) and code available [here](http://stats.lse.ac.uk/kuha/Publications/publications.html) 
+[^1]: Sturgis, P., Kuha, J., Baker, N., Callegaro, M., Fisher, S., Green, J., Jennings, W., Lauderdale, B. E., and Smith, P. (2017) An assessment of the causes of the errors in the 2015 UK General Election opinion polls. Journal of the Royal Statistical Society A. Article available [here](https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12329) and code available [here](http://stats.lse.ac.uk/kuha/Publications/publications.html).
 
 [^2]: Official data on the referendum participation can be found [here](https://estaticos.elperiodico.com/resources/pdf/4/3/1507302086634.pdf?_ga=2.11952052.1654533961.1528484435-1600052709.1528484435).
 
@@ -206,7 +202,15 @@ http://upceo.ceo.gencat.cat/wsceop/6408/Fitxa%20t%C3%A8cnica%20-863.pdf (in Cata
 
 [^17]: This correction uses both the bootstrap and the jackknife resample estimates. For more details see pag 184 of Efron, B. & Tibshirani, R.J. (1993) An Introduction to the Bootstrap. New York: Chapman & Hall.
 
-[^18]: Presentation slides can be found here: https://www.europeansurveyresearch.org/news/non-prob/INPS_06_Kuha.pdf
+[^18]: It is actually not a 'simple random sample' as there is no randomisation of respondents in a non-probability sample. However, I'll use this terminology for consistency with the presentation given by Kuha, J. & Sturgis, P. (2017) A bootstrap method for estimating the sampling variation in point estimates from quota samples. Available here: https://www.europeansurveyresearch.org/news/non-prob/INPS_06_Kuha.pdf
 
-[^19]: This is mentioned in page 19 of Hesterberg, T. (2014) What Teachers Should Know about the Bootstrap: Resampling in the Undergraduate Statistics Curriculum
+[^19]: SEs have been calculated here as the standard deviation of the bootstrap estimates.
+
+[^20]: Presentation slides can be found here: https://www.europeansurveyresearch.org/news/non-prob/INPS_06_Kuha.pdf
+
+[^21]: This is mentioned in page 19 of Hesterberg, T. (2014) What Teachers Should Know about the Bootstrap: Resampling in the Undergraduate Statistics Curriculum
 [available here](https://arxiv.org/pdf/1411.5279.pdf)
+
+[^22]: The effective sample size is calculated as: $neff = \frac{n}{DEFT^{2}}$
+
+

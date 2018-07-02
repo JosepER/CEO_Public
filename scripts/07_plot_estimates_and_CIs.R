@@ -22,6 +22,8 @@ confidence_intervals <- read_rds(here("outputs", "vote_confidence_intervals_06.r
 
 comparison_se_designs <- read_rds(here("outputs", "comparison_bootstrap_designs_06.rds"))
 
+table_se_designs <- read_rds(here("outputs", "data_table_comparison_bootstrap_designs_06.rds"))
+
 # Create graphs ----
 
 # ** tidy data ---- 
@@ -89,6 +91,13 @@ p_2 <- comparison_se_designs %>%
 
 p_2
 
+## ** summary table ----
+
+names(table_se_designs) <- c("Design", "Estimated SE")
+
+t_2 <- table_se_designs %>%
+  mutate(`Estimated SE` = round(`Estimated SE`, 5))
+
 # Export plot and table ----
 
 p_1 %>%
@@ -99,3 +108,6 @@ p_2 %>%
 
 t_1 %>%
   write_rds(here("outputs", "tables", "table_vote_estimates_intervals_07.rds"))
+
+t_2 %>%
+  write_rds(here("outputs", "tables", "table_comparison_bootstrap_designs_07.rds"))
