@@ -1,17 +1,15 @@
 ---
 title: "How many people voted on the 1st of October independence referendum?"
-subtitle: "A bootstrap approach using a quota sample survey."
+subtitle: "Using a bootstrap approach to variance estimateion on a quota sample survey."
 author: Josep Espasa Reig
-tags: ["R", "survey", "variance estimation", "bootstrap"]
-topics: "Referendum"
-output: html_document
-
+output:
+  html_document: default
 ---
 
 
 # Acknowledgements
 
-This blog couldn't have been writen without the scripts published by the authors of Sturgis et al 2017[^1] and the responses to my questions provided by people at ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html).
+This blog couldn't have been written without the scripts published by the authors of Sturgis et al 2017[^1] and the responses to my questions provided by people at ['Centre d'Estudis d'Opinió' (CEO)](http://ceo.gencat.cat/ca/inici/index.html).
 
 # How many people voted?
 
@@ -21,7 +19,7 @@ The real number of votes is thus still unknown, and very little data from survey
 
 The CEO survey, collected data during the last two weeks of that month and used a quota sampling with sample allocation proportional to population estimates[^4]. The sample size in three out of the four provinces was too small to compute reliable estimates. The sample size of the Province of Barcelona, however, was close to 1,000 respondents and should allow for a decent calculation with the methods presented below. 
 
-According to the official information from the Catalan Government the province had a turnout of 41.2% or around 1,6 million votes. As shown in Figure 1, my estimate from CEO survey data would be that the turnout was most likely between 50.6% and 56.8%. This would mean that between 2 and 2.26 million people voted in this province. 
+According to the official information from the Catalan Government the province had a turnout of 41.2% or around 1.6 million votes. As shown in Figure 1, my estimate from CEO survey data would be that the turnout was most likely between 50.6% and 56.8%. This would mean that between 2 and 2.26 million people voted in this province. 
 
 Even knowing that some ballot boxes were taken away by Spanish police forces, the difference between the official information and the CEO survey is large. Thus, estimates from the survey should be taken with a grain of salt. We know that people tend to lie about their participation in elections, stating that they voted when they actually didn't[^5]. Moreover, a quota sample like the one used by CEO is based on assumptions that might have been violated in this case. These assumptions and the exact methods used to compute the estimates are explained in the next sections in a slightly more technical way. The [last part of this blog](#comparison_designs) also compares the current design of the survey with simpler alternatives. 
 
@@ -31,7 +29,6 @@ rm(list = ls())
 
 library(scales)
 library(kableExtra)
-library(here)
 library(magrittr)
 library(RColorBrewer)
 library(tidyverse)
@@ -39,13 +36,13 @@ library(tidyverse)
 qual_col_pals <- brewer.pal.info[brewer.pal.info$category == 'qual',]
 col_vector <- unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
 
-p_1 <- read_rds(here("outputs", "plots", "plot_vote_estimates_intervals_07.rds"))
+p_1 <- read_rds("C:/Users/josep/Desktop/R/CEO_Public/outputs/plots/plot_vote_estimates_intervals_07.rds")
 
-p_2 <- read_rds(here("outputs", "plots", "plot_comparison_bootstrap_designs_07.rds"))
+p_2 <- read_rds("C:/Users/josep/Desktop/R/CEO_Public/outputs/plots/plot_comparison_bootstrap_designs_07.rds")
 
-t_1 <- read_rds(here("outputs", "tables", "table_vote_estimates_intervals_07.rds"))
+t_1 <- read_rds("C:/Users/josep/Desktop/R/CEO_Public/outputs/tables/table_vote_estimates_intervals_07.rds")
 
-t_2 <- read_rds(here("outputs", "tables", "table_comparison_bootstrap_designs_07.rds"))
+t_2 <- read_rds("C:/Users/josep/Desktop/R/CEO_Public/outputs/tables/table_comparison_bootstrap_designs_07.rds")
 
 p_1
 ```
@@ -54,15 +51,15 @@ _Note: See section ['Estimates of turnout in 1-O referendum'](#estimates_of_turn
 
 # Quota sampling
 
-Before explaining the particluarities of quota sampling, let me give a brief overview about the concepts of probability and non-probability sampling. These concepts are very relevant to understand the large difference between the official data and CEO's survey estimates.
+Before explaining the particularities of quota sampling, let me give a brief overview about the concepts of probability and non-probability sampling. These concepts are very relevant to understand the large difference between the official data and CEO's survey estimates.
 
 ## Probability vs non-probability sampling
 
 Concisely explained, there are two approaches to survey sampling: probability and non-probability sampling. In the survey industry the first one is still the gold standard. In probability sampling, we draw a random sample of units from a population. This might take various forms (e.g. within stratums, proportional to some variable), but the important fact is that we know the probability of each unit being selected. In probability sampling, all units should have a chance to be in the survey (i.e. their probability of inclusion should not be equal to 0). The great advantage of probability sampling is that it's unbiased. This is, if the sampling was to be repeated many times, the expected value of the estimates from the samples would be identical to the value for the whole population. Thus, the sample will tend to be (on average) a small-scale representation of the population from which we can obtain unbiased estimates. 
 
-Non-probabililty samples are those in which the selection of units is not randomised according to principles of probability theory. There are a wide variety of non-probability sample methods[^6]. They are extensively used in market research but considered of poor quality in many other fields. When compared to probability sample surveys, they don't have the 'unbiasedness' characteristic by design. This type of surveys tend to rely on adjustments made by statisticians once the sample is collected. Making inferences from non-probability surveys requires some reliance on modeling assumptions and thus significant statistical expertise.
+Non-probability samples are those in which the selection of units is not randomised according to principles of probability theory. There are a wide variety of non-probability sample methods[^6]. They are extensively used in market research but considered of poor quality in many other fields. When compared to probability sample surveys, they don't have the 'unbiasedness' characteristic by design. This type of surveys tend to rely on adjustments made by statisticians once the sample is collected. Making inferences from non-probability surveys requires some reliance on modelling assumptions and thus significant statistical expertise.
 
-Three main issues of probabilty samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list of units from which the random sample is selected[^7]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. Some statisticians have pointed that, due to non-response, no survey is really a probability sample[^8]. The same voices say that the low response rates that we see in certain research areas might make probability samples worthless. 
+Three main issues of probability samples are coverage error, non-response error and their cost. The first two are problems that affect the capacity of the sample to properly represent the population. Coverage error is caused by some units not being in the list of units from which the random sample is selected[^7]. Non-response error is when the survey fails to collect responses for some of the units. This increases the uncertainty of estimates due to smaller sample sizes and risks biasing the survey as certain profiles of respondents might have a larger propensity to respond than others. Some statisticians have pointed that, due to non-response, no survey is really a probability sample[^8]. The same voices say that the low response rates that we see in certain research areas might make probability samples worthless. 
 
 ## Quota sampling and the CEO survey 
 
@@ -71,14 +68,14 @@ The survey produced by CEO used a quotas rather than probability sampling. Quota
   * The interviewers were sent to do 'random walks'[^9] in sampled municipalities. The starting point was selected at random from a list of streets.
   * Interviewers then collected responses with face-to-face interviews until quotas by crossed categories of age gender and place of birth were filled.
 
-In this particular survey, some quotas could not be filled because of low response rates and budget constrains. Thus, CEO researchers applied a calibration step after the responses were collected.
+In this particular survey, some quotas could not be filled because of low response rates and budget constraints. Thus, CEO researchers applied a calibration step after the responses were collected.
 
-The main problem with quota sampling is that the selection of respondents within quotas is not randomised. Interviewers can replace any potential respondent with another one with the same characteristics in quota variables. The estimates from a quota sampling survey will be biased if respondents within quotas differ from those in the population. Therefore, the estimation of the proportion of people that voted in the 1-O referendum will be biased if, within each quota (e.g. males, 18 to 24 born in Catalonia), the proportion of people that voted isn't the same as that in the population for people with the same characterisctics. 
+The main problem with quota sampling is that the selection of respondents within quotas is not randomised. Interviewers can replace any potential respondent with another one with the same characteristics in quota variables. The estimates from a quota sampling survey will be biased if respondents within quotas differ from those in the population. Therefore, the estimation of the proportion of people that voted in the 1-O referendum will be biased if, within each quota (e.g. males, 18 to 24 born in Catalonia), the proportion of people that voted isn't the same as that in the population for people with the same characteristics. 
 
   
 ## Variance estimation for quota sampling {#variance_estimation_quota_sampling}
 
-As important as providing an estimate of the proportion of people that voted is the capacity to provide an estimate of its uncertainty. This means that we don't only want to know how many people voted, but how confident we are on this estimate. This is the point where methodology gets more tricky and the actual reason why I started doing this analysis. 
+As important as providing an estimate of the proportion of people that voted is the capacity to provide an estimate of its uncertainty. This means that we don't only want to know how many people voted, but how confident we are on this estimate. This is the point where methodology gets trickier and the actual reason why I started doing this analysis. 
 
 Most researchers compute the uncertainty of estimates as if the data proceeded from simple random samples from the population[^10]. Thus, they do not take into account the actual design of the survey. Sturgis et al. (2017) suggests a method for calculation the precision of estimates from quota samples. This method is based on 'bootstrap resamples' or resamples with replacement taken from the survey data. In their article, Sturgis et al. explain it in the following way:
 
@@ -97,18 +94,18 @@ For drawing the M independent resamples simulating quota designs (point A above)
 
 ## Estimation of 1-O turnout using bootstrap resamples
 
-To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompaining the article. The scripts with the code for my analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, after cleaning and rearranging the data I computed the bootstrap resamples simulating 10,000 different samples with the quota design. Some of these bootstrap resamples had sligthly less observations than the intial data due to no respondents available which would fit non-completed quotas (explained in point 5 [of the algorithm above](#variance_estimation_quota_sampling)). The analysis of these resamples should represent the variablility in the quota sampling process if this was to be implemented a large number of times. An important difference with the original CEO's sampling design is that I included the size of municipalities as another quota (with its categories not crossed with other quota variables). Ideally, there should probably be first a step with a resample of municipalities[^13]. The publicly available data, however, didn't have an identification variable for all municipalities.
+To estimate the participation in the 1-O referendum using the CEO sample I used the method proposed in Sturgis et al. (2017) and the R code accompanying the article. The scripts with the code for my analysis can be found in the [GitHub repository for this article](https://github.com/JosepER/CEO_public/tree/master/scripts). Summarising the process, after cleaning and rearranging the data I computed the bootstrap resamples simulating 10,000 different samples with the quota design. Some of these bootstrap resamples had slightly less observations than the initial data due to no respondents available which would fit non-completed quotas (explained in point 5 [of the algorithm above](#variance_estimation_quota_sampling)). The analysis of these resamples should represent the variability in the quota sampling process if this was to be implemented a large number of times. An important difference with the original CEO's sampling design is that I included the size of municipalities as another quota (with its categories not crossed with other quota variables). Ideally, there should probably be first a step with a resample of municipalities[^13]. The publicly available data, however, didn't have an identification variable for all municipalities.
 
 After I finished drawing the bootstrap resamples simulating the quota design, I calibrated these using official statistics data from IDESCAT, the official body responsible for collecting and publishing statistics in Catalonia. I performed calibration using: 
 1. Crossed categories of age and place of birth and
 2. First language of respondent[^14].  
 
-Calibration for each resample as well as for the main survey was implemented with a raking algorithm. This procedure is different from that used by CEO when computing their survey weights. They use a post-stratification calibration with crossed categories of age, place of birth and first language[^15]. I didn't repeat their procedure for two resasons: 
+Calibration for each resample as well as for the main survey was implemented with a raking algorithm. This procedure is different from that used by CEO when computing their survey weights. They use a post-stratification calibration with crossed categories of age, place of birth and first language[^15]. I didn't repeat their procedure for two reasons: 
 
 1. I couldn't find estimates from official statistics for the cross-classification of these three variables. 
 2. This results in some very small cells and thus some extreme weights.
 
-Some resamples had some large weights, so I applied a minor trim to limit the most extreme weights[^16]. The code accompaning Sturgis et al. (2017) does not include this step. I think it's reasonable to include it, however, to make simulations close to the actual process which they are meant to reproduce. We would expect researchers to trim the weights of their surveys if they found some extreme weights. At the same time, some resamples will need more trimming than others. Thus, we should incorporate this uncertainty in the variance computation. The final estimates, however, were computed using both trimmed and untrimmed weights for robustness checks. This sensitivity analysis showed that trimming weights had only a very small impact on point estimates. 
+Some resamples had some large weights, so I applied a minor trim to limit the most extreme weights[^16]. The code accompanying Sturgis et al. (2017) does not include this step. I think it's reasonable to include it, however, to make simulations close to the actual process which they are meant to reproduce. We would expect researchers to trim the weights of their surveys if they found some extreme weights. At the same time, some resamples will need more trimming than others. Thus, we should incorporate this uncertainty in the variance computation. The final estimates, however, were computed using both trimmed and untrimmed weights for robustness checks. This sensitivity analysis showed that trimming weights had only a very small impact on point estimates. 
 
 For computing the bootstrap adjusted percentile intervals (see section below) I also computed and calibrate jackknife resamples from the CEO survey. For these, as for the main sample, I left the weights untrimmed as they didn't have extreme values.
 
@@ -138,11 +135,11 @@ t_1 %>%
 
 # How much more efficient was the Quota sample? {#comparison_designs}
 
-As an extra step of the analysis, I compared the estimated variance from the bootstrap samples using the quota design (seen in previous sections) with that of bootstrap samples assuming a "simple random sample" (SRS) design[^18][^19]. The later is a mere resample with replacement from the initial survey respondents, with weights computed for each resample. The comparison of the properties of estimates computed assuming both designs should give us an insight of the theoretical 'gains' of using a quota sampe instead of just interviewing the same number of people without quotas. This exercise is similar to what Kuha and Sturgis presented last year in the ESRA 'Conference on Inference for Non-Probability Samples'[^20] and could be used to assess the impact of changes in design of surveys. For example, we could analyse the effect of using different variables in quotas and/or calibration steps. Alike procedures are also common for testing other sampling design changes such as how accurate surveys would be if the sample size increased or decreased[^21]. 
+As an extra step of the analysis, I compared the estimated variance from the bootstrap samples using the quota design (seen in previous sections) with that of bootstrap samples assuming a "simple random sample" (SRS) design[^18][^19]. The latter is a mere resample with replacement from the initial survey respondents, with weights computed for each resample. The comparison of the properties of estimates computed assuming both designs should give us an insight of the theoretical 'gains' of using a quota sample instead of just interviewing the same number of people without quotas. This exercise is similar to what Kuha and Sturgis presented last year in the ESRA 'Conference on Inference for Non-Probability Samples'[^20] and could be used to assess the impact of changes in design of surveys. For example, we could analyse the effect of using different variables in quotas and/or calibration steps. Alike procedures are also common for testing other sampling design changes such as how accurate surveys would be if the sample size increased or decreased[^21]. 
 
-Figure 2 shows the distribution of bootstrap estimates by comparing the quota and "SRS" designs. Summary estimates for the variance of these distributions can be found in Table 2 below.The weights clearly pushed the estimates for vote on the referendum down. Comparing the upper and lower graphs, we see that the unweighted estimates are centered around 61%, while the weighted ones are around 54%. This means that the original sample underrepresented profiles of people that had lower propensity to vote in the referendum. It also means that the variables used in the weighting procedure (age crossed by place of birth and first language) are strongly related to the probability of people voting on the referendum. This won't come as a great surprise for people with knowledge on Catalan politics.
+Figure 2 shows the distribution of bootstrap estimates by comparing the quota and "SRS" designs. Summary estimates for the variance of these distributions can be found in Table 2 below. The weights clearly pushed the estimates for vote on the referendum down. Comparing the upper and lower graphs, we see that the unweighted estimates are centred around 61%, while the weighted ones are around 54%. This means that the original sample underrepresented profiles of people that had lower propensity to vote in the referendum. It also means that the variables used in the weighting procedure (age crossed by place of birth and first language) are strongly related to the probability of people voting on the referendum. This won't come as a great surprise for people with knowledge on Catalan politics.
 
-The distributions in the upper graph compare 10,000 unweighted bootstrap estimates. We see that without quotas, the estimates are more disperse. The standard deviation of the distribution without quotas is 1.56% and that of the distribution with quotas is 1.44%. Thus, the estimated standard error using quota sample is 0.92 times what it would be if the survey didn't use them. In survey statistics jargon, this ratio is usually called 'design factor'. In terms of effective sample, this would mean that the initial sample of 968 respondents in Barcelona province obtained from a quota design would be as informative as ~1144 respondents obtained from design withot quotas (SRS)[^22].
+The distributions in the upper graph compare 10,000 unweighted bootstrap estimates. We see that without quotas, the estimates are more disperse. The standard deviation of the distribution without quotas is 1.56% and that of the distribution with quotas is 1.44%. Thus, the estimated standard error using quota sample is 0.92 times what it would be if the survey didn't use them. In survey statistics jargon, this ratio is usually called 'design factor'. In terms of effective sample, this would mean that the initial sample of 968 respondents in Barcelona province obtained from a quota design would be as informative as ~1144 respondents obtained from design without quotas (SRS)[^22].
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -153,7 +150,7 @@ This advantage in efficiency of the quota design seems to almost disappear once 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 t_2 %>%
-  kable(caption = "Table 2: Standard errors under different samplig designs") %>%
+  kable(caption = "Table 2: Standard errors under different sampling designs") %>%
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover"),
                             full_width = F)
 
@@ -163,7 +160,7 @@ t_2 %>%
 
 The (survey) data and methods used here are unlikely to have produced a good estimate of vote turnout in the 1st of October referendum. The distance from the official estimates is very large and most certainly not due to sampling error. Thus, the CEO survey data, most probably has underlying problems that persist even after being adjusted with population information from official statistics. Two usual suspects here might be 1) measurement error (i.e. people lying about their participation in the referendum) and 2) violation of the assumptions of quota design (i.e. some sort of bias/self-selection mechanism).
 
-Hopefully, the blog presented a way of calculating uncertainty of surveys implementing quota sampling. This bootstrap techinque was suggested in Sturgis et al. (2017). Similar applications can also be used to compare the efficiency of different survey designs as presented by Kuha, J. and Sturgis, P. (2017).
+Hopefully, the blog presented a way of calculating uncertainty of surveys implementing quota sampling. This bootstrap technique was suggested in Sturgis et al. (2017). Similar applications can also be used to compare the efficiency of different survey designs as presented by Kuha, J. and Sturgis, P. (2017).
 
 A limitation that wasn't addressed in this blog is the presence of missing values in the dependent variable (participation in the 1-O referendum). It would certainly have been useful to check for patterns of missing data and, if needed, use some imputation technique combined with the bootstrap resamples. 
 
